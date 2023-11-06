@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1003558852836",
+    "project_id": "san-pedro-app-a8610",
+    "storage_bucket": "san-pedro-app-a8610.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003558852836:android:d9ad7f4ee296e97f52f4f1",
+        "android_client_info": {
+          "package_name": "com.bmwaresd.sp_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAirT5wd7szU1WZp6IH1TxCiA_iDA1YcsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
