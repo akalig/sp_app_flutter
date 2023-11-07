@@ -41,7 +41,7 @@ class MPIN extends StatelessWidget {
                         for (int i = 0; i < 6; i++)
                           Container(
                             margin: const EdgeInsets.all(10.0),
-                            width: 40,
+                            width: 35,
                             child: const TextField(
                               maxLength: 1,
                               style: TextStyle(color: Colors.black),

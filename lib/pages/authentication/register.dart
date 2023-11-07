@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_app/json/location_data.dart';
 
+import 'face_scan.dart';
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -21,47 +23,11 @@ class _RegisterState extends State<Register> {
 
   String currentOption = categoryOptions[0];
 
-  // String selectedRegion = "0";
-  // String selectedProvince = "0";
-  // String selectedMunicipality = "0";
-  // String selectedBarangay = "0";
+  String selectedRegion = "0";
+  String selectedProvince = "0";
+  String selectedMunicipality = "0";
+  String selectedBarangay = "0";
 
-  String selectedRegion = '';
-  String selectedProvince = '';
-  String selectedMunicipality = '';
-  String selectedBarangay = '';
-
-  List<String> regions = [];
-  List<String> provinces = [];
-  List<String> municipalities = [];
-  List<String> barangays = [];
-
-  @override
-  void initState() {
-    super.initState();
-    regions = jsonData.keys.toList();
-  }
-
-  void updateProvinces(String region) {
-    provinces = jsonData['region_name'][region].keys.toList();
-    selectedProvince = '';
-    selectedMunicipality = '';
-    selectedBarangay = '';
-    municipalities = [];
-    barangays = [];
-  }
-
-  void updateMunicipalities(String province) {
-    municipalities = jsonData[selectedRegion]['province_list'][province]['municipality_list'].keys.toList();
-    selectedMunicipality = '';
-    selectedBarangay = '';
-    barangays = [];
-  }
-
-  void updateBarangays(String municipality) {
-    barangays = jsonData[selectedRegion]['province_list'][selectedProvince]['municipality_list'][municipality]['barangay_list'];
-    selectedBarangay = '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -366,68 +332,185 @@ class _RegisterState extends State<Register> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      DropdownButtonFormField<String>(
-                                        value: selectedRegion,
-                                        onChanged: (region) {
-                                          setState(() {
-                                            selectedRegion = region!;
-                                            updateProvinces(region);
-                                          });
-                                        },
-                                        items: regions.map((region) {
-                                          return DropdownMenuItem(
-                                            value: region,
-                                            child: Text(region),
+                                      StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('regions')
+                                            .orderBy(FieldPath.documentId)
+                                            .snapshots(),
+                                        builder: (context, regionSnapshot) {
+                                          if (regionSnapshot.connectionState == ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          }
+
+                                          if (regionSnapshot.hasError) {
+                                            return Text('Error: ${regionSnapshot.error}');
+                                          }
+
+                                          final regions = regionSnapshot.data!.docs.reversed.toList();
+                                          List<DropdownMenuItem<String>> regionItems = [];
+                                          regionItems.add(
+                                            const DropdownMenuItem(
+                                              value: "0",
+                                              child: Text('Select Region'),
+                                            ),
                                           );
-                                        }).toList(),
-                                        hint: const Text('Select Region'),
-                                      ),
-                                      DropdownButtonFormField<String>(
-                                        value: selectedProvince,
-                                        onChanged: (province) {
-                                          setState(() {
-                                            selectedProvince = province!;
-                                            updateMunicipalities(province);
-                                          });
-                                        },
-                                        items: provinces.map((province) {
-                                          return DropdownMenuItem(
-                                            value: province,
-                                            child: Text(province),
+
+                                          for (var region in regions) {
+                                            regionItems.add(
+                                              DropdownMenuItem(
+                                                value: region['region_name'].toString(),
+                                                child: Text(region['region_name'].toString()),
+                                              ),
+                                            );
+                                          }
+
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                margin: const EdgeInsets.all(10.0),
+                                                padding: const EdgeInsets.all(10.0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey),
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                                child: DropdownButton<String>(
+                                                  items: regionItems,
+                                                  onChanged: (regionValue) {
+                                                    setState(() {
+                                                      selectedRegion = regionValue!;
+                                                      selectedProvince = "0"; // Reset selected province when changing the region.
+                                                      selectedMunicipality = "0"; // Reset selected municipality when changing the region.
+                                                    });
+                                                    print(regionValue);
+                                                  },
+                                                  value: selectedRegion,
+                                                  isExpanded: true,
+                                                ),
+                                              ),
+                                              StreamBuilder<QuerySnapshot>(
+                                                stream: FirebaseFirestore.instance
+                                                    .collection('regions')
+                                                    .where("region_name", isEqualTo: selectedRegion)
+                                                    .snapshots(),
+                                                builder: (context, provinceSnapshot) {
+                                                  if (provinceSnapshot.connectionState == ConnectionState.waiting) {
+                                                    return const CircularProgressIndicator();
+                                                  }
+
+                                                  if (provinceSnapshot.hasError) {
+                                                    return Text('Error: ${provinceSnapshot.error}');
+                                                  }
+
+                                                  final provinces = provinceSnapshot.data!.docs.reversed.toList();
+                                                  List<DropdownMenuItem<String>> provinceItems = [];
+                                                  provinceItems.add(
+                                                    const DropdownMenuItem(
+                                                      value: "0",
+                                                      child: Text('Select Province'),
+                                                    ),
+                                                  );
+
+                                                  for (var province in provinces) {
+                                                    // Assuming province['province_list'] is a map
+                                                    Map<String, dynamic> provinceList = province['province_list'];
+                                                    provinceList.keys.forEach((provinceName) {
+                                                      provinceItems.add(
+                                                        DropdownMenuItem(
+                                                          value: provinceName,
+                                                          child: Text(provinceName),
+                                                        ),
+                                                      );
+                                                    });
+                                                  }
+
+                                                  return Container(
+                                                    width: double.infinity,
+                                                    margin: const EdgeInsets.all(10.0),
+                                                    padding: const EdgeInsets.all(10.0),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(color: Colors.grey),
+                                                      borderRadius: BorderRadius.circular(5.0),
+                                                    ),
+                                                    child: DropdownButton<String>(
+                                                      items: provinceItems,
+                                                      onChanged: (provinceValue) {
+                                                        setState(() {
+                                                          selectedProvince = provinceValue!;
+                                                          selectedMunicipality = "0"; // Reset selected municipality when changing the province.
+                                                        });
+                                                        print(provinceValue);
+                                                      },
+                                                      value: selectedProvince,
+                                                      isExpanded: true,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+
+                                              // StreamBuilder<QuerySnapshot>(
+                                              //   stream: FirebaseFirestore.instance
+                                              //       .collection('regions')
+                                              //       .where("region_name", isEqualTo: selectedRegion)
+                                              //       .snapshots(),
+                                              //   builder: (context, municipalitySnapshot) {
+                                              //     if (municipalitySnapshot.connectionState == ConnectionState.waiting) {
+                                              //       return const CircularProgressIndicator();
+                                              //     }
+                                              //
+                                              //     if (municipalitySnapshot.hasError) {
+                                              //       return Text('Error: ${municipalitySnapshot.error}');
+                                              //     }
+                                              //
+                                              //     final municipalities = municipalitySnapshot.data!.docs.reversed.toList();
+                                              //     List<DropdownMenuItem<String>> municipalityItems = [];
+                                              //     municipalityItems.add(
+                                              //       const DropdownMenuItem(
+                                              //         value: "0",
+                                              //         child: Text('Select Municipality'),
+                                              //       ),
+                                              //     );
+                                              //
+                                              //     for (var municipality in municipalities) {
+                                              //       // Assuming province['province_list'] is a map
+                                              //       Map<String, dynamic> municipalityList = municipality['province_list'][selectedProvince]['municipality_list'];
+                                              //
+                                              //       municipalityList.keys.forEach((municipalityName) {
+                                              //         municipalityItems.add(
+                                              //           DropdownMenuItem(
+                                              //             value: municipalityName,
+                                              //             child: Text(municipalityName),
+                                              //           ),
+                                              //         );
+                                              //       });
+                                              //     }
+                                              //
+                                              //     return Container(
+                                              //       width: double.infinity,
+                                              //       margin: const EdgeInsets.all(10.0),
+                                              //       padding: const EdgeInsets.all(10.0),
+                                              //       decoration: BoxDecoration(
+                                              //         border: Border.all(color: Colors.grey),
+                                              //         borderRadius: BorderRadius.circular(5.0),
+                                              //       ),
+                                              //       child: DropdownButton<String>(
+                                              //         items: municipalityItems,
+                                              //         onChanged: (municipalityValue) {
+                                              //           setState(() {
+                                              //             selectedMunicipality = municipalityValue!;
+                                              //             selectedBarangay = "0"; // Reset selected municipality when changing the province.
+                                              //           });
+                                              //           print(municipalityValue);
+                                              //         },
+                                              //         value: selectedProvince,
+                                              //         isExpanded: true,
+                                              //       ),
+                                              //     );
+                                              //   },
+                                              // ),
+                                            ],
                                           );
-                                        }).toList(),
-                                        hint: const Text('Select Province'),
-                                      ),
-                                      DropdownButtonFormField<String>(
-                                        value: selectedMunicipality,
-                                        onChanged: (municipality) {
-                                          setState(() {
-                                            selectedMunicipality = municipality!;
-                                            updateBarangays(municipality);
-                                          });
                                         },
-                                        items: municipalities.map((municipality) {
-                                          return DropdownMenuItem(
-                                            value: municipality,
-                                            child: Text(municipality),
-                                          );
-                                        }).toList(),
-                                        hint: const Text('Select Municipality'),
-                                      ),
-                                      DropdownButtonFormField<String>(
-                                        value: selectedBarangay,
-                                        onChanged: (barangay) {
-                                          setState(() {
-                                            selectedBarangay = barangay!;
-                                          });
-                                        },
-                                        items: barangays.map((barangay) {
-                                          return DropdownMenuItem(
-                                            value: barangay,
-                                            child: Text(barangay),
-                                          );
-                                        }).toList(),
-                                        hint: const Text('Select Barangay'),
                                       ),
                                     ],
                                   ),
@@ -435,7 +518,57 @@ class _RegisterState extends State<Register> {
 
                                 const Padding(
                                   padding: EdgeInsets.only(
-                                      top: 25.0, left: 8.0, right: 8.0),
+                                      top: 10.0, left: 8.0, right: 8.0),
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      hintText:
+                                      "Municipality",
+                                      hintStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10.0, left: 8.0, right: 8.0),
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      hintText:
+                                      "Barangay",
+                                      hintStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10.0, left: 8.0, right: 8.0),
                                   child: TextField(
                                     style: TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
@@ -472,25 +605,29 @@ class _RegisterState extends State<Register> {
                           Visibility(
                             visible: isRegistrationSectionTwoVisible,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: ElevatedButton(
-                                onPressed: null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green[900],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                              padding: const EdgeInsets.all(25.0),
+                              child: SizedBox(
+                                width: 300,
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const FaceScan()),
                                   ),
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 15, bottom: 15),
-                                  width: double.infinity,
-                                  child: const Center(
-                                    child: Text(
-                                      'Next',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[800],
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    padding: const EdgeInsets.all(18),
+                                    child: const Center(
+                                      child: Text(
+                                        'Continue',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          letterSpacing: 1,
+                                        ),
                                       ),
                                     ),
                                   ),
