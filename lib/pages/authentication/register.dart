@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sp_app/json/location_data.dart';
-
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'face_scan.dart';
 
 class Register extends StatefulWidget {
@@ -27,7 +26,6 @@ class _RegisterState extends State<Register> {
   String selectedProvince = "0";
   String selectedMunicipality = "0";
   String selectedBarangay = "0";
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +82,7 @@ class _RegisterState extends State<Register> {
                             'Personal Information',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 20, // Increase font size
+                              fontSize: 16, // Increase font size
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -274,61 +272,80 @@ class _RegisterState extends State<Register> {
                                   'Address',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20, // Increase font size
+                                    fontSize: 16, // Increase font size
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
 
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 25.0, left: 8.0, right: 8.0),
+                                      top: 10.0, left: 8.0, right: 8.0, bottom: 5.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Choose Category",
-                                        style: TextStyle(fontSize: 18),
+                                        style: TextStyle(fontSize: 14),
                                       ),
-                                      Column(
-                                        children: [
-                                          ListTile(
-                                            title: const Text('Resident'),
-                                            contentPadding: EdgeInsets.zero,
-                                            // Set contentPadding to control horizontal alignment
-                                            leading: Radio(
-                                              value: categoryOptions[0],
-                                              groupValue: currentOption,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  currentOption = value.toString();
-                                                });
-                                              },
-                                            ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1.0,
+                                            // You can adjust the border width
+                                            color: Colors
+                                                .grey, // You can adjust the border color
                                           ),
-                                          ListTile(
-                                            title: const Text('Visitor'),
-                                            contentPadding: EdgeInsets.zero,
-                                            // Set contentPadding to control horizontal alignment
-                                            leading: Radio(
-                                              value: categoryOptions[1],
-                                              groupValue: currentOption,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  currentOption = value.toString();
-                                                });
-                                              },
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: ListTile(
+                                                title: const Text('Resident'),
+                                                contentPadding: EdgeInsets.zero,
+                                                // Set contentPadding to control horizontal alignment
+                                                leading: Radio(
+                                                  value: categoryOptions[0],
+                                                  groupValue: currentOption,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      currentOption =
+                                                          value.toString();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                            const SizedBox(width: 16),
+                                            // Add spacing between the radio buttons
+                                            Expanded(
+                                              child: ListTile(
+                                                title: const Text('Visitor'),
+                                                contentPadding: EdgeInsets.zero,
+                                                // Set contentPadding to control horizontal alignment
+                                                leading: Radio(
+                                                  value: categoryOptions[1],
+                                                  groupValue: currentOption,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      currentOption =
+                                                          value.toString();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
 
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 25.0, left: 8.0, right: 8.0),
+                                      top: 10.0, left: 8.0, right: 8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -338,16 +355,21 @@ class _RegisterState extends State<Register> {
                                             .orderBy(FieldPath.documentId)
                                             .snapshots(),
                                         builder: (context, regionSnapshot) {
-                                          if (regionSnapshot.connectionState == ConnectionState.waiting) {
+                                          if (regionSnapshot.connectionState ==
+                                              ConnectionState.waiting) {
                                             return const CircularProgressIndicator();
                                           }
 
                                           if (regionSnapshot.hasError) {
-                                            return Text('Error: ${regionSnapshot.error}');
+                                            return Text(
+                                                'Error: ${regionSnapshot.error}');
                                           }
 
-                                          final regions = regionSnapshot.data!.docs.reversed.toList();
-                                          List<DropdownMenuItem<String>> regionItems = [];
+                                          final regions = regionSnapshot
+                                              .data!.docs.reversed
+                                              .toList();
+                                          List<DropdownMenuItem<String>>
+                                              regionItems = [];
                                           regionItems.add(
                                             const DropdownMenuItem(
                                               value: "0",
@@ -358,8 +380,11 @@ class _RegisterState extends State<Register> {
                                           for (var region in regions) {
                                             regionItems.add(
                                               DropdownMenuItem(
-                                                value: region['region_name'].toString(),
-                                                child: Text(region['region_name'].toString()),
+                                                value: region['region_name']
+                                                    .toString(),
+                                                child: Text(
+                                                    region['region_name']
+                                                        .toString()),
                                               ),
                                             );
                                           }
@@ -368,19 +393,27 @@ class _RegisterState extends State<Register> {
                                             children: [
                                               Container(
                                                 width: double.infinity,
-                                                margin: const EdgeInsets.all(10.0),
-                                                padding: const EdgeInsets.all(10.0),
+                                                margin:
+                                                    const EdgeInsets.only(bottom: 10.0, top: 15.0),
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
                                                 decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey),
-                                                  borderRadius: BorderRadius.circular(5.0),
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
                                                 ),
                                                 child: DropdownButton<String>(
                                                   items: regionItems,
                                                   onChanged: (regionValue) {
                                                     setState(() {
-                                                      selectedRegion = regionValue!;
-                                                      selectedProvince = "0"; // Reset selected province when changing the region.
-                                                      selectedMunicipality = "0"; // Reset selected municipality when changing the region.
+                                                      selectedRegion =
+                                                          regionValue!;
+                                                      selectedProvince =
+                                                          "0"; // Reset selected province when changing the region.
+                                                      selectedMunicipality =
+                                                          "0"; // Reset selected municipality when changing the region.
                                                     });
                                                     print(regionValue);
                                                   },
@@ -389,36 +422,54 @@ class _RegisterState extends State<Register> {
                                                 ),
                                               ),
                                               StreamBuilder<QuerySnapshot>(
-                                                stream: FirebaseFirestore.instance
+                                                stream: FirebaseFirestore
+                                                    .instance
                                                     .collection('regions')
-                                                    .where("region_name", isEqualTo: selectedRegion)
+                                                    .where("region_name",
+                                                        isEqualTo:
+                                                            selectedRegion)
                                                     .snapshots(),
-                                                builder: (context, provinceSnapshot) {
-                                                  if (provinceSnapshot.connectionState == ConnectionState.waiting) {
+                                                builder: (context,
+                                                    provinceSnapshot) {
+                                                  if (provinceSnapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
                                                     return const CircularProgressIndicator();
                                                   }
 
-                                                  if (provinceSnapshot.hasError) {
-                                                    return Text('Error: ${provinceSnapshot.error}');
+                                                  if (provinceSnapshot
+                                                      .hasError) {
+                                                    return Text(
+                                                        'Error: ${provinceSnapshot.error}');
                                                   }
 
-                                                  final provinces = provinceSnapshot.data!.docs.reversed.toList();
-                                                  List<DropdownMenuItem<String>> provinceItems = [];
+                                                  final provinces =
+                                                      provinceSnapshot
+                                                          .data!.docs.reversed
+                                                          .toList();
+                                                  List<DropdownMenuItem<String>>
+                                                      provinceItems = [];
                                                   provinceItems.add(
                                                     const DropdownMenuItem(
                                                       value: "0",
-                                                      child: Text('Select Province'),
+                                                      child: Text(
+                                                          'Select Province'),
                                                     ),
                                                   );
 
-                                                  for (var province in provinces) {
+                                                  for (var province
+                                                      in provinces) {
                                                     // Assuming province['province_list'] is a map
-                                                    Map<String, dynamic> provinceList = province['province_list'];
-                                                    provinceList.keys.forEach((provinceName) {
+                                                    Map<String, dynamic>
+                                                        provinceList = province[
+                                                            'province_list'];
+                                                    provinceList.keys.forEach(
+                                                        (provinceName) {
                                                       provinceItems.add(
                                                         DropdownMenuItem(
                                                           value: provinceName,
-                                                          child: Text(provinceName),
+                                                          child: Text(
+                                                              provinceName),
                                                         ),
                                                       );
                                                     });
@@ -426,18 +477,26 @@ class _RegisterState extends State<Register> {
 
                                                   return Container(
                                                     width: double.infinity,
-                                                    margin: const EdgeInsets.all(10.0),
-                                                    padding: const EdgeInsets.all(10.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
                                                     decoration: BoxDecoration(
-                                                      border: Border.all(color: Colors.grey),
-                                                      borderRadius: BorderRadius.circular(5.0),
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
                                                     ),
-                                                    child: DropdownButton<String>(
+                                                    child:
+                                                        DropdownButton<String>(
                                                       items: provinceItems,
-                                                      onChanged: (provinceValue) {
+                                                      onChanged:
+                                                          (provinceValue) {
                                                         setState(() {
-                                                          selectedProvince = provinceValue!;
-                                                          selectedMunicipality = "0"; // Reset selected municipality when changing the province.
+                                                          selectedProvince =
+                                                              provinceValue!;
+                                                          selectedMunicipality =
+                                                              "0"; // Reset selected municipality when changing the province.
                                                         });
                                                         print(provinceValue);
                                                       },
@@ -531,8 +590,31 @@ class _RegisterState extends State<Register> {
                                         ),
                                       ),
                                       border: OutlineInputBorder(),
-                                      hintText:
-                                      "Municipality",
+                                      hintText: "Municipality",
+                                      hintStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10.0, left: 8.0, right: 8.0),
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      hintText: "Barangay",
                                       hintStyle: TextStyle(
                                         fontSize: 16.0,
                                         color: Colors.grey,
@@ -557,32 +639,7 @@ class _RegisterState extends State<Register> {
                                       ),
                                       border: OutlineInputBorder(),
                                       hintText:
-                                      "Barangay",
-                                      hintStyle: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 10.0, left: 8.0, right: 8.0),
-                                  child: TextField(
-                                    style: TextStyle(color: Colors.black),
-                                    keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(),
-                                      hintText:
-                                      "Building No./House No./Unit No./Street",
+                                          "Building No./House No./Unit No./Street",
                                       hintStyle: TextStyle(
                                         fontSize: 16.0,
                                         color: Colors.grey,
@@ -611,7 +668,8 @@ class _RegisterState extends State<Register> {
                                 child: GestureDetector(
                                   onTap: () => Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const FaceScan()),
+                                    MaterialPageRoute(
+                                        builder: (context) => const FaceScan()),
                                   ),
                                   child: Container(
                                     decoration: BoxDecoration(

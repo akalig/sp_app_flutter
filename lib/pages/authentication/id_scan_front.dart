@@ -75,12 +75,39 @@ class _IDScanFrontState extends State<IDScanFront> {
             context: context,
             builder: (context) => AlertDialog(
               title: const Text('Your ID'),
-              content: AspectRatio(
-                aspectRatio: 2 / 3,
-                child: Image.file(
-                  File(xfile.path),
-                  fit: BoxFit.fill, // Use "cover" to maintain aspect ratio
-                ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: Image.file(
+                      File(xfile.path),
+                      fit: BoxFit.fill, // Use "fill" to fill the available space
+                    ),
+                  ),
+                  SizedBox(height: 16.0), // Add some spacing between the image and buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle the "Retake" button press
+                          Navigator.pop(context); // Close the dialog
+                          // Add your logic for "Retake" here
+                        },
+                        child: const Text('Retake'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle the "Continue" button press
+                          Navigator.pop(context); // Close the dialog
+                          // Add your logic for "Continue" here
+                        },
+                        child: const Text('Continue'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );
