@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 
 class MPIN extends StatelessWidget {
@@ -35,32 +36,28 @@ class MPIN extends StatelessWidget {
                       'Enter your Enter your MPIN',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (int i = 0; i < 6; i++)
-                          Container(
-                            margin: const EdgeInsets.all(10.0),
-                            width: 35,
-                            child: const TextField(
-                              maxLength: 1,
-                              style: TextStyle(color: Colors.black),
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                border: OutlineInputBorder(),
-                                hintText: "*",
-                                hintStyle: TextStyle(
-                                    fontSize: 20.0, color: Colors.grey),
-                                hoverColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                      ],
+                    OtpTextField(
+                      numberOfFields: 6,
+                      borderColor: const Color(0xFFFFFFFF),
+                      textStyle: const TextStyle(color: Color(0xFFFFFFFF)),
+                      //set to true to show as box or false to show as dash
+                      showFieldAsBox: true,
+                      //runs when a code is typed in
+                      onCodeChanged: (String code) {
+                        //handle validation or checks here
+                      },
+                      //runs when every textfield is filled
+                      onSubmit: (String verificationCode){
+                        showDialog(
+                            context: context,
+                            builder: (context){
+                              return AlertDialog(
+                                title: const Text("Verification Code"),
+                                content: Text('Code entered is $verificationCode'),
+                              );
+                            }
+                        );
+                      }, // end onSubmit
                     ),
                     const Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
