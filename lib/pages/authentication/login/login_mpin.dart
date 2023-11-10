@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 
-class MPIN extends StatelessWidget {
-  const MPIN({super.key});
+class LoginMPIN extends StatelessWidget {
+  const LoginMPIN({super.key});
 
   @override
   Widget build(BuildContext context) {

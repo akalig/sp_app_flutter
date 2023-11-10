@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'authentication/login.dart';
-import 'authentication/register.dart';
+import 'login/login.dart';
+import 'register/register.dart';
 
 class Authentication extends StatelessWidget {
   const Authentication({super.key});

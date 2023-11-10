@@ -1,17 +1,77 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:sp_app/pages/authentication/id_scan_front.dart';
+import 'package:sp_app/pages/authentication/register/scan/register_id_scan.dart';
 
-class FaceScan extends StatefulWidget {
-  const FaceScan({super.key});
+class RegisterFaceScan extends StatefulWidget {
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController middleNameController;
+  final TextEditingController suffixNameController;
+  final TextEditingController mobileNumberController;
+  final TextEditingController municipalityController;
+  final TextEditingController barangayController;
+  final TextEditingController streetController;
+  final String buttonText;
+  final String currentOption;
+  final String selectedRegion;
+  final String selectedProvince;
+
+  const RegisterFaceScan({
+    Key? key,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.middleNameController,
+    required this.suffixNameController,
+    required this.mobileNumberController,
+    required this.municipalityController,
+    required this.barangayController,
+    required this.streetController,
+    required this.buttonText,
+    required this.currentOption,
+    required this.selectedRegion,
+    required this.selectedProvince,
+  }) : super(key: key);
 
   @override
-  State<FaceScan> createState() => _FaceScanState();
+  State<RegisterFaceScan> createState() => _RegisterFaceScanState();
 }
 
-class _FaceScanState extends State<FaceScan> {
+class _RegisterFaceScanState extends State<RegisterFaceScan> {
   late CameraController controller;
+
+  // Declare the parameters as instance variables
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController middleNameController;
+  late TextEditingController suffixNameController;
+  late TextEditingController mobileNumberController;
+  late TextEditingController municipalityController;
+  late TextEditingController barangayController;
+  late TextEditingController streetController;
+  late String buttonText;
+  late String currentOption;
+  late String selectedRegion;
+  late String selectedProvince;
+
+  @override
+  void initState() {
+    // Initialize the instance variables in initState
+    firstNameController = widget.firstNameController;
+    lastNameController = widget.lastNameController;
+    middleNameController = widget.middleNameController;
+    suffixNameController = widget.suffixNameController;
+    mobileNumberController = widget.mobileNumberController;
+    municipalityController = widget.municipalityController;
+    barangayController = widget.barangayController;
+    streetController = widget.streetController;
+    buttonText = widget.buttonText;
+    currentOption = widget.currentOption;
+    selectedRegion = widget.selectedRegion;
+    selectedProvince = widget.selectedProvince;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +94,9 @@ class _FaceScanState extends State<FaceScan> {
                     aspectRatio: 2 / 3,
                     child: Image.asset(
                       'lib/images/camera-overlay-conceptcoder.png',
-                      fit: BoxFit.cover
+                      fit: BoxFit.cover,
                     ),
                   ),
-
                   InkWell(
                     onTap: () => onTakePicture(),
                     child: const CircleAvatar(
@@ -69,7 +128,7 @@ class _FaceScanState extends State<FaceScan> {
   }
 
   void onTakePicture() async {
-    await controller.takePicture().then((XFile xfile){
+    await controller.takePicture().then((XFile xfile) {
       if (mounted) {
         if (xfile != null) {
           showDialog(
@@ -88,7 +147,8 @@ class _FaceScanState extends State<FaceScan> {
                       ).image,
                     ),
                   ),
-                  const SizedBox(height: 16.0), // Add some spacing between the image and buttons
+                  const SizedBox(height: 16.0),
+                  // Add some spacing between the image and buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -101,7 +161,23 @@ class _FaceScanState extends State<FaceScan> {
                       GestureDetector(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const IDScanFront()),
+                          MaterialPageRoute(
+                            builder: (context) => RegisterIDScan(
+                              firstNameController: firstNameController,
+                              lastNameController: lastNameController,
+                              middleNameController: middleNameController,
+                              suffixNameController: suffixNameController,
+                              mobileNumberController: mobileNumberController,
+                              municipalityController: municipalityController,
+                              barangayController: barangayController,
+                              streetController: streetController,
+                              buttonText: buttonText,
+                              currentOption: currentOption,
+                              selectedRegion: selectedRegion,
+                              selectedProvince: selectedProvince,
+                              image: Image.file(File(xfile.path)),
+                            ),
+                          ),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
@@ -128,7 +204,6 @@ class _FaceScanState extends State<FaceScan> {
               ),
             ),
           );
-
         }
       }
       return;

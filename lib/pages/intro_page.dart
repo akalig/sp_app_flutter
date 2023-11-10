@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'authentication.dart';
+import 'authentication/authentication.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'm_pin.dart';
+import 'login_mpin.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -64,7 +63,7 @@ class Login extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const MPIN()),
+                                MaterialPageRoute(builder: (context) => const LoginMPIN()),
                               ),
                               child: Container(
                                 decoration: BoxDecoration(

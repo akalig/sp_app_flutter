@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'face_scan.dart';
+import 'scan/register_face_scan.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -13,6 +12,16 @@ class Register extends StatefulWidget {
 List<String> categoryOptions = ['Resident', 'Visitor'];
 
 class _RegisterState extends State<Register> {
+
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController suffixNameController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController municipalityController = TextEditingController();
+  TextEditingController barangayController = TextEditingController();
+  TextEditingController streetController = TextEditingController();
+
   DateTime date = DateTime.now();
   bool isRegistrationSectionOneVisible = true;
   bool isRegistrationSectionTwoVisible = false;
@@ -86,13 +95,14 @@ class _RegisterState extends State<Register> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(
+                          Padding(
+                            padding: const EdgeInsets.only(
                                 top: 25.0, left: 8.0, right: 8.0),
                             child: TextField(
-                              style: TextStyle(color: Colors.black),
+                              controller: firstNameController,
+                              style: const TextStyle(color: Colors.black),
                               keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
@@ -109,13 +119,14 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(
+                          Padding(
+                            padding: const EdgeInsets.only(
                                 top: 25.0, left: 8.0, right: 8.0),
                             child: TextField(
-                              style: TextStyle(color: Colors.black),
+                              controller: lastNameController,
+                              style: const TextStyle(color: Colors.black),
                               keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
@@ -132,17 +143,18 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
                                 child: Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       top: 25.0, left: 8.0, right: 4.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    controller: middleNameController,
+                                    style: const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       filled: true,
                                       fillColor: Colors.white,
                                       enabledBorder: OutlineInputBorder(
@@ -162,12 +174,13 @@ class _RegisterState extends State<Register> {
                               ),
                               Flexible(
                                 child: Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       top: 25.0, left: 4.0, right: 8.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    controller: suffixNameController,
+                                    style: const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       filled: true,
                                       fillColor: Colors.white,
                                       enabledBorder: OutlineInputBorder(
@@ -231,14 +244,15 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
 
-                          const Padding(
-                            padding: EdgeInsets.only(
+                          Padding(
+                            padding: const EdgeInsets.only(
                                 top: 25.0, left: 8.0, right: 8.0),
                             child: TextField(
+                              controller: mobileNumberController,
                               maxLength: 11,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
@@ -506,67 +520,6 @@ class _RegisterState extends State<Register> {
                                                   );
                                                 },
                                               ),
-
-                                              // StreamBuilder<QuerySnapshot>(
-                                              //   stream: FirebaseFirestore.instance
-                                              //       .collection('regions')
-                                              //       .where("region_name", isEqualTo: selectedRegion)
-                                              //       .snapshots(),
-                                              //   builder: (context, municipalitySnapshot) {
-                                              //     if (municipalitySnapshot.connectionState == ConnectionState.waiting) {
-                                              //       return const CircularProgressIndicator();
-                                              //     }
-                                              //
-                                              //     if (municipalitySnapshot.hasError) {
-                                              //       return Text('Error: ${municipalitySnapshot.error}');
-                                              //     }
-                                              //
-                                              //     final municipalities = municipalitySnapshot.data!.docs.reversed.toList();
-                                              //     List<DropdownMenuItem<String>> municipalityItems = [];
-                                              //     municipalityItems.add(
-                                              //       const DropdownMenuItem(
-                                              //         value: "0",
-                                              //         child: Text('Select Municipality'),
-                                              //       ),
-                                              //     );
-                                              //
-                                              //     for (var municipality in municipalities) {
-                                              //       // Assuming province['province_list'] is a map
-                                              //       Map<String, dynamic> municipalityList = municipality['province_list'][selectedProvince]['municipality_list'];
-                                              //
-                                              //       municipalityList.keys.forEach((municipalityName) {
-                                              //         municipalityItems.add(
-                                              //           DropdownMenuItem(
-                                              //             value: municipalityName,
-                                              //             child: Text(municipalityName),
-                                              //           ),
-                                              //         );
-                                              //       });
-                                              //     }
-                                              //
-                                              //     return Container(
-                                              //       width: double.infinity,
-                                              //       margin: const EdgeInsets.all(10.0),
-                                              //       padding: const EdgeInsets.all(10.0),
-                                              //       decoration: BoxDecoration(
-                                              //         border: Border.all(color: Colors.grey),
-                                              //         borderRadius: BorderRadius.circular(5.0),
-                                              //       ),
-                                              //       child: DropdownButton<String>(
-                                              //         items: municipalityItems,
-                                              //         onChanged: (municipalityValue) {
-                                              //           setState(() {
-                                              //             selectedMunicipality = municipalityValue!;
-                                              //             selectedBarangay = "0"; // Reset selected municipality when changing the province.
-                                              //           });
-                                              //           print(municipalityValue);
-                                              //         },
-                                              //         value: selectedProvince,
-                                              //         isExpanded: true,
-                                              //       ),
-                                              //     );
-                                              //   },
-                                              // ),
                                             ],
                                           );
                                         },
@@ -575,13 +528,14 @@ class _RegisterState extends State<Register> {
                                   ),
                                 ),
 
-                                const Padding(
-                                  padding: EdgeInsets.only(
+                                Padding(
+                                  padding: const EdgeInsets.only(
                                       top: 10.0, left: 8.0, right: 8.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    controller: municipalityController,
+                                    style: const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       filled: true,
                                       fillColor: Colors.white,
                                       enabledBorder: OutlineInputBorder(
@@ -599,13 +553,14 @@ class _RegisterState extends State<Register> {
                                   ),
                                 ),
 
-                                const Padding(
-                                  padding: EdgeInsets.only(
+                                Padding(
+                                  padding: const EdgeInsets.only(
                                       top: 10.0, left: 8.0, right: 8.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    controller: barangayController,
+                                    style: const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       filled: true,
                                       fillColor: Colors.white,
                                       enabledBorder: OutlineInputBorder(
@@ -623,13 +578,14 @@ class _RegisterState extends State<Register> {
                                   ),
                                 ),
 
-                                const Padding(
-                                  padding: EdgeInsets.only(
+                                Padding(
+                                  padding: const EdgeInsets.only(
                                       top: 10.0, left: 8.0, right: 8.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    controller: streetController,
+                                    style: const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       filled: true,
                                       fillColor: Colors.white,
                                       enabledBorder: OutlineInputBorder(
@@ -669,7 +625,21 @@ class _RegisterState extends State<Register> {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const FaceScan()),
+                                      builder: (context) => RegisterFaceScan(
+                                        firstNameController: firstNameController,
+                                        lastNameController: lastNameController,
+                                        middleNameController: middleNameController,
+                                        suffixNameController: suffixNameController,
+                                        mobileNumberController: mobileNumberController,
+                                        municipalityController: municipalityController,
+                                        barangayController: barangayController,
+                                        streetController: streetController,
+                                        buttonText: buttonText,
+                                        currentOption: currentOption,
+                                        selectedRegion: selectedRegion,
+                                        selectedProvince: selectedProvince,
+                                      ),
+                                    ),
                                   ),
                                   child: Container(
                                     decoration: BoxDecoration(
