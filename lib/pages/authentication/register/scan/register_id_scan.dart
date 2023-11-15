@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterIDScan extends StatefulWidget {
-
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
@@ -99,10 +99,8 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                     aspectRatio: 2 / 3,
                     child: Image.asset(
                         'lib/images/camera-overlay-conceptcoder2.png',
-                        fit: BoxFit.cover
-                    ),
+                        fit: BoxFit.cover),
                   ),
-
                   InkWell(
                     onTap: () => onTakePicture(),
                     child: const CircleAvatar(
@@ -134,7 +132,7 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
   }
 
   void onTakePicture() async {
-    await controller.takePicture().then((XFile xfile){
+    await controller.takePicture().then((XFile xfile) {
       if (mounted) {
         if (xfile != null) {
           showDialog(
@@ -148,10 +146,12 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                     aspectRatio: 2 / 3,
                     child: Image.file(
                       File(xfile.path),
-                      fit: BoxFit.fill, // Use "fill" to fill the available space
+                      fit:
+                          BoxFit.fill, // Use "fill" to fill the available space
                     ),
                   ),
-                  SizedBox(height: 16.0), // Add some spacing between the image and buttons
+                  SizedBox(height: 16.0),
+                  // Add some spacing between the image and buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -166,8 +166,22 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                       GestureDetector(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const RegisterOTP()),
-
+                          MaterialPageRoute(
+                            builder: (context) => RegisterOTP(
+                              firstNameController: firstNameController,
+                              lastNameController: lastNameController,
+                              middleNameController: middleNameController,
+                              suffixNameController: suffixNameController,
+                              mobileNumberController: mobileNumberController,
+                              municipalityController: municipalityController,
+                              barangayController: barangayController,
+                              streetController: streetController,
+                              buttonText: buttonText,
+                              currentOption: currentOption,
+                              selectedRegion: selectedRegion,
+                              selectedProvince: selectedProvince,
+                            ),
+                          ),
                         ),
                         child: Container(
                           decoration: BoxDecoration(

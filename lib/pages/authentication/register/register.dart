@@ -249,7 +249,7 @@ class _RegisterState extends State<Register> {
                                 top: 25.0, left: 8.0, right: 8.0),
                             child: TextField(
                               controller: mobileNumberController,
-                              maxLength: 11,
+                              maxLength: 10,
                               style: const TextStyle(color: Colors.black),
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
