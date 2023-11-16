@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sp_app/pages/authentication/register/register_mpin.dart';
 import 'package:sp_app/pages/home/home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
-class RegisterOTP extends StatefulWidget {
+class RegisterMPIN extends StatefulWidget {
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
@@ -18,7 +18,7 @@ class RegisterOTP extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
 
-  const RegisterOTP({
+  const RegisterMPIN({
     Key? key,
     required this.firstNameController,
     required this.lastNameController,
@@ -35,10 +35,10 @@ class RegisterOTP extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<RegisterOTP> createState() => _RegisterOTPState();
+  State<RegisterMPIN> createState() => _RegisterMPINState();
 }
 
-class _RegisterOTPState extends State<RegisterOTP> {
+class _RegisterMPINState extends State<RegisterMPIN> {
   // Declare the parameters as instance variables
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
@@ -52,7 +52,6 @@ class _RegisterOTPState extends State<RegisterOTP> {
   late String currentOption;
   late String selectedRegion;
   late String selectedProvince;
-  late Image image;
 
   @override
   void initState() {
@@ -98,14 +97,13 @@ class _RegisterOTPState extends State<RegisterOTP> {
                   ),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Enter OTP request.',
+                      'Enter your Enter your MPIN',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 50.0), //
                     OtpTextField(
                       numberOfFields: 6,
                       borderColor: const Color(0xFFFFFFFF),
@@ -117,27 +115,72 @@ class _RegisterOTPState extends State<RegisterOTP> {
                         //handle validation or checks here
                       },
                       //runs when every textfield is filled
-                      onSubmit: (String verificationCode) async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterMPIN(
-                              firstNameController: firstNameController,
-                              lastNameController: lastNameController,
-                              middleNameController: middleNameController,
-                              suffixNameController: suffixNameController,
-                              mobileNumberController: mobileNumberController,
-                              municipalityController: municipalityController,
-                              barangayController: barangayController,
-                              streetController: streetController,
-                              buttonText: buttonText,
-                              currentOption: currentOption,
-                              selectedRegion: selectedRegion,
-                              selectedProvince: selectedProvince,
-                            ),
-                          ),
-                        );
+                      onSubmit: (String pinPassword) async {
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (context){
+                        //       return AlertDialog(
+                        //         title: const Text("Verification Code"),
+                        //         content: Text('Code entered is $verificationCode'),
+                        //       );
+                        //     }
+                        // );
+
+                        try {
+                          // Get a Firestore instance
+                          String randomString = generateRandomString(20);
+                          FirebaseFirestore firestore = FirebaseFirestore.instance;
+                          Timestamp createdAtTimestamp = Timestamp.now();
+
+                          // Save data to "users" collection
+                          await firestore.collection('users').doc(randomString).set({
+                            'first_name': firstNameController.text,
+                            'last_name': lastNameController.text,
+                            'middle_name': middleNameController.text,
+                            'suffix_name': suffixNameController.text,
+                            'mobile_number': mobileNumberController.text,
+                            'municipality': municipalityController.text,
+                            'barangay': barangayController.text,
+                            'street': streetController.text,
+                            'birthdate': buttonText,
+                            'category': currentOption,
+                            'region': selectedRegion,
+                            'province': selectedProvince,
+                            'pin_password': pinPassword,
+                            'userID': randomString,
+                            'has_greencard': 'false',
+                            'created_at': createdAtTimestamp,
+                          });
+
+                          // Navigate to the home page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage()),
+                          );
+                        } catch (e) {
+                          print('Error saving data: $e');
+                          // Handle error
+                        }
                       }, // end onSubmit
+                    ),
+                    const Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Forgot Password? ',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Click here',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -148,4 +191,20 @@ class _RegisterOTPState extends State<RegisterOTP> {
       ),
     );
   }
+
+  String generateRandomString(int length) {
+    const String characterSet =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    Random random = Random();
+
+    StringBuffer buffer = StringBuffer();
+
+    for (int i = 0; i < length; i++) {
+      int randomIndex = random.nextInt(characterSet.length);
+      buffer.write(characterSet[randomIndex]);
+    }
+
+    return buffer.toString();
+  }
+
 }

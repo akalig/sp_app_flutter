@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
+import '../../home/home_page.dart';
+
 
 class LoginMPIN extends StatelessWidget {
   const LoginMPIN({super.key});
@@ -48,14 +50,9 @@ class LoginMPIN extends StatelessWidget {
                       },
                       //runs when every textfield is filled
                       onSubmit: (String verificationCode){
-                        showDialog(
-                            context: context,
-                            builder: (context){
-                              return AlertDialog(
-                                title: const Text("Verification Code"),
-                                content: Text('Code entered is $verificationCode'),
-                              );
-                            }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage()),
                         );
                       }, // end onSubmit
                     ),

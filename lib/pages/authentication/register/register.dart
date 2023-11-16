@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'scan/register_face_scan.dart';
 
 class Register extends StatefulWidget {
@@ -39,6 +40,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         margin: const EdgeInsets.only(top: 25),
         decoration: const BoxDecoration(
@@ -625,7 +627,7 @@ class _RegisterState extends State<Register> {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => RegisterFaceScan(
+                                      builder: (context) => RegisterOTP(
                                         firstNameController: firstNameController,
                                         lastNameController: lastNameController,
                                         middleNameController: middleNameController,
