@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:sp_app/pages/authentication/register/register_mpin.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,10 +15,9 @@ class RegisterIDScan extends StatefulWidget {
   final TextEditingController barangayController;
   final TextEditingController streetController;
   final String buttonText;
-  final String currentOption;
   final String selectedRegion;
   final String selectedProvince;
-  final Image image;
+  final String residentSelection;
 
   const RegisterIDScan({
     Key? key,
@@ -30,10 +30,9 @@ class RegisterIDScan extends StatefulWidget {
     required this.barangayController,
     required this.streetController,
     required this.buttonText,
-    required this.currentOption,
     required this.selectedRegion,
     required this.selectedProvince,
-    required this.image,
+    required this.residentSelection,
   }) : super(key: key);
 
   @override
@@ -53,10 +52,9 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
   late TextEditingController barangayController;
   late TextEditingController streetController;
   late String buttonText;
-  late String currentOption;
   late String selectedRegion;
   late String selectedProvince;
-  late Image image;
+  late String residentSelection;
 
   @override
   void initState() {
@@ -70,10 +68,9 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
     barangayController = widget.barangayController;
     streetController = widget.streetController;
     buttonText = widget.buttonText;
-    currentOption = widget.currentOption;
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
-    image = widget.image;
+    residentSelection = widget.residentSelection;
 
     super.initState();
   }
@@ -167,7 +164,7 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterOTP(
+                            builder: (context) => RegisterMPIN(
                               firstNameController: firstNameController,
                               lastNameController: lastNameController,
                               middleNameController: middleNameController,
@@ -177,9 +174,9 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                               barangayController: barangayController,
                               streetController: streetController,
                               buttonText: buttonText,
-                              currentOption: currentOption,
                               selectedRegion: selectedRegion,
                               selectedProvince: selectedProvince,
+                              residentSelection: residentSelection,
                             ),
                           ),
                         ),

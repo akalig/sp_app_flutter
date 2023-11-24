@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sp_app/pages/authentication/register/register.dart';
 import 'package:sp_app/pages/authentication/register/register_mpin.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 
 class RegisterOTP extends StatefulWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController middleNameController;
-  final TextEditingController suffixNameController;
   final TextEditingController mobileNumberController;
-  final TextEditingController municipalityController;
-  final TextEditingController barangayController;
-  final TextEditingController streetController;
-  final String buttonText;
-  final String currentOption;
-  final String selectedRegion;
-  final String selectedProvince;
+  final String residentSelection;
 
   const RegisterOTP({
     Key? key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.middleNameController,
-    required this.suffixNameController,
     required this.mobileNumberController,
-    required this.municipalityController,
-    required this.barangayController,
-    required this.streetController,
-    required this.buttonText,
-    required this.currentOption,
-    required this.selectedRegion,
-    required this.selectedProvince,
+    required this.residentSelection,
   }) : super(key: key);
 
   @override
@@ -40,35 +21,14 @@ class RegisterOTP extends StatefulWidget {
 
 class _RegisterOTPState extends State<RegisterOTP> {
   // Declare the parameters as instance variables
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
-  late TextEditingController middleNameController;
-  late TextEditingController suffixNameController;
   late TextEditingController mobileNumberController;
-  late TextEditingController municipalityController;
-  late TextEditingController barangayController;
-  late TextEditingController streetController;
-  late String buttonText;
-  late String currentOption;
-  late String selectedRegion;
-  late String selectedProvince;
-  late Image image;
+  late String residentSelection;
 
   @override
   void initState() {
     // Initialize the instance variables in initState
-    firstNameController = widget.firstNameController;
-    lastNameController = widget.lastNameController;
-    middleNameController = widget.middleNameController;
-    suffixNameController = widget.suffixNameController;
     mobileNumberController = widget.mobileNumberController;
-    municipalityController = widget.municipalityController;
-    barangayController = widget.barangayController;
-    streetController = widget.streetController;
-    buttonText = widget.buttonText;
-    currentOption = widget.currentOption;
-    selectedRegion = widget.selectedRegion;
-    selectedProvince = widget.selectedProvince;
+    residentSelection = widget.residentSelection;
 
     super.initState();
   }
@@ -121,19 +81,9 @@ class _RegisterOTPState extends State<RegisterOTP> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterMPIN(
-                              firstNameController: firstNameController,
-                              lastNameController: lastNameController,
-                              middleNameController: middleNameController,
-                              suffixNameController: suffixNameController,
+                            builder: (context) => Register(
                               mobileNumberController: mobileNumberController,
-                              municipalityController: municipalityController,
-                              barangayController: barangayController,
-                              streetController: streetController,
-                              buttonText: buttonText,
-                              currentOption: currentOption,
-                              selectedRegion: selectedRegion,
-                              selectedProvince: selectedProvince,
+                              residentSelection: residentSelection,
                             ),
                           ),
                         );

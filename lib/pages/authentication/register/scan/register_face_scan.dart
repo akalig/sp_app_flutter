@@ -13,9 +13,9 @@ class RegisterFaceScan extends StatefulWidget {
   final TextEditingController barangayController;
   final TextEditingController streetController;
   final String buttonText;
-  final String currentOption;
   final String selectedRegion;
   final String selectedProvince;
+  final String residentSelection;
 
   const RegisterFaceScan({
     Key? key,
@@ -28,9 +28,9 @@ class RegisterFaceScan extends StatefulWidget {
     required this.barangayController,
     required this.streetController,
     required this.buttonText,
-    required this.currentOption,
     required this.selectedRegion,
     required this.selectedProvince,
+    required this.residentSelection,
   }) : super(key: key);
 
   @override
@@ -50,9 +50,9 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
   late TextEditingController barangayController;
   late TextEditingController streetController;
   late String buttonText;
-  late String currentOption;
   late String selectedRegion;
   late String selectedProvince;
+  late String residentSelection;
 
   @override
   void initState() {
@@ -66,9 +66,9 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
     barangayController = widget.barangayController;
     streetController = widget.streetController;
     buttonText = widget.buttonText;
-    currentOption = widget.currentOption;
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
+    residentSelection = widget.residentSelection;
 
     super.initState();
   }
@@ -172,10 +172,9 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                               barangayController: barangayController,
                               streetController: streetController,
                               buttonText: buttonText,
-                              currentOption: currentOption,
                               selectedRegion: selectedRegion,
                               selectedProvince: selectedProvince,
-                              image: Image.file(File(xfile.path)),
+                              residentSelection: residentSelection,
                             ),
                           ),
                         ),

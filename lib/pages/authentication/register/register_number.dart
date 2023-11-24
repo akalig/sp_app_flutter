@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'login_mpin.dart';
+import 'package:sp_app/pages/authentication/register/register_otp.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class RegisterNumber extends StatefulWidget {
+  final String residentSelection;
+
+  const RegisterNumber({
+    Key? key,
+    required this.residentSelection,
+  }) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  State<RegisterNumber> createState() => _RegisterNumberState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterNumberState extends State<RegisterNumber> {
   TextEditingController mobileNumberController = TextEditingController();
+  late String residentSelection;
 
   Future<void> checkMobileNumber(BuildContext context, String mobileNumber) async {
     try {
@@ -21,11 +27,10 @@ class _LoginState extends State<Login> {
           .get();
 
       // Check if there's a user with the provided mobile number
-      if (querySnapshot.docs.isEmpty) {
-        // Mobile number not registered, show snackbar and return
+      if (querySnapshot.docs.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Mobile Number not registered'),
+            content: Text('Mobile Number already registered'),
             duration: Duration(seconds: 2),
             backgroundColor: Colors.red,
           ),
@@ -33,26 +38,28 @@ class _LoginState extends State<Login> {
         return;
       }
 
-      // Mobile number is registered
-      // Retrieve the mobile number and pin_password from the first document (assuming there's only one)
-      String retrievedMobileNumber = querySnapshot.docs[0]['mobile_number'];
-      String retrievedPinPassword = querySnapshot.docs[0]['pin_password'];
-
-      // Navigate to the next screen (LoginMPIN) and pass the values
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => LoginMPIN(
-            mobileNumber: retrievedMobileNumber,
-            pinPassword: retrievedPinPassword,
-          ),
-        ),
+        MaterialPageRoute(builder: (context) => RegisterOTP(
+          mobileNumberController: mobileNumberController,
+          residentSelection: residentSelection,
+        )),
       );
+
     } catch (e) {
       // Handle any errors that might occur during the Firestore query
       print('Error checking mobile number: $e');
       // You can show an error snackbar or handle it as appropriate for your app
     }
+  }
+
+
+  @override
+  void initState() {
+    // Initialize the instance variables in initState
+    residentSelection = widget.residentSelection;
+
+    super.initState();
   }
 
   @override
@@ -85,10 +92,7 @@ class _LoginState extends State<Login> {
                   children: [
                     const Text(
                       'Enter your mobile number',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),
                     ),
                     Column(
                       children: [
@@ -102,24 +106,25 @@ class _LoginState extends State<Login> {
                             fillColor: Colors.white,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                             border: OutlineInputBorder(),
-                            hintText: "🇵🇭 +63",
+                            hintText: "Mobile Number",
                             hintStyle: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               color: Colors.grey,
                             ),
-                            hoverColor: Colors.white,
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25.0),
                           child: SizedBox(
                             width: 300,
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+
                                 if (mobileNumberController.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -134,6 +139,7 @@ class _LoginState extends State<Login> {
                                 // Call the function to check if the mobile number is registered
                                 checkMobileNumber(context, mobileNumberController.text);
                               },
+
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -142,7 +148,7 @@ class _LoginState extends State<Login> {
                                 padding: const EdgeInsets.all(18),
                                 child: const Center(
                                   child: Text(
-                                    'LOGIN',
+                                    'REGISTER',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -162,16 +168,9 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Forgot Password? ',
+                          'San Pedro App',
                           style: TextStyle(
                             color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Click here',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],

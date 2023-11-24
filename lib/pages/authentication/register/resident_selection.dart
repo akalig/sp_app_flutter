@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/authentication/register/register_number.dart';
-import 'package:sp_app/pages/authentication/register/resident_selection.dart';
-import 'login/login.dart';
-import 'register/register.dart';
 
-class Authentication extends StatelessWidget {
-  const Authentication({super.key});
+class ResidentSelection extends StatefulWidget {
+  const ResidentSelection({super.key});
+
+  @override
+  State<ResidentSelection> createState() => _ResidentSelectionState();
+}
+
+class _ResidentSelectionState extends State<ResidentSelection> {
+
+  String textResident = "Resident";
+  String textNonResident = "Non-Resident";
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +59,9 @@ class Authentication extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Login()),
+                          MaterialPageRoute(builder: (context) => RegisterNumber(
+                              residentSelection: textNonResident,
+                          )),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
@@ -63,7 +71,7 @@ class Authentication extends StatelessWidget {
                           padding: const EdgeInsets.all(18),
                           child: const Center(
                             child: Text(
-                              'LOGIN',
+                              'REGISTER AS NON - RESIDENT',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -84,7 +92,11 @@ class Authentication extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const ResidentSelection()),
+                          MaterialPageRoute(builder: (context) => RegisterNumber(
+
+                            residentSelection: textResident,
+
+                          )),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
@@ -94,7 +106,7 @@ class Authentication extends StatelessWidget {
                           padding: const EdgeInsets.all(18),
                           child: const Center(
                             child: Text(
-                              'REGISTER',
+                              'REGISTER AS RESIDENT',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

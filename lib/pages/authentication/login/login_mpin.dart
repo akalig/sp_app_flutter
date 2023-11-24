@@ -3,9 +3,12 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 import '../../home/home_page.dart';
 
-
 class LoginMPIN extends StatelessWidget {
-  const LoginMPIN({super.key});
+  final String mobileNumber;
+  final String pinPassword;
+
+  const LoginMPIN({Key? key, required this.mobileNumber, required this.pinPassword})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,26 +38,36 @@ class LoginMPIN extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Enter your Enter your MPIN',
+                      'Enter your MPIN',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     OtpTextField(
                       numberOfFields: 6,
                       borderColor: const Color(0xFFFFFFFF),
                       textStyle: const TextStyle(color: Color(0xFFFFFFFF)),
-                      //set to true to show as box or false to show as dash
                       showFieldAsBox: true,
-                      //runs when a code is typed in
                       onCodeChanged: (String code) {
-                        //handle validation or checks here
+                        // Handle validation or checks here
                       },
-                      //runs when every textfield is filled
-                      onSubmit: (String verificationCode){
+                      onSubmit: (String verificationCode) {
+                        // Check if the entered MPIN matches the pinPassword
+                        if (verificationCode != pinPassword) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Invalid MPIN'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        // MPIN is valid, navigate to the home page
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const HomePage()),
                         );
-                      }, // end onSubmit
+                      },
                     ),
                     const Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

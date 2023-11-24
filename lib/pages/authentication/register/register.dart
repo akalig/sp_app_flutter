@@ -1,10 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sp_app/pages/authentication/authentication.dart';
+import 'package:sp_app/pages/authentication/register/register_mpin.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'scan/register_face_scan.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  final TextEditingController mobileNumberController;
+  final String residentSelection;
+
+  const Register({
+    Key? key,
+    required this.mobileNumberController,
+    required this.residentSelection,
+  }) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -13,12 +22,10 @@ class Register extends StatefulWidget {
 List<String> categoryOptions = ['Resident', 'Visitor'];
 
 class _RegisterState extends State<Register> {
-
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController suffixNameController = TextEditingController();
-  TextEditingController mobileNumberController = TextEditingController();
   TextEditingController municipalityController = TextEditingController();
   TextEditingController barangayController = TextEditingController();
   TextEditingController streetController = TextEditingController();
@@ -30,12 +37,27 @@ class _RegisterState extends State<Register> {
 
   String buttonText = 'Select Birthdate';
 
-  String currentOption = categoryOptions[0];
-
   String selectedRegion = "0";
   String selectedProvince = "0";
   String selectedMunicipality = "0";
   String selectedBarangay = "0";
+
+  late TextEditingController mobileNumberController;
+  late String residentSelection;
+
+  @override
+  void initState() {
+    // Initialize the instance variables in initState
+    mobileNumberController = widget.mobileNumberController;
+    residentSelection = widget.residentSelection;
+
+    String defaultMunicipalityValue = "San Pedro";
+
+    municipalityController.text =
+        (residentSelection == "Resident") ? defaultMunicipalityValue : "";
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +78,12 @@ class _RegisterState extends State<Register> {
                 child: GestureDetector(
                   onTap: () {
                     // Navigate back to the homepage
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Authentication(),
+                      ),
+                    );
                   },
                   child: const Text(
                     '< Back to Homepage',
@@ -245,32 +272,6 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 25.0, left: 8.0, right: 8.0),
-                            child: TextField(
-                              controller: mobileNumberController,
-                              maxLength: 10,
-                              style: const TextStyle(color: Colors.black),
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(),
-                                hintText: "Mobile Number",
-                                hintStyle: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -290,72 +291,6 @@ class _RegisterState extends State<Register> {
                                     color: Colors.black,
                                     fontSize: 16, // Increase font size
                                     fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10.0, left: 8.0, right: 8.0, bottom: 5.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Choose Category",
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            width: 1.0,
-                                            // You can adjust the border width
-                                            color: Colors
-                                                .grey, // You can adjust the border color
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: ListTile(
-                                                title: const Text('Resident'),
-                                                contentPadding: EdgeInsets.zero,
-                                                // Set contentPadding to control horizontal alignment
-                                                leading: Radio(
-                                                  value: categoryOptions[0],
-                                                  groupValue: currentOption,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      currentOption =
-                                                          value.toString();
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            // Add spacing between the radio buttons
-                                            Expanded(
-                                              child: ListTile(
-                                                title: const Text('Visitor'),
-                                                contentPadding: EdgeInsets.zero,
-                                                // Set contentPadding to control horizontal alignment
-                                                leading: Radio(
-                                                  value: categoryOptions[1],
-                                                  groupValue: currentOption,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      currentOption =
-                                                          value.toString();
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
                                   ),
                                 ),
 
@@ -386,31 +321,41 @@ class _RegisterState extends State<Register> {
                                               .toList();
                                           List<DropdownMenuItem<String>>
                                               regionItems = [];
-                                          regionItems.add(
-                                            const DropdownMenuItem(
-                                              value: "0",
-                                              child: Text('Select Region'),
-                                            ),
-                                          );
 
-                                          for (var region in regions) {
+                                          if (residentSelection == 'Resident') {
                                             regionItems.add(
-                                              DropdownMenuItem(
-                                                value: region['region_name']
-                                                    .toString(),
-                                                child: Text(
-                                                    region['region_name']
-                                                        .toString()),
+                                              const DropdownMenuItem(
+                                                value: "0",
+                                                child: Text('Region IV - A'),
                                               ),
                                             );
+                                          } else {
+                                            regionItems.add(
+                                              const DropdownMenuItem(
+                                                value: "0",
+                                                child: Text('Select Region'),
+                                              ),
+                                            );
+
+                                            for (var region in regions) {
+                                              regionItems.add(
+                                                DropdownMenuItem(
+                                                  value: region['region_name']
+                                                      .toString(),
+                                                  child: Text(
+                                                      region['region_name']
+                                                          .toString()),
+                                                ),
+                                              );
+                                            }
                                           }
 
                                           return Column(
                                             children: [
                                               Container(
                                                 width: double.infinity,
-                                                margin:
-                                                    const EdgeInsets.only(bottom: 10.0, top: 15.0),
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 10.0, top: 15.0),
                                                 padding:
                                                     const EdgeInsets.all(10.0),
                                                 decoration: BoxDecoration(
@@ -465,30 +410,42 @@ class _RegisterState extends State<Register> {
                                                           .toList();
                                                   List<DropdownMenuItem<String>>
                                                       provinceItems = [];
-                                                  provinceItems.add(
-                                                    const DropdownMenuItem(
-                                                      value: "0",
-                                                      child: Text(
-                                                          'Select Province'),
-                                                    ),
-                                                  );
 
-                                                  for (var province
-                                                      in provinces) {
-                                                    // Assuming province['province_list'] is a map
-                                                    Map<String, dynamic>
-                                                        provinceList = province[
-                                                            'province_list'];
-                                                    provinceList.keys.forEach(
-                                                        (provinceName) {
-                                                      provinceItems.add(
-                                                        DropdownMenuItem(
-                                                          value: provinceName,
-                                                          child: Text(
-                                                              provinceName),
-                                                        ),
-                                                      );
-                                                    });
+                                                  if (residentSelection ==
+                                                      'Resident') {
+                                                    provinceItems.add(
+                                                      const DropdownMenuItem(
+                                                        value: "0",
+                                                        child: Text('Laguna'),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    provinceItems.add(
+                                                      const DropdownMenuItem(
+                                                        value: "0",
+                                                        child: Text(
+                                                            'Select Province'),
+                                                      ),
+                                                    );
+
+                                                    for (var province
+                                                        in provinces) {
+                                                      // Assuming province['province_list'] is a map
+                                                      Map<String, dynamic>
+                                                          provinceList =
+                                                          province[
+                                                              'province_list'];
+                                                      provinceList.keys.forEach(
+                                                          (provinceName) {
+                                                        provinceItems.add(
+                                                          DropdownMenuItem(
+                                                            value: provinceName,
+                                                            child: Text(
+                                                                provinceName),
+                                                          ),
+                                                        );
+                                                      });
+                                                    }
                                                   }
 
                                                   return Container(
@@ -624,25 +581,107 @@ class _RegisterState extends State<Register> {
                               child: SizedBox(
                                 width: 300,
                                 child: GestureDetector(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RegisterOTP(
-                                        firstNameController: firstNameController,
-                                        lastNameController: lastNameController,
-                                        middleNameController: middleNameController,
-                                        suffixNameController: suffixNameController,
-                                        mobileNumberController: mobileNumberController,
-                                        municipalityController: municipalityController,
-                                        barangayController: barangayController,
-                                        streetController: streetController,
-                                        buttonText: buttonText,
-                                        currentOption: currentOption,
-                                        selectedRegion: selectedRegion,
-                                        selectedProvince: selectedProvince,
-                                      ),
-                                    ),
-                                  ),
+                                  onTap: () {
+                                    // Check if any of the text fields is empty
+                                    if (residentSelection == 'Resident') {
+                                      if (municipalityController.text.isEmpty ||
+                                          barangayController.text.isEmpty ||
+                                          streetController.text.isEmpty) {
+                                        // If any field is empty, show a snackbar or toast message and return
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'Please fill in all fields'),
+                                            duration: Duration(seconds: 2),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    } else {
+                                      if (selectedRegion == "0" ||
+                                          selectedProvince == "0" ||
+                                          municipalityController.text.isEmpty ||
+                                          barangayController.text.isEmpty ||
+                                          streetController.text.isEmpty) {
+                                        // If any field is empty, show a snackbar or toast message and return
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'Please fill in all fields'),
+                                            duration: Duration(seconds: 2),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    }
+
+                                    // Check the value of residentSelection and navigate accordingly
+                                    if (residentSelection == "Resident") {
+                                      // Navigate to RegisterScanFace
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegisterFaceScan(
+                                            firstNameController:
+                                                firstNameController,
+                                            lastNameController:
+                                                lastNameController,
+                                            middleNameController:
+                                                middleNameController,
+                                            suffixNameController:
+                                                suffixNameController,
+                                            mobileNumberController:
+                                                mobileNumberController,
+                                            municipalityController:
+                                                municipalityController,
+                                            barangayController:
+                                                barangayController,
+                                            streetController: streetController,
+                                            buttonText: buttonText,
+                                            selectedRegion: selectedRegion,
+                                            selectedProvince: selectedProvince,
+                                            residentSelection:
+                                                residentSelection,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (residentSelection ==
+                                        "Non-Resident") {
+                                      // Navigate to RegisterMPIN
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => RegisterMPIN(
+                                            firstNameController:
+                                                firstNameController,
+                                            lastNameController:
+                                                lastNameController,
+                                            middleNameController:
+                                                middleNameController,
+                                            suffixNameController:
+                                                suffixNameController,
+                                            mobileNumberController:
+                                                mobileNumberController,
+                                            municipalityController:
+                                                municipalityController,
+                                            barangayController:
+                                                barangayController,
+                                            streetController: streetController,
+                                            buttonText: buttonText,
+                                            selectedRegion: selectedRegion,
+                                            selectedProvince: selectedProvince,
+                                            residentSelection:
+                                                residentSelection,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.green[800],
@@ -667,6 +706,22 @@ class _RegisterState extends State<Register> {
                           ),
                           ElevatedButton(
                             onPressed: () {
+                              // Check if any of the text fields is empty
+                              if (firstNameController.text.isEmpty ||
+                                  lastNameController.text.isEmpty ||
+                                  buttonText == 'Select Birthdate') {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please fill in all fields'),
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+
+                                return;
+                              }
+
+                              // If all fields have values, toggle visibility
                               setState(() {
                                 isRegistrationSectionOneVisible =
                                     !isRegistrationSectionOneVisible;
@@ -684,10 +739,12 @@ class _RegisterState extends State<Register> {
                               padding:
                                   const EdgeInsets.only(top: 15, bottom: 15),
                               width: double.infinity,
-                              child: const Center(
+                              child: Center(
                                 child: Text(
-                                  'Next',
-                                  style: TextStyle(
+                                  isRegistrationSectionOneVisible
+                                      ? 'Next'
+                                      : 'Previous',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     color: Colors.white,
                                   ),

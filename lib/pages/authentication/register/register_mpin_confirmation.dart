@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:sp_app/pages/authentication/register/register_mpin_confirmation.dart';
+import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
 import '../login/login.dart';
 
-class RegisterMPIN extends StatefulWidget {
+class ConfirmMPIN extends StatefulWidget {
+
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
@@ -20,8 +21,9 @@ class RegisterMPIN extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
   final String residentSelection;
+  final String desiredPin;
 
-  const RegisterMPIN({
+  const ConfirmMPIN({
     Key? key,
     required this.firstNameController,
     required this.lastNameController,
@@ -35,14 +37,14 @@ class RegisterMPIN extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
+    required this.desiredPin,
   }) : super(key: key);
 
   @override
-  State<RegisterMPIN> createState() => _RegisterMPINState();
+  State<ConfirmMPIN> createState() => _ConfirmMPINState();
 }
 
-class _RegisterMPINState extends State<RegisterMPIN> {
-  // Declare the parameters as instance variables
+class _ConfirmMPINState extends State<ConfirmMPIN> {
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController middleNameController;
@@ -55,6 +57,7 @@ class _RegisterMPINState extends State<RegisterMPIN> {
   late String selectedRegion;
   late String selectedProvince;
   late String residentSelection;
+  late String desiredPin;
 
   @override
   void initState() {
@@ -71,6 +74,7 @@ class _RegisterMPINState extends State<RegisterMPIN> {
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
+    desiredPin = widget.desiredPin;
 
     super.initState();
   }
@@ -103,7 +107,7 @@ class _RegisterMPINState extends State<RegisterMPIN> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Enter your Desired MPIN Number',
+                      'Confirm your MPIN Number',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -119,27 +123,54 @@ class _RegisterMPINState extends State<RegisterMPIN> {
                       },
                       //runs when every textfield is filled
                       onSubmit: (String pinPassword) async {
+
+                        if (desiredPin != pinPassword) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(
+                            const SnackBar(
+                              content:
+                              Text('Desired MPIN is not matched'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
                         // Get a Firestore instance
+                        String randomString = generateRandomString(20);
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+                        Timestamp createdAtTimestamp = Timestamp.now();
+
+                        // Save data to "users" collection
+                        await firestore
+                            .collection('users')
+                            .doc(randomString)
+                            .set({
+                          'first_name': firstNameController.text,
+                          'last_name': lastNameController.text,
+                          'middle_name': middleNameController.text,
+                          'suffix_name': suffixNameController.text,
+                          'mobile_number': mobileNumberController.text,
+                          'municipality': municipalityController.text,
+                          'barangay': barangayController.text,
+                          'street': streetController.text,
+                          'birthdate': buttonText,
+                          'residency': residentSelection,
+                          'region': selectedRegion,
+                          'province': selectedProvince,
+                          'pin_password': pinPassword,
+                          'userID': randomString,
+                          'has_greencard': 'false',
+                          'created_at': createdAtTimestamp,
+                        });
+
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => ConfirmMPIN(
-                              firstNameController: firstNameController,
-                              lastNameController: lastNameController,
-                              middleNameController: middleNameController,
-                              suffixNameController: suffixNameController,
-                              mobileNumberController: mobileNumberController,
-                              municipalityController: municipalityController,
-                              barangayController: barangayController,
-                              streetController: streetController,
-                              buttonText: buttonText,
-                              selectedRegion: selectedRegion,
-                              selectedProvince: selectedProvince,
-                              residentSelection: residentSelection,
-                              desiredPin: pinPassword,
-                            ),
-                          ),
+                          MaterialPageRoute(builder: (context) => const Authentication()),
                         );
+
                       }, // end onSubmit
                     ),
                     const Row(
@@ -163,4 +194,20 @@ class _RegisterMPINState extends State<RegisterMPIN> {
       ),
     );
   }
+
+  String generateRandomString(int length) {
+    const String characterSet =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    Random random = Random();
+
+    StringBuffer buffer = StringBuffer();
+
+    for (int i = 0; i < length; i++) {
+      int randomIndex = random.nextInt(characterSet.length);
+      buffer.write(characterSet[randomIndex]);
+    }
+
+    return buffer.toString();
+  }
+
 }
