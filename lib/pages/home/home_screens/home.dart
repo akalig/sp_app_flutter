@@ -1,15 +1,68 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../emergencies.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String userId;
+
+  const Home({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+
+  late String userId;
+
+  String userName = "";
+  String userResidency = "";
+  String userMobileNumber = "";
+
+  @override
+  void initState() {
+    userId = widget.userId;
+    _fetchUserData();
+
+    sendUserIDToServer(userId);
+    super.initState();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('userID', isEqualTo: userId)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        var userData = snapshot.docs[0].data()!;
+
+        String firstName = userData['first_name'] ?? '';
+        String middleName = userData['middle_name'] ?? '';
+        String lastName = userData['last_name'] ?? '';
+        String suffixName = userData['suffix_name'] ?? '';
+
+        userName = '$firstName $middleName $lastName $suffixName';
+
+        userResidency = userData['residency'] ?? '';
+        userMobileNumber = userData['mobile_number'] ?? '';
+
+        setState(() {});
+      } else {
+        print('User not found');
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,9 +73,9 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(top: 25.0),
             child: Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
-                color: Colors.green, // Set a background color
+                color: Colors.green,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -35,51 +88,43 @@ class _HomeState extends State<Home> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          // Navigate to Emergencies() here
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Emergencies(),
-                            ),
-                          );
-                        },
-                        child: Image.asset(
-                          'lib/images/users_icon.png',
-                          height: 70,
-                        ),
+                      child: Image.asset(
+                        'lib/images/users_icon.png',
+                        height: 70,
                       ),
                     ),
 
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            'Hello, User',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
+                            'Hello, $userName', // Use the userName variable
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            'Visitor',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
+                            '$userResidency', // Use the userResidency variable
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            '+639367812650',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
+                            '+63$userMobileNumber', // Use the userMobileNumber variable
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                       ],
@@ -103,9 +148,20 @@ class _HomeState extends State<Home> {
                   children: [
                     Column(
                       children: [
-                        Image.asset(
-                          'lib/images/emergency_button.png',
-                          height: 260,
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to Emergencies() here
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Emergencies(userId: userId),
+                              ),
+                            );
+                          },
+                          child: Image.asset(
+                            'lib/images/emergency_button.png',
+                            height: 260,
+                          ),
                         ),
                         const Text(
                           'Tap in case of emergency',
@@ -120,7 +176,7 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(1.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -224,7 +280,7 @@ class _HomeState extends State<Home> {
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(1.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -328,7 +384,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
 
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
 
                       ],
                     ),
@@ -340,5 +396,74 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  Future<void> sendUserIDToServer(String userID) async {
+    const url = 'https://bmwaresd.com/spapp_conn_get_user_status.php';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userID': userID,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response
+        print('Data sent to server successfully');
+
+        // Parse the JSON response
+        final List<dynamic> dataList = json.decode(response.body);
+
+        // Check if the response is a list and is not empty
+        if (dataList.isNotEmpty) {
+          // Assuming that each item in the list has a 'status' field
+          for (var dataItem in dataList) {
+            if (dataItem is Map<String, dynamic> && dataItem.containsKey('status')) {
+              String userStatus = dataItem['status'];
+              print('User Status: $userStatus');
+
+              // Update Firestore
+              await updateFirestoreUserStatus(userId, userStatus);
+
+              // Show a Snackbar with the user status
+              final snackBar = SnackBar(
+                content: Text('User Status: $userStatus'),
+                duration: Duration(seconds: 3), // Adjust the duration as needed
+              );
+
+              // Find the Scaffold in the widget tree and show the Snackbar
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            } else {
+              print('Response item does not contain the expected status field.');
+            }
+          }
+        } else {
+          print('Response is empty or not in the expected format.');
+        }
+      } else {
+        // If the server returns an error response
+        print('Failed to send data to server. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any exception that occurs during the HTTP request
+      print('Error sending data to server: $e');
+    }
+  }
+
+  Future<void> updateFirestoreUserStatus(String userId, String userStatus) async {
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+      // Update the document where userID is equal to userId
+      await users.doc(userId).update({
+        'status': userStatus,
+      });
+
+      print('User status updated in Firestore successfully');
+    } catch (e) {
+      print('Error updating user status in Firestore: $e');
+    }
   }
 }

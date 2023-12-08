@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
-import 'package:sp_app/pages/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
-
-import '../login/login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ConfirmMPIN extends StatefulWidget {
-
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
@@ -21,6 +20,8 @@ class ConfirmMPIN extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
   final String residentSelection;
+  final File? capturedFaceScan;
+  final File? capturedIDScan;
   final String desiredPin;
 
   const ConfirmMPIN({
@@ -37,6 +38,8 @@ class ConfirmMPIN extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
+    required this.capturedFaceScan,
+    required this.capturedIDScan,
     required this.desiredPin,
   }) : super(key: key);
 
@@ -57,6 +60,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
   late String selectedRegion;
   late String selectedProvince;
   late String residentSelection;
+  late File? capturedFaceScan;
+  late File? capturedIDScan;
   late String desiredPin;
 
   @override
@@ -74,6 +79,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
+    capturedFaceScan = widget.capturedFaceScan;
+    capturedIDScan = widget.capturedIDScan;
     desiredPin = widget.desiredPin;
 
     super.initState();
@@ -109,27 +116,23 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                     const Text(
                       'Confirm your MPIN Number',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     OtpTextField(
                       numberOfFields: 6,
                       borderColor: const Color(0xFFFFFFFF),
                       textStyle: const TextStyle(color: Color(0xFFFFFFFF)),
-                      //set to true to show as box or false to show as dash
                       showFieldAsBox: true,
-                      //runs when a code is typed in
                       onCodeChanged: (String code) {
-                        //handle validation or checks here
+                        // Handle validation or checks here
                       },
-                      //runs when every textfield is filled
                       onSubmit: (String pinPassword) async {
-
                         if (desiredPin != pinPassword) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content:
-                              Text('Desired MPIN is not matched'),
+                              content: Text('Desired MPIN is not matched'),
                               duration: Duration(seconds: 2),
                               backgroundColor: Colors.red,
                             ),
@@ -137,17 +140,15 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                           return;
                         }
 
-                        // Get a Firestore instance
+                        String hasGreenCard = "false";
+                        String status = "pending";
+
                         String randomString = generateRandomString(20);
                         FirebaseFirestore firestore =
                             FirebaseFirestore.instance;
                         Timestamp createdAtTimestamp = Timestamp.now();
 
-                        // Save data to "users" collection
-                        await firestore
-                            .collection('users')
-                            .doc(randomString)
-                            .set({
+                        await firestore.collection('users').doc(randomString).set({
                           'first_name': firstNameController.text,
                           'last_name': lastNameController.text,
                           'middle_name': middleNameController.text,
@@ -162,16 +163,40 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                           'province': selectedProvince,
                           'pin_password': pinPassword,
                           'userID': randomString,
-                          'has_greencard': 'false',
+                          'has_greencard': hasGreenCard,
+                          'status': status,
                           'created_at': createdAtTimestamp,
                         });
+
+                        await sendDataToServer(
+                          firstNameController.text,
+                          lastNameController.text,
+                          middleNameController.text,
+                          suffixNameController.text,
+                          mobileNumberController.text,
+                          buttonText,
+                          residentSelection,
+                          selectedRegion,
+                          selectedProvince,
+                          municipalityController.text,
+                          barangayController.text,
+                          streetController.text,
+                          pinPassword,
+                          hasGreenCard,
+                          randomString,
+                          status,
+                          createdAtTimestamp.toDate().toString(),
+                        );
+
+                        if (residentSelection == 'Resident' && capturedIDScan != null && capturedFaceScan != null) {
+                          await sendImagesToFirebaseStorage(randomString);
+                        }
 
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const Authentication()),
                         );
-
-                      }, // end onSubmit
+                      },
                     ),
                     const Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,6 +220,76 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     );
   }
 
+  Future<void> sendDataToServer(
+      String firstname,
+      String lastname,
+      String middleName,
+      String suffixName,
+      String mobileNumber,
+      String birthdate,
+      String residency,
+      String region,
+      String province,
+      String municipality,
+      String barangay,
+      String street,
+      String pinPassword,
+      String hasGreenCard,
+      String userID,
+      String status,
+      String createdAt) async {
+    const url = 'https://bmwaresd.com/spapp_conn_send_user.php';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'first_name': firstname,
+          'last_name': lastname,
+          'middle_name': middleName,
+          'suffix_name': suffixName,
+          'mobile_number': mobileNumber,
+          'birthdate': birthdate,
+          'residency': residency,
+          'region': region,
+          'province': province,
+          'municipality': municipality,
+          'barangay': barangay,
+          'street': street,
+          'pin_password': pinPassword,
+          'has_greencard': hasGreenCard,
+          'userID': userID,
+          'status': status,
+          'created_at': createdAt,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Data sent to server successfully');
+      } else {
+        print('Failed to send data to server. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending data to server: $e');
+    }
+  }
+
+  Future<void> sendImagesToFirebaseStorage(String userID) async {
+    final storage = FirebaseStorage.instance;
+
+    // Upload capturedIDScan to user_id_scan/userID/
+    if (capturedIDScan != null) {
+      final Reference idScanRef = storage.ref().child('user_id_scan/$userID/capturedIDScan.jpg');
+      await idScanRef.putFile(capturedIDScan!);
+    }
+
+    // Upload capturedFaceScan to user_face_scan/userID/
+    if (capturedFaceScan != null) {
+      final Reference faceScanRef = storage.ref().child('user_face_scan/$userID/capturedFaceScan.jpg');
+      await faceScanRef.putFile(capturedFaceScan!);
+    }
+  }
+
   String generateRandomString(int length) {
     const String characterSet =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -209,5 +304,4 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
 
     return buffer.toString();
   }
-
 }

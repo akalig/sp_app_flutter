@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../home/home_page.dart';
 
-class LoginMPIN extends StatelessWidget {
-  final String mobileNumber;
+class LoginMPIN extends StatefulWidget {
   final String pinPassword;
+  final String userID;
 
-  const LoginMPIN({Key? key, required this.mobileNumber, required this.pinPassword})
-      : super(key: key);
+  const LoginMPIN({
+    super.key,
+    required this.pinPassword,
+    required this.userID,
+  });
+
+  @override
+  State<LoginMPIN> createState() => _LoginMPINState();
+}
+
+class _LoginMPINState extends State<LoginMPIN> {
+  late String pinPassword;
+  late String userID;
+
+  @override
+  void initState() {
+    // Initialize the instance variables in initState
+    pinPassword = widget.pinPassword;
+    userID = widget.userID;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +69,7 @@ class LoginMPIN extends StatelessWidget {
                       onCodeChanged: (String code) {
                         // Handle validation or checks here
                       },
-                      onSubmit: (String verificationCode) {
+                      onSubmit: (String verificationCode) async  {
                         // Check if the entered MPIN matches the pinPassword
                         if (verificationCode != pinPassword) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -63,10 +83,15 @@ class LoginMPIN extends StatelessWidget {
                         }
 
                         // MPIN is valid, navigate to the home page
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setString('userID', userID);
+                        prefs.setBool('isLoggedIn', true);
+
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
+                          MaterialPageRoute(builder: (context) => HomePage(userId: userID)),
                         );
+
                       },
                     ),
                     const Row(

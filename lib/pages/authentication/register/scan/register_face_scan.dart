@@ -18,7 +18,7 @@ class RegisterFaceScan extends StatefulWidget {
   final String residentSelection;
 
   const RegisterFaceScan({
-    Key? key,
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.middleNameController,
@@ -31,7 +31,7 @@ class RegisterFaceScan extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
-  }) : super(key: key);
+  });
 
   @override
   State<RegisterFaceScan> createState() => _RegisterFaceScanState();
@@ -39,6 +39,8 @@ class RegisterFaceScan extends StatefulWidget {
 
 class _RegisterFaceScanState extends State<RegisterFaceScan> {
   late CameraController controller;
+
+  File? capturedFaceScan;
 
   // Declare the parameters as instance variables
   late TextEditingController firstNameController;
@@ -130,81 +132,85 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
   void onTakePicture() async {
     await controller.takePicture().then((XFile xfile) {
       if (mounted) {
-        if (xfile != null) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Your Face'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 180.0,
-                    height: 180.0,
-                    child: CircleAvatar(
-                      backgroundImage: Image.file(
-                        File(xfile.path),
-                      ).image,
+
+        setState(() {
+          capturedFaceScan = File(xfile.path);
+        });
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Your Face'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 180.0,
+                  height: 180.0,
+                  child: CircleAvatar(
+                    backgroundImage: Image.file(
+                      File(xfile.path),
+                    ).image,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                // Add some spacing between the image and buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Retake'),
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Add some spacing between the image and buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Retake'),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterIDScan(
-                              firstNameController: firstNameController,
-                              lastNameController: lastNameController,
-                              middleNameController: middleNameController,
-                              suffixNameController: suffixNameController,
-                              mobileNumberController: mobileNumberController,
-                              municipalityController: municipalityController,
-                              barangayController: barangayController,
-                              streetController: streetController,
-                              buttonText: buttonText,
-                              selectedRegion: selectedRegion,
-                              selectedProvince: selectedProvince,
-                              residentSelection: residentSelection,
-                            ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterIDScan(
+                            firstNameController: firstNameController,
+                            lastNameController: lastNameController,
+                            middleNameController: middleNameController,
+                            suffixNameController: suffixNameController,
+                            mobileNumberController: mobileNumberController,
+                            municipalityController: municipalityController,
+                            barangayController: barangayController,
+                            streetController: streetController,
+                            buttonText: buttonText,
+                            selectedRegion: selectedRegion,
+                            selectedProvince: selectedProvince,
+                            residentSelection: residentSelection,
+                            capturedFaceScan: capturedFaceScan,
                           ),
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.green[800],
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: const Center(
-                            child: Text(
-                              'Continue',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                letterSpacing: 1,
-                              ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[800],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: const Center(
+                          child: Text(
+                            'Continue',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              letterSpacing: 1,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        }
-      }
+          ),
+        );
+            }
       return;
     });
   }

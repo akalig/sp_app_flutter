@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:sp_app/pages/authentication/register/register_mpin_confirmation.dart';
-import 'package:sp_app/pages/home/home_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:math';
+import 'dart:io';
 
-import '../login/login.dart';
 
 class RegisterMPIN extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -20,9 +17,11 @@ class RegisterMPIN extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
   final String residentSelection;
+  final File? capturedFaceScan;
+  final File? capturedIDScan;
 
   const RegisterMPIN({
-    Key? key,
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.middleNameController,
@@ -35,7 +34,9 @@ class RegisterMPIN extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
-  }) : super(key: key);
+    required this.capturedFaceScan,
+    required this.capturedIDScan,
+  });
 
   @override
   State<RegisterMPIN> createState() => _RegisterMPINState();
@@ -55,6 +56,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
   late String selectedRegion;
   late String selectedProvince;
   late String residentSelection;
+  late File? capturedFaceScan;
+  late File? capturedIDScan;
 
   @override
   void initState() {
@@ -71,6 +74,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
+    capturedFaceScan = widget.capturedFaceScan;
+    capturedIDScan = widget.capturedIDScan;
 
     super.initState();
   }
@@ -136,6 +141,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
                               selectedRegion: selectedRegion,
                               selectedProvince: selectedProvince,
                               residentSelection: residentSelection,
+                              capturedFaceScan: capturedFaceScan,
+                              capturedIDScan: capturedIDScan,
                               desiredPin: pinPassword,
                             ),
                           ),

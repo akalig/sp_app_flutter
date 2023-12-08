@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/register/register_mpin.dart';
-import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'scan/register_face_scan.dart';
 
 class Register extends StatefulWidget {
@@ -10,10 +9,10 @@ class Register extends StatefulWidget {
   final String residentSelection;
 
   const Register({
-    Key? key,
+    super.key,
     required this.mobileNumberController,
     required this.residentSelection,
-  }) : super(key: key);
+  });
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -435,8 +434,7 @@ class _RegisterState extends State<Register> {
                                                           provinceList =
                                                           province[
                                                               'province_list'];
-                                                      provinceList.keys.forEach(
-                                                          (provinceName) {
+                                                      for (var provinceName in provinceList.keys) {
                                                         provinceItems.add(
                                                           DropdownMenuItem(
                                                             value: provinceName,
@@ -444,7 +442,7 @@ class _RegisterState extends State<Register> {
                                                                 provinceName),
                                                           ),
                                                         );
-                                                      });
+                                                      }
                                                     }
                                                   }
 
@@ -677,6 +675,8 @@ class _RegisterState extends State<Register> {
                                             selectedProvince: selectedProvince,
                                             residentSelection:
                                                 residentSelection,
+                                            capturedFaceScan: null,
+                                            capturedIDScan: null,
                                           ),
                                         ),
                                       );

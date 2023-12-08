@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/authentication/register/register_mpin.dart';
-import 'package:sp_app/pages/authentication/register/register_otp.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterIDScan extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -18,9 +16,10 @@ class RegisterIDScan extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
   final String residentSelection;
+  final File? capturedFaceScan;
 
   const RegisterIDScan({
-    Key? key,
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.middleNameController,
@@ -33,7 +32,8 @@ class RegisterIDScan extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
-  }) : super(key: key);
+    required this.capturedFaceScan,
+  });
 
   @override
   State<RegisterIDScan> createState() => _RegisterIDScanState();
@@ -41,6 +41,8 @@ class RegisterIDScan extends StatefulWidget {
 
 class _RegisterIDScanState extends State<RegisterIDScan> {
   late CameraController controller;
+
+  File? capturedIDScan;
 
   // Declare the parameters as instance variables
   late TextEditingController firstNameController;
@@ -55,6 +57,7 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
   late String selectedRegion;
   late String selectedProvince;
   late String residentSelection;
+  late File? capturedFaceScan;
 
   @override
   void initState() {
@@ -71,6 +74,7 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
+    capturedFaceScan = widget.capturedFaceScan;
 
     super.initState();
   }
@@ -131,82 +135,87 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
   void onTakePicture() async {
     await controller.takePicture().then((XFile xfile) {
       if (mounted) {
-        if (xfile != null) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Your ID'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 2 / 3,
-                    child: Image.file(
-                      File(xfile.path),
-                      fit:
-                          BoxFit.fill, // Use "fill" to fill the available space
+
+        setState(() {
+          capturedIDScan = File(xfile.path);
+        });
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Your ID'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AspectRatio(
+                  aspectRatio: 2 / 3,
+                  child: Image.file(
+                    File(xfile.path),
+                    fit:
+                        BoxFit.fill, // Use "fill" to fill the available space
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                // Add some spacing between the image and buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle the "Retake" button press
+                        Navigator.pop(context); // Close the dialog
+                        // Add your logic for "Retake" here
+                      },
+                      child: const Text('Retake'),
                     ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Add some spacing between the image and buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle the "Retake" button press
-                          Navigator.pop(context); // Close the dialog
-                          // Add your logic for "Retake" here
-                        },
-                        child: const Text('Retake'),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterMPIN(
-                              firstNameController: firstNameController,
-                              lastNameController: lastNameController,
-                              middleNameController: middleNameController,
-                              suffixNameController: suffixNameController,
-                              mobileNumberController: mobileNumberController,
-                              municipalityController: municipalityController,
-                              barangayController: barangayController,
-                              streetController: streetController,
-                              buttonText: buttonText,
-                              selectedRegion: selectedRegion,
-                              selectedProvince: selectedProvince,
-                              residentSelection: residentSelection,
-                            ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterMPIN(
+                            firstNameController: firstNameController,
+                            lastNameController: lastNameController,
+                            middleNameController: middleNameController,
+                            suffixNameController: suffixNameController,
+                            mobileNumberController: mobileNumberController,
+                            municipalityController: municipalityController,
+                            barangayController: barangayController,
+                            streetController: streetController,
+                            buttonText: buttonText,
+                            selectedRegion: selectedRegion,
+                            selectedProvince: selectedProvince,
+                            residentSelection: residentSelection,
+                            capturedFaceScan: capturedFaceScan,
+                            capturedIDScan: capturedIDScan,
                           ),
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.green[800],
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: const Center(
-                            child: Text(
-                              'Continue',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                letterSpacing: 1,
-                              ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[800],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: const Center(
+                          child: Text(
+                            'Continue',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              letterSpacing: 1,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        }
-      }
+          ),
+        );
+            }
       return;
     });
   }

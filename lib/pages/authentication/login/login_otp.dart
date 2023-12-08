@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:sp_app/pages/authentication/register/register.dart';
+import 'package:sp_app/pages/authentication/login/login_mpin.dart';
 
-class RegisterOTP extends StatefulWidget {
-  final TextEditingController mobileNumberController;
-  final String residentSelection;
+class LoginOTP extends StatefulWidget {
+  final String mobileNumber;
+  final String pinPassword;
+  final String userID;
   final String otp;
 
-  const RegisterOTP({
+  const LoginOTP({
     super.key,
-    required this.mobileNumberController,
-    required this.residentSelection,
+    required this.mobileNumber,
+    required this.pinPassword,
+    required this.userID,
     required this.otp,
   });
 
   @override
-  State<RegisterOTP> createState() => _RegisterOTPState();
+  State<LoginOTP> createState() => _LoginOTPState();
 }
 
-class _RegisterOTPState extends State<RegisterOTP> {
-  // Declare the parameters as instance variables
-  late TextEditingController mobileNumberController;
-  late String residentSelection;
+class _LoginOTPState extends State<LoginOTP> {
+  late String mobileNumber;
+  late String pinPassword;
+  late String userID;
   late String otp;
 
   @override
   void initState() {
     // Initialize the instance variables in initState
-    mobileNumberController = widget.mobileNumberController;
-    residentSelection = widget.residentSelection;
+    mobileNumber = widget.mobileNumber;
+    pinPassword = widget.pinPassword;
+    userID = widget.userID;
     otp = widget.otp;
 
     super.initState();
@@ -79,7 +82,6 @@ class _RegisterOTPState extends State<RegisterOTP> {
                       },
                       //runs when every textfield is filled
                       onSubmit: (String verificationCode) async {
-
                         // if (otp != verificationCode) {
                         //   ScaffoldMessenger.of(context).showSnackBar(
                         //     const SnackBar(
@@ -94,9 +96,9 @@ class _RegisterOTPState extends State<RegisterOTP> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Register(
-                              mobileNumberController: mobileNumberController,
-                              residentSelection: residentSelection,
+                            builder: (context) => LoginMPIN(
+                              pinPassword: pinPassword,
+                              userID: userID,
                             ),
                           ),
                         );

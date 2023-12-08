@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'login_mpin.dart';
+import 'package:sp_app/pages/authentication/authentication.dart';
+import 'package:sp_app/pages/authentication/login/login_otp.dart';
+import 'dart:math';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   _LoginState createState() => _LoginState();
@@ -37,14 +40,20 @@ class _LoginState extends State<Login> {
       // Retrieve the mobile number and pin_password from the first document (assuming there's only one)
       String retrievedMobileNumber = querySnapshot.docs[0]['mobile_number'];
       String retrievedPinPassword = querySnapshot.docs[0]['pin_password'];
+      String retrievedUserID = querySnapshot.docs[0]['userID'];
+
+      String randomDigits = generateRandomString(6);
+      // sendMessage(randomDigits);
 
       // Navigate to the next screen (LoginMPIN) and pass the values
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginMPIN(
+          builder: (context) => LoginOTP(
             mobileNumber: retrievedMobileNumber,
             pinPassword: retrievedPinPassword,
+            userID: retrievedUserID,
+            otp: randomDigits,
           ),
         ),
       );
@@ -55,134 +64,190 @@ class _LoginState extends State<Login> {
     }
   }
 
+  // void sendMessage(String randomDigits) async {
+  //
+  //   var apiUrl = 'https://semaphore.co/api/v4/messages';
+  //   var apiKey = 'c2ccfae1d1ab68804ff30ea669c47581';
+  //   var number = mobileNumberController.text;
+  //   var senderName = 'SEMAPHORE';
+  //   var message = 'Your One-time-Password is $randomDigits';
+  //
+  //   var parameters = {
+  //     'apikey': apiKey,
+  //     'number': number,
+  //     'message': message,
+  //     'sendername': senderName,
+  //   };
+  //
+  //   // Make the POST request
+  //   var response = await http.post(
+  //     Uri.parse(apiUrl),
+  //     body: parameters,
+  //   );
+  //
+  //   // Check if the request was successful (status code 200)
+  //   if (response.statusCode == 200) {
+  //     // Print the server response
+  //     print(response.body);
+  //   } else {
+  //     // Print an error message if the request was not successful
+  //     print('Request failed with status: ${response.statusCode}');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            Image.asset(
-              'lib/images/sp-logo.png',
-              height: 300,
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(25),
-                decoration: BoxDecoration(
-                  color: Colors.green[900],
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Enter your mobile number',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Authentication()),
+        );
+        return false; // Returning false prevents the screen from being popped automatically
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              Image.asset(
+                'lib/images/sp-logo.png',
+                height: 300,
+              ),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: Colors.green[900],
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
-                    Column(
-                      children: [
-                        TextField(
-                          controller: mobileNumberController,
-                          maxLength: 10,
-                          style: const TextStyle(color: Colors.black),
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
-                            border: OutlineInputBorder(),
-                            hintText: "🇵🇭 +63",
-                            hintStyle: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.grey,
-                            ),
-                            hoverColor: Colors.white,
-                          ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Enter your mobile number',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 25.0),
-                          child: SizedBox(
-                            width: 300,
-                            child: GestureDetector(
-                              onTap: () {
-                                if (mobileNumberController.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Please fill in all fields'),
-                                      duration: Duration(seconds: 2),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                // Call the function to check if the mobile number is registered
-                                checkMobileNumber(context, mobileNumberController.text);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
+                      ),
+                      Column(
+                        children: [
+                          TextField(
+                            controller: mobileNumberController,
+                            maxLength: 10,
+                            style: const TextStyle(color: Colors.black),
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                padding: const EdgeInsets.all(18),
-                                child: const Center(
-                                  child: Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      letterSpacing: 1,
+                              ),
+                              border: OutlineInputBorder(),
+                              hintText: "🇵🇭 +63",
+                              hintStyle: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.grey,
+                              ),
+                              hoverColor: Colors.white,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 25.0),
+                            child: SizedBox(
+                              width: 300,
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (mobileNumberController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Please fill in all fields'),
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  // Call the function to check if the mobile number is registered
+                                  checkMobileNumber(context, mobileNumberController.text);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  padding: const EdgeInsets.all(18),
+                                  child: const Center(
+                                    child: Text(
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        letterSpacing: 1,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Forgot Password? ',
-                          style: TextStyle(
-                            color: Colors.white,
+                        ],
+                      ),
+                      const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Forgot Password? ',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Click here',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            'Click here',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
+  String generateRandomString(int length) {
+    const String characterSet =
+        '1234567890';
+    Random random = Random();
+
+    StringBuffer buffer = StringBuffer();
+
+    for (int i = 0; i < length; i++) {
+      int randomIndex = random.nextInt(characterSet.length);
+      buffer.write(characterSet[randomIndex]);
+    }
+
+    return buffer.toString();
+  }
+
 }
