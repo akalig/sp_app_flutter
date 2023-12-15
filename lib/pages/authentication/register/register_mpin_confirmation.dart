@@ -143,6 +143,14 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                         String hasGreenCard = "false";
                         String status = "pending";
 
+                        if (selectedRegion == "0") {
+                          selectedRegion = 'Region IV - A';
+                        }
+
+                        if (selectedProvince == "0") {
+                          selectedProvince = 'Laguna';
+                        }
+
                         String randomString = generateRandomString(20);
                         FirebaseFirestore firestore =
                             FirebaseFirestore.instance;

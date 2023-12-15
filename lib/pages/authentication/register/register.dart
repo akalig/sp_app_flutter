@@ -85,7 +85,7 @@ class _RegisterState extends State<Register> {
                     );
                   },
                   child: const Text(
-                    '< Back to Homepage',
+                    '< Back',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Colors.white, // Change the text color

@@ -96,6 +96,8 @@ class _DigitalIDState extends State<DigitalID> {
                             },
                           )),
 
+                      const SizedBox(height: 20),
+
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: FutureBuilder<DocumentSnapshot>(

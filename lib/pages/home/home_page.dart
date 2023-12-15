@@ -2,13 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../authentication/authentication.dart';
+import 'package:sp_app/pages/home/update_residency/update_residency.dart';
+import '../../FirebaseMessagingAPI/firebase_push_notification_api.dart';
 import '../authentication/login/login.dart';
 import 'home_screens/notifications.dart';
 import 'home_screens/home.dart';
 import 'home_screens/news.dart';
 import 'home_screens/profile.dart';
 import 'digital_id.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   final String userId;
@@ -25,9 +27,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userId;
 
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final FirebasePushNotificationAPI _firebasePushNotificationAPI =
+  FirebasePushNotificationAPI();
+
   @override
   void initState() {
     userId = widget.userId;
+    saveNotificationInfoInFirestore(userId);
     super.initState();
   }
 
@@ -53,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () async {
-          await checkApproval(userId, context);
+          await checkResidency(userId, context);
         },
         shape: const CircleBorder(),
         child: const Icon(Icons.assignment_ind_outlined,
@@ -124,7 +132,66 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> checkApproval(String userID, BuildContext context) async {
+  Future<void> checkResidency(String userID, BuildContext context) async {
+    try {
+      // Reference to the Firestore collection
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // Query the user's document based on userID
+      DocumentSnapshot userSnapshot = await usersCollection.doc(userID).get();
+
+      // Check if the document exists
+      if (userSnapshot.exists) {
+        // Get the residency field
+        String residency = userSnapshot.get('residency');
+
+        if (residency == 'Resident') {
+
+          await checkApproval(userID);
+
+        } else {
+          // Show an AlertDialog if the user is a Non-Resident
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Access Denied'),
+                content: Text('Digital ID is exclusive for Residents Only.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => UpdateResidency(userId: userId)),
+                      );
+                    },
+                    child: Text('Update to Resident Account'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+      } else {
+        // Handle the case when the user document doesn't exist
+        print('User document does not exist');
+      }
+    } catch (e) {
+      // Handle errors, e.g., network issues
+      print('Error checking approval: $e');
+    }
+  }
+
+  Future<void> checkApproval(String userID) async {
     try {
       // Reference to the Firestore collection
       CollectionReference usersCollection =
@@ -139,12 +206,12 @@ class _HomePageState extends State<HomePage> {
         String status = userSnapshot.get('status');
 
         if (status == 'Approved') {
-          await checkResidency(userID);
-
-          // Show a SnackBar if the user is a Resident
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('You are a Approved!'),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DigitalID(
+                userId: userId,
+              ),
             ),
           );
         } else {
@@ -160,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: Text('Close'),
                   ),
                 ],
               );
@@ -177,56 +244,52 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> checkResidency(String userID) async {
+  void saveNotificationInfoInFirestore(String userID) async {
     try {
-      // Reference to the Firestore collection
-      CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('users');
+      // Reference to the collection 'push_notification_token'
+      CollectionReference tokenCollection = _firestore.collection('push_notification_token');
 
-      // Query the user's document based on userID
-      DocumentSnapshot userSnapshot = await usersCollection.doc(userID).get();
+      // Create a document with the user ID
+      DocumentReference userDocument = tokenCollection.doc(userID);
 
-      // Check if the document exists
-      if (userSnapshot.exists) {
-        // Get the residency field
-        String status = userSnapshot.get('residency');
+      String? fcm = await _firebasePushNotificationAPI.initNotifications();
 
-        if (status == 'Resident') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DigitalID(
-                userId: userId,
-              ),
-            ),
-          );
-        } else {
-          // Show an AlertDialog if the user is a Non-Resident
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Access Denied'),
-                content: Text('Digital ID is exclusive for Residents Only.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
+      // Set the data in the document
+      await userDocument.set({
+        'userID': userID,
+        'fcm_token': fcm,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      await saveNotificationInfoInServer(userId);
+
+      print('Notification info saved successfully');
+    } catch (error) {
+      print('Error saving notification info: $error');
+      // Handle the error as needed
+    }
+  }
+
+  Future<void> saveNotificationInfoInServer(String userID) async {
+    const url = 'https://bmwaresd.com/spapp_conn_send_push_notification_info.php';
+    String? fcm = await _firebasePushNotificationAPI.initNotifications();
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userID': userID,
+          'region': fcm,
+          'created_at': FieldValue.serverTimestamp(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Data sent to server successfully');
       } else {
-        // Handle the case when the user document doesn't exist
-        print('User document does not exist');
+        print('Failed to send data to server. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle errors, e.g., network issues
-      print('Error checking approval: $e');
+      print('Error sending data to server: $e');
     }
   }
 }

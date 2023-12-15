@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sp_app/pages/home/home_page.dart';
 import '../location/location_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -231,13 +232,12 @@ class _EmergenciesState extends State<Emergencies> {
         // isClickedEmergency = false;
         countdown = 0; // Reset countdown
       });
-
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text('Request Cancelled'),
-      //   ),
-      // );
     }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage(userId: userId)),
+    );
   }
 
   void sendNonIndicateEmergency() async {
