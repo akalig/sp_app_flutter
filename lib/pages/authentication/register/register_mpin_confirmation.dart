@@ -284,18 +284,54 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
 
   Future<void> sendImagesToFirebaseStorage(String userID) async {
     final storage = FirebaseStorage.instance;
+    String idScanURL = '';
+    String faceScanURL = '';
 
     // Upload capturedIDScan to user_id_scan/userID/
     if (capturedIDScan != null) {
       final Reference idScanRef = storage.ref().child('user_id_scan/$userID/capturedIDScan.jpg');
       await idScanRef.putFile(capturedIDScan!);
+
+      // Retrieve download URL
+      idScanURL = await idScanRef.getDownloadURL();
+      print('ID Scan Download URL: $idScanURL');
     }
 
     // Upload capturedFaceScan to user_face_scan/userID/
     if (capturedFaceScan != null) {
       final Reference faceScanRef = storage.ref().child('user_face_scan/$userID/capturedFaceScan.jpg');
       await faceScanRef.putFile(capturedFaceScan!);
+
+      // Retrieve download URL
+      faceScanURL = await faceScanRef.getDownloadURL();
+      print('Face Scan Download URL: $faceScanURL');
     }
+
+    await saveImageLinksToServer(userID, idScanURL, faceScanURL);
+  }
+
+  Future<void> saveImageLinksToServer(String userID, String idScanURL, String faceScanURL) async {
+    const url = 'https://bmwaresd.com/spapp_conn_send_images_links.php';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userID': userID,
+          'idScanURL': idScanURL,
+          'faceScanURL': faceScanURL,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Data sent to server successfully');
+      } else {
+        print('Failed to send data to server. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending data to server: $e');
+    }
+
   }
 
   String generateRandomString(int length) {
