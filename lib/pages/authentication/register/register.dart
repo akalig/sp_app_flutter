@@ -247,7 +247,7 @@ class _RegisterState extends State<Register> {
                                 setState(() {
                                   date = newDate;
                                   buttonText =
-                                      '${date.year}/${date.month}/${date.day}';
+                                      '${date.year}-${date.month}-${date.day}';
                                 });
                               },
                               style: ElevatedButton.styleFrom(

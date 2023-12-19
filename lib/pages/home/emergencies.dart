@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sp_app/pages/home/emergency_status.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 import '../location/location_service.dart';
 import 'package:http/http.dart' as http;
@@ -190,8 +191,13 @@ class _EmergenciesState extends State<Emergencies> {
                   controller.loading(); //starts loading animation
                   await Future.delayed(const Duration(seconds: 1));
                   controller.success(); //starts success animation
-                  await Future.delayed(const Duration(seconds: 5));
+                  await Future.delayed(const Duration(seconds: 2));
                   controller.reset(); //resets the slider
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage(userId: userId)),
+                  );
                 },
                 child: const Text('Slide to Cancel',
                     style: TextStyle(color: Colors.black)),
@@ -233,11 +239,6 @@ class _EmergenciesState extends State<Emergencies> {
         countdown = 0; // Reset countdown
       });
     }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage(userId: userId)),
-    );
   }
 
   void sendNonIndicateEmergency() async {
@@ -259,22 +260,19 @@ class _EmergenciesState extends State<Emergencies> {
 
         CollectionReference emergencyCollection = FirebaseFirestore.instance.collection('emergency');
         DocumentReference documentReference = await emergencyCollection.add({
+          'userID': userData['userID'],
           'first_name': userData['first_name'],
           'last_name': userData['last_name'],
           'middle_name': userData['middle_name'],
           'suffix_name': userData['suffix_name'],
           'mobile_number': userData['mobile_number'],
-          'municipality': userData['municipality'],
-          'barangay': userData['barangay'],
-          'street': userData['street'],
-          'region': userData['region'],
-          'province': userData['province'],
-          'emergency': emergency,
-          'userID': userData['userID'],
+          'residency': userData['residency'],
           'latitude': location['latitude'],
           'longitude': location['longitude'],
           'status': status,
+          'emergency': emergency,
           'created_at': FieldValue.serverTimestamp(),
+          'modified_at': FieldValue.serverTimestamp(),
         });
 
         // Send data to PHP server
@@ -312,22 +310,19 @@ class _EmergenciesState extends State<Emergencies> {
 
         CollectionReference emergencyCollection = FirebaseFirestore.instance.collection('emergency');
         DocumentReference documentReference = await emergencyCollection.add({
+          'userID': userData['userID'],
           'first_name': userData['first_name'],
           'last_name': userData['last_name'],
           'middle_name': userData['middle_name'],
           'suffix_name': userData['suffix_name'],
           'mobile_number': userData['mobile_number'],
-          'municipality': userData['municipality'],
-          'barangay': userData['barangay'],
-          'street': userData['street'],
-          'region': userData['region'],
-          'province': userData['province'],
-          'emergency': emergency,
-          'userID': userData['userID'],
+          'residency': userData['residency'],
           'latitude': location['latitude'],
           'longitude': location['longitude'],
           'status': status,
+          'emergency': emergency,
           'created_at': FieldValue.serverTimestamp(),
+          'modified_at': FieldValue.serverTimestamp(),
         });
 
         // Send data to PHP server
@@ -338,6 +333,11 @@ class _EmergenciesState extends State<Emergencies> {
             content: Text('Request Sent'),
           ),
         );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => EmergencyStatus(userId: userId)),
+        );
+
       } else {
         showErrorSnackBar('Error retrieving user data. Please try again.');
       }
@@ -355,22 +355,19 @@ class _EmergenciesState extends State<Emergencies> {
         Uri.parse(url),
         body: {
           'documentId': documentId,
+          'userID': userData['userID'],
           'first_name': userData['first_name'],
           'last_name': userData['last_name'],
           'middle_name': userData['middle_name'],
           'suffix_name': userData['suffix_name'],
           'mobile_number': userData['mobile_number'],
-          'municipality': userData['municipality'],
-          'barangay': userData['barangay'],
-          'street': userData['street'],
-          'region': userData['region'],
-          'province': userData['province'],
-          'emergency': emergency,
-          'userID': userData['userID'],
+          'residency': userData['residency'],
           'latitude': location['latitude'].toString(),
           'longitude': location['longitude'].toString(),
           'status': status,
-          'created_at': DateTime.now().toUtc().toString(),
+          'emergency': emergency,
+          'created_at': DateTime.now().toLocal().toString(),
+          'modified_at': DateTime.now().toLocal().toString(),
         },
       );
 

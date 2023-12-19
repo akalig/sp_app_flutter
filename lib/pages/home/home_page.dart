@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     userId = widget.userId;
     saveNotificationInfoInFirestore(userId);
+    _configureFirebaseMessaging();
     super.initState();
   }
 
@@ -47,12 +49,73 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _configureFirebaseMessaging() {
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("onMessage: $message");
+
+      // Extract data from the notification
+      String notificationUserID = message.data['userID'];
+      String notificationBody = message.notification?.body ?? ""; // Extract notification body
+
+      print("USERID: $notificationUserID");
+      print("BODY: $notificationBody");
+
+      // Compare with the currently logged-in user's ID
+      if (notificationUserID == userId) {
+        // Save notification to Firestore
+        saveNotificationToFirestore(userId, notificationBody);
+
+        // Show the notification
+        _showNotification(message.data);
+      }
+    });
+  }
+
+  void _showNotification(Map<String, dynamic> data) {
+    _firebasePushNotificationAPI;
+  }
+
+  void saveNotificationToFirestore(String userID, String body) async {
+    try {
+      // Reference to the Firestore collection 'notifications'
+      CollectionReference notificationsCollection =
+      FirebaseFirestore.instance.collection('notifications');
+
+      // Create a document with the user ID and timestamp
+      DocumentReference notificationDocument =
+      notificationsCollection.doc('${userID}_${DateTime.now().millisecondsSinceEpoch}');
+
+      // Set the data in the document
+      await notificationDocument.set({
+        'userID': userID,
+        'body': body,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      print('Notification saved to Firestore successfully');
+    } catch (error) {
+      print('Error saving notification to Firestore: $error');
+      // Handle the error as needed
+    }
+  }
+
+  Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+    print("Handling a background message: ${message.messageId}");
+
+    String notificationBody = message.notification?.body ?? ""; // Extract notification body
+
+    // Save notification to Firestore
+    saveNotificationToFirestore(userId, notificationBody);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
       Home(userId: userId),
       const News(),
-      const Notifications(),
+      Notifications(userId: userId),
       const Profile(),
     ];
 
@@ -261,7 +324,7 @@ class _HomePageState extends State<HomePage> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      await saveNotificationInfoInServer(userId);
+      await saveNotificationInfoInServer(userId, fcm);
 
       print('Notification info saved successfully');
     } catch (error) {
@@ -270,16 +333,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> saveNotificationInfoInServer(String userID) async {
+  Future<void> saveNotificationInfoInServer(String userID, String? fcm) async {
     const url = 'https://bmwaresd.com/spapp_conn_send_push_notification_info.php';
-    String? fcm = await _firebasePushNotificationAPI.initNotifications();
     try {
       final response = await http.post(
         Uri.parse(url),
         body: {
           'userID': userID,
-          'region': fcm,
-          'created_at': FieldValue.serverTimestamp(),
+          'fcm': fcm,
+          'created_at': DateTime.now().toUtc().toString(),
         },
       );
 
