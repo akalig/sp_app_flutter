@@ -4,6 +4,7 @@ import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/login/login_otp.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,6 +15,95 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   TextEditingController mobileNumberController = TextEditingController();
+  bool acceptedTerms = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkTermsAndConditions();
+  }
+
+  Future<void> checkTermsAndConditions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasAccepted = prefs.getBool('acceptedTerms') ?? false;
+
+    if (!hasAccepted) {
+      showTermsAndConditionsDialog();
+    }
+  }
+
+  Future<void> showTermsAndConditionsDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Terms and Conditions'),
+              content: Column(
+                children: [
+                  Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: acceptedTerms,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            acceptedTerms = value!;
+                          });
+                        },
+                      ),
+                      Text('I accept the terms and conditions'),
+                    ],
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    declineTermsAndConditions();
+                  },
+                  child: Text('Decline'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (acceptedTerms) {
+                      Navigator.of(context).pop(); // Close the dialog
+                      acceptTermsAndConditions();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('You must agree to the terms and conditions'),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  child: Text('Accept'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> acceptTermsAndConditions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('acceptedTerms', true);
+  }
+
+  Future<void> declineTermsAndConditions() async {
+    // Handle decline action if needed
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Authentication()),
+    );
+  }
 
   Future<void> checkMobileNumber(BuildContext context, String mobileNumber) async {
     try {

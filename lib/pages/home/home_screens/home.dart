@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../emergencies.dart';
 import 'package:http/http.dart' as http;
 
+import '../emergency_status.dart';
+
 class Home extends StatefulWidget {
   final String userId;
 
@@ -149,14 +151,33 @@ class _HomeState extends State<Home> {
                     Column(
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            // Navigate to Emergencies() here
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Emergencies(userId: userId),
-                              ),
-                            );
+                          onTap: () async {
+                            // Retrieve data from Firestore
+                            DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('emergency').doc(userId).get();
+                            if (snapshot.exists) {
+                              // Check the status field
+                              String status = snapshot['status'];
+                              if (status == 'Completed' || status == 'Deferred') {
+                                // Navigate to Emergencies()
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Emergencies(userId: userId),
+                                  ),
+                                );
+                              } else {
+                                // Navigate to EmergencyStatus()
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EmergencyStatus(userId: userId),
+                                  ),
+                                );
+                              }
+                            } else {
+                              // Handle the case when the document doesn't exist
+                              // You may want to display an error message or take appropriate action
+                            }
                           },
                           child: Image.asset(
                             'lib/images/emergency_button.png',
@@ -169,6 +190,7 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
+
 
                     const SizedBox(height: 10),
 

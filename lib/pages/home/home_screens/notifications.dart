@@ -25,7 +25,6 @@ class _NotificationsState extends State<Notifications> {
     _notificationsStream = FirebaseFirestore.instance
         .collection('notifications')
         .where('userID', isEqualTo: userId)
-        .orderBy('timestamp', descending: true)
         .snapshots();
 
     super.initState();

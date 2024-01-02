@@ -259,7 +259,9 @@ class _EmergenciesState extends State<Emergencies> {
         print('Latitude: ${location['latitude']}, Longitude: ${location['longitude']}');
 
         CollectionReference emergencyCollection = FirebaseFirestore.instance.collection('emergency');
-        DocumentReference documentReference = await emergencyCollection.add({
+        DocumentReference documentReference = emergencyCollection.doc(userId);
+
+        await documentReference.set({
           'userID': userData['userID'],
           'first_name': userData['first_name'],
           'last_name': userData['last_name'],
@@ -309,7 +311,9 @@ class _EmergenciesState extends State<Emergencies> {
         print('Latitude: ${location['latitude']}, Longitude: ${location['longitude']}');
 
         CollectionReference emergencyCollection = FirebaseFirestore.instance.collection('emergency');
-        DocumentReference documentReference = await emergencyCollection.add({
+        DocumentReference documentReference = emergencyCollection.doc(userId);
+
+        await documentReference.set({
           'userID': userData['userID'],
           'first_name': userData['first_name'],
           'last_name': userData['last_name'],

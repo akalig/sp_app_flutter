@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/home/home_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EmergencyStatus extends StatefulWidget {
   final String userId;
@@ -15,10 +18,13 @@ class EmergencyStatus extends StatefulWidget {
 
 class _EmergencyStatusState extends State<EmergencyStatus> {
   late String userId;
+  late String emergencyStatus = "";
 
   @override
   void initState() {
     userId = widget.userId;
+
+    sendUserIDToServer(userId);
     super.initState();
   }
 
@@ -64,6 +70,17 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+
+                        const SizedBox(height: 10),
+
+                        Text(
+                          'Status: $emergencyStatus',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+
                         const SizedBox(height: 30),
                       ],
                     ),
@@ -134,7 +151,6 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -145,4 +161,79 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
       ),
     );
   }
+
+  Future<void> sendUserIDToServer(String userID) async {
+    const url = 'https://bmwaresd.com/spapp_conn_get_emergency_status.php';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userID': userID,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response
+        print('Data sent to server successfully');
+
+        // Parse the JSON response
+        final List<dynamic> dataList = json.decode(response.body);
+
+        // Check if the response is a list and is not empty
+        if (dataList.isNotEmpty) {
+          // Assuming that each item in the list has a 'status' field
+          for (var dataItem in dataList) {
+            if (dataItem is Map<String, dynamic> && dataItem.containsKey('status')) {
+
+              setState(() {
+                // Update emergencyStatus and trigger a rebuild
+                emergencyStatus = dataItem['status'];
+              });
+
+              print('Emergency Status: $emergencyStatus');
+
+              // Update Firestore
+              await updateFirestoreEmergencyStatus(userId, emergencyStatus);
+
+              // Show a Snackbar with the user status
+              final snackBar = SnackBar(
+                content: Text('Emergency Status: $emergencyStatus'),
+                duration: Duration(seconds: 3), // Adjust the duration as needed
+              );
+
+              // Find the Scaffold in the widget tree and show the Snackbar
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            } else {
+              print('Response item does not contain the expected status field.');
+            }
+          }
+        } else {
+          print('Response is empty or not in the expected format.');
+        }
+      } else {
+        // If the server returns an error response
+        print('Failed to send data to server. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any exception that occurs during the HTTP request
+      print('Error sending data to server: $e');
+    }
+  }
+
+  Future<void> updateFirestoreEmergencyStatus(String userId, String emergencyStatus) async {
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection('emergency');
+
+      // Update the document where userID is equal to userId
+      await users.doc(userId).update({
+        'status': emergencyStatus,
+      });
+
+      print('User status updated in Firestore successfully');
+    } catch (e) {
+      print('Error updating user status in Firestore: $e');
+    }
+  }
+
 }
