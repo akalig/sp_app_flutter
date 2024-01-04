@@ -1,77 +1,60 @@
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
-import 'package:sp_app/pages/authentication/register/scan/register_face_scan_left.dart';
-import 'package:sp_app/pages/authentication/register/scan/register_id_scan.dart';
+import 'package:sp_app/pages/home/update_residency/update_id_scan.dart';
 
-class RegisterFaceScan extends StatefulWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController middleNameController;
-  final TextEditingController suffixNameController;
-  final TextEditingController mobileNumberController;
+class UpdateFaceScanRight extends StatefulWidget {
+
+  final String userId;
+  final String selectedRegion;
+  final String selectedProvince;
   final TextEditingController municipalityController;
   final TextEditingController barangayController;
   final TextEditingController streetController;
-  final String buttonText;
-  final String selectedRegion;
-  final String selectedProvince;
-  final String residentSelection;
+  final File? capturedFaceScan;
+  final File? capturedFaceScanLeft;
 
-  const RegisterFaceScan({
+  const UpdateFaceScanRight({
     super.key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.middleNameController,
-    required this.suffixNameController,
-    required this.mobileNumberController,
+    required this.userId,
+    required this.selectedRegion,
+    required this.selectedProvince,
     required this.municipalityController,
     required this.barangayController,
     required this.streetController,
-    required this.buttonText,
-    required this.selectedRegion,
-    required this.selectedProvince,
-    required this.residentSelection,
+    required this.capturedFaceScan,
+    required this.capturedFaceScanLeft,
   });
 
   @override
-  State<RegisterFaceScan> createState() => _RegisterFaceScanState();
+  State<UpdateFaceScanRight> createState() => _UpdateFaceScanRightState();
 }
 
-class _RegisterFaceScanState extends State<RegisterFaceScan> {
+class _UpdateFaceScanRightState extends State<UpdateFaceScanRight> {
   late CameraController controller;
 
-  File? capturedFaceScan;
+  File? capturedFaceScanRight;
 
-  // Declare the parameters as instance variables
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
-  late TextEditingController middleNameController;
-  late TextEditingController suffixNameController;
-  late TextEditingController mobileNumberController;
+  late String userId;
+  late String selectedRegion;
+  late String selectedProvince;
   late TextEditingController municipalityController;
   late TextEditingController barangayController;
   late TextEditingController streetController;
-  late String buttonText;
-  late String selectedRegion;
-  late String selectedProvince;
-  late String residentSelection;
+  late File? capturedFaceScan;
+  late File? capturedFaceScanLeft;
 
   @override
   void initState() {
     // Initialize the instance variables in initState
-    firstNameController = widget.firstNameController;
-    lastNameController = widget.lastNameController;
-    middleNameController = widget.middleNameController;
-    suffixNameController = widget.suffixNameController;
-    mobileNumberController = widget.mobileNumberController;
+    userId = widget.userId;
+    selectedRegion = widget.selectedRegion;
+    selectedProvince = widget.selectedProvince;
     municipalityController = widget.municipalityController;
     barangayController = widget.barangayController;
     streetController = widget.streetController;
-    buttonText = widget.buttonText;
-    selectedRegion = widget.selectedRegion;
-    selectedProvince = widget.selectedProvince;
-    residentSelection = widget.residentSelection;
+    capturedFaceScan = widget.capturedFaceScan;
+    capturedFaceScanLeft = widget.capturedFaceScanLeft;
 
     super.initState();
   }
@@ -89,7 +72,6 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-
                   AspectRatio(
                     aspectRatio: 2 / 3,
                     child: CameraPreview(controller),
@@ -97,7 +79,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                   AspectRatio(
                     aspectRatio: 2 / 3,
                     child: Image.asset(
-                      'lib/images/camera-overlay-conceptcoder-front-face.png',
+                      'lib/images/camera-overlay-conceptcoder-right-face.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -134,15 +116,14 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
   void onTakePicture() async {
     await controller.takePicture().then((XFile xfile) {
       if (mounted) {
-
         setState(() {
-          capturedFaceScan = File(xfile.path);
+          capturedFaceScanRight = File(xfile.path);
         });
 
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Your Front Face Scan'),
+            title: const Text('Your Face'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -170,20 +151,16 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterFaceScanLeft(
-                            firstNameController: firstNameController,
-                            lastNameController: lastNameController,
-                            middleNameController: middleNameController,
-                            suffixNameController: suffixNameController,
-                            mobileNumberController: mobileNumberController,
+                          builder: (context) => UpdateIDScan(
+                            userId: userId,
+                            selectedRegion: selectedRegion,
+                            selectedProvince: selectedProvince,
                             municipalityController: municipalityController,
                             barangayController: barangayController,
                             streetController: streetController,
-                            buttonText: buttonText,
-                            selectedRegion: selectedRegion,
-                            selectedProvince: selectedProvince,
-                            residentSelection: residentSelection,
                             capturedFaceScan: capturedFaceScan,
+                            capturedFaceScanLeft: capturedFaceScanLeft,
+                            capturedFaceScanRight: capturedFaceScanRight,
                           ),
                         ),
                       ),
@@ -212,10 +189,9 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
             ),
           ),
         );
-            }
+      }
       return;
     });
   }
 }
-
 enum EnumCameraDescription { front, back }

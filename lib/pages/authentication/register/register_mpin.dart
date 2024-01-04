@@ -18,6 +18,8 @@ class RegisterMPIN extends StatefulWidget {
   final String selectedProvince;
   final String residentSelection;
   final File? capturedFaceScan;
+  final File? capturedFaceScanLeft;
+  final File? capturedFaceScanRight;
   final File? capturedIDScan;
 
   const RegisterMPIN({
@@ -35,6 +37,8 @@ class RegisterMPIN extends StatefulWidget {
     required this.selectedProvince,
     required this.residentSelection,
     required this.capturedFaceScan,
+    required this.capturedFaceScanLeft,
+    required this.capturedFaceScanRight,
     required this.capturedIDScan,
   });
 
@@ -57,6 +61,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
   late String selectedProvince;
   late String residentSelection;
   late File? capturedFaceScan;
+  late File? capturedFaceScanLeft;
+  late File? capturedFaceScanRight;
   late File? capturedIDScan;
 
   @override
@@ -75,6 +81,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
     capturedFaceScan = widget.capturedFaceScan;
+    capturedFaceScanLeft = widget.capturedFaceScanLeft;
+    capturedFaceScanRight = widget.capturedFaceScanRight;
     capturedIDScan = widget.capturedIDScan;
 
     super.initState();
@@ -142,6 +150,8 @@ class _RegisterMPINState extends State<RegisterMPIN> {
                               selectedProvince: selectedProvince,
                               residentSelection: residentSelection,
                               capturedFaceScan: capturedFaceScan,
+                              capturedFaceScanLeft: capturedFaceScanLeft,
+                              capturedFaceScanRight: capturedFaceScanRight,
                               capturedIDScan: capturedIDScan,
                               desiredPin: pinPassword,
                             ),

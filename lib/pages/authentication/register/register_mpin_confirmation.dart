@@ -21,6 +21,8 @@ class ConfirmMPIN extends StatefulWidget {
   final String selectedProvince;
   final String residentSelection;
   final File? capturedFaceScan;
+  final File? capturedFaceScanLeft;
+  final File? capturedFaceScanRight;
   final File? capturedIDScan;
   final String desiredPin;
 
@@ -39,6 +41,8 @@ class ConfirmMPIN extends StatefulWidget {
     required this.selectedProvince,
     required this.residentSelection,
     required this.capturedFaceScan,
+    required this.capturedFaceScanLeft,
+    required this.capturedFaceScanRight,
     required this.capturedIDScan,
     required this.desiredPin,
   }) : super(key: key);
@@ -61,6 +65,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
   late String selectedProvince;
   late String residentSelection;
   late File? capturedFaceScan;
+  late File? capturedFaceScanLeft;
+  late File? capturedFaceScanRight;
   late File? capturedIDScan;
   late String desiredPin;
 
@@ -80,6 +86,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
     capturedFaceScan = widget.capturedFaceScan;
+    capturedFaceScanLeft = widget.capturedFaceScanLeft;
+    capturedFaceScanRight = widget.capturedFaceScanRight;
     capturedIDScan = widget.capturedIDScan;
     desiredPin = widget.desiredPin;
 
@@ -286,6 +294,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     final storage = FirebaseStorage.instance;
     String idScanURL = '';
     String faceScanURL = '';
+    String faceScanLeftURL = '';
+    String faceScanRightURL = '';
 
     // Upload capturedIDScan to user_id_scan/userID/
     if (capturedIDScan != null) {
@@ -307,10 +317,30 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
       print('Face Scan Download URL: $faceScanURL');
     }
 
-    await saveImageLinksToServer(userID, idScanURL, faceScanURL);
+    // Upload capturedFaceScanLeft to user_face_scan_left/userID/
+    if (capturedFaceScanLeft != null) {
+      final Reference faceScanLeftRef = storage.ref().child('user_face_scan_left/$userID/capturedFaceScanLeft.jpg');
+      await faceScanLeftRef.putFile(capturedFaceScanLeft!);
+
+      // Retrieve download URL
+      faceScanLeftURL = await faceScanLeftRef.getDownloadURL();
+      print('Face Scan Left Download URL: $faceScanLeftURL');
+    }
+
+    // Upload capturedFaceScanRight to user_face_scan_right/userID/
+    if (capturedFaceScanRight != null) {
+      final Reference faceScanRightRef = storage.ref().child('user_face_scan_right/$userID/capturedFaceScanRight.jpg');
+      await faceScanRightRef.putFile(capturedFaceScanRight!);
+
+      // Retrieve download URL
+      faceScanRightURL = await faceScanRightRef.getDownloadURL();
+      print('Face Scan Left Download URL: $faceScanRightURL');
+    }
+
+    await saveImageLinksToServer(userID, idScanURL, faceScanURL, faceScanLeftURL, faceScanRightURL);
   }
 
-  Future<void> saveImageLinksToServer(String userID, String idScanURL, String faceScanURL) async {
+  Future<void> saveImageLinksToServer(String userID, String idScanURL, String faceScanURL, String faceScanLeftURL, String faceScanRightURL) async {
     const url = 'https://bmwaresd.com/spapp_conn_send_images_links.php';
 
     try {
@@ -320,6 +350,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
           'userID': userID,
           'idScanURL': idScanURL,
           'faceScanURL': faceScanURL,
+          'faceScanLeftURL': faceScanLeftURL,
+          'faceScanRightURL': faceScanRightURL,
         },
       );
 

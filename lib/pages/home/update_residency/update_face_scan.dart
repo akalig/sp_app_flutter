@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:sp_app/pages/home/update_residency/update_face_scan_left.dart';
 import 'package:sp_app/pages/home/update_residency/update_id_scan.dart';
 
 class UpdateFaceScan extends StatefulWidget {
@@ -142,7 +143,7 @@ class _UpdateFaceScanState extends State<UpdateFaceScan> {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UpdateIDScan(
+                          builder: (context) => UpdateFaceScanLeft(
                             userId: userId,
                             selectedRegion: selectedRegion,
                             selectedProvince: selectedProvince,

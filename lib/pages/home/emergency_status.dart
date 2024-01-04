@@ -197,13 +197,13 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
               await updateFirestoreEmergencyStatus(userId, emergencyStatus);
 
               // Show a Snackbar with the user status
-              final snackBar = SnackBar(
-                content: Text('Emergency Status: $emergencyStatus'),
-                duration: Duration(seconds: 3), // Adjust the duration as needed
-              );
-
-              // Find the Scaffold in the widget tree and show the Snackbar
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              // final snackBar = SnackBar(
+              //   content: Text('Emergency Status: $emergencyStatus'),
+              //   duration: Duration(seconds: 3), // Adjust the duration as needed
+              // );
+              //
+              // // Find the Scaffold in the widget tree and show the Snackbar
+              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
             } else {
               print('Response item does not contain the expected status field.');
             }

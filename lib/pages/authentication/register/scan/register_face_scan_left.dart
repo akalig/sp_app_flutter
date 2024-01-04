@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:sp_app/pages/authentication/register/scan/register_face_scan_left.dart';
+import 'package:sp_app/pages/authentication/register/scan/register_face_scan_right.dart';
 import 'package:sp_app/pages/authentication/register/scan/register_id_scan.dart';
 
-class RegisterFaceScan extends StatefulWidget {
+class RegisterFaceScanLeft extends StatefulWidget {
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
@@ -17,8 +17,9 @@ class RegisterFaceScan extends StatefulWidget {
   final String selectedRegion;
   final String selectedProvince;
   final String residentSelection;
+  final File? capturedFaceScan;
 
-  const RegisterFaceScan({
+  const RegisterFaceScanLeft({
     super.key,
     required this.firstNameController,
     required this.lastNameController,
@@ -32,16 +33,17 @@ class RegisterFaceScan extends StatefulWidget {
     required this.selectedRegion,
     required this.selectedProvince,
     required this.residentSelection,
+    required this.capturedFaceScan,
   });
 
   @override
-  State<RegisterFaceScan> createState() => _RegisterFaceScanState();
+  State<RegisterFaceScanLeft> createState() => _RegisterFaceScanLeftState();
 }
 
-class _RegisterFaceScanState extends State<RegisterFaceScan> {
+class _RegisterFaceScanLeftState extends State<RegisterFaceScanLeft> {
   late CameraController controller;
 
-  File? capturedFaceScan;
+  File? capturedFaceScanLeft;
 
   // Declare the parameters as instance variables
   late TextEditingController firstNameController;
@@ -56,6 +58,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
   late String selectedRegion;
   late String selectedProvince;
   late String residentSelection;
+  late File? capturedFaceScan;
 
   @override
   void initState() {
@@ -72,6 +75,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
     selectedRegion = widget.selectedRegion;
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
+    capturedFaceScan = widget.capturedFaceScan;
 
     super.initState();
   }
@@ -97,7 +101,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                   AspectRatio(
                     aspectRatio: 2 / 3,
                     child: Image.asset(
-                      'lib/images/camera-overlay-conceptcoder-front-face.png',
+                      'lib/images/camera-overlay-conceptcoder-left-face.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -136,13 +140,13 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
       if (mounted) {
 
         setState(() {
-          capturedFaceScan = File(xfile.path);
+          capturedFaceScanLeft = File(xfile.path);
         });
 
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Your Front Face Scan'),
+            title: const Text('Your Left Face Scan'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -170,7 +174,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterFaceScanLeft(
+                          builder: (context) => RegisterFaceScanRight(
                             firstNameController: firstNameController,
                             lastNameController: lastNameController,
                             middleNameController: middleNameController,
@@ -184,6 +188,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
                             selectedProvince: selectedProvince,
                             residentSelection: residentSelection,
                             capturedFaceScan: capturedFaceScan,
+                            capturedFaceScanLeft: capturedFaceScanLeft,
                           ),
                         ),
                       ),
@@ -212,7 +217,7 @@ class _RegisterFaceScanState extends State<RegisterFaceScan> {
             ),
           ),
         );
-            }
+      }
       return;
     });
   }

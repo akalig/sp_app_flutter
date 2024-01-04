@@ -676,6 +676,8 @@ class _RegisterState extends State<Register> {
                                             residentSelection:
                                                 residentSelection,
                                             capturedFaceScan: null,
+                                            capturedFaceScanLeft: null,
+                                            capturedFaceScanRight: null,
                                             capturedIDScan: null,
                                           ),
                                         ),

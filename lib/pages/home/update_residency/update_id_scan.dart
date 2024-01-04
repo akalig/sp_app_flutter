@@ -15,6 +15,8 @@ class UpdateIDScan extends StatefulWidget {
   final TextEditingController barangayController;
   final TextEditingController streetController;
   final File? capturedFaceScan;
+  final File? capturedFaceScanLeft;
+  final File? capturedFaceScanRight;
 
   const UpdateIDScan({
     super.key,
@@ -25,6 +27,8 @@ class UpdateIDScan extends StatefulWidget {
     required this.barangayController,
     required this.streetController,
     required this.capturedFaceScan,
+    required this.capturedFaceScanLeft,
+    required this.capturedFaceScanRight,
   });
 
   @override
@@ -43,6 +47,8 @@ class _UpdateIDScanState extends State<UpdateIDScan> {
   late TextEditingController barangayController;
   late TextEditingController streetController;
   late File? capturedFaceScan;
+  late File? capturedFaceScanLeft;
+  late File? capturedFaceScanRight;
 
   String status = "pending";
   String residency = "Resident";
@@ -57,6 +63,8 @@ class _UpdateIDScanState extends State<UpdateIDScan> {
     barangayController = widget.barangayController;
     streetController = widget.streetController;
     capturedFaceScan = widget.capturedFaceScan;
+    capturedFaceScanLeft = widget.capturedFaceScanLeft;
+    capturedFaceScanRight = widget.capturedFaceScanRight;
 
     super.initState();
   }
@@ -274,18 +282,78 @@ class _UpdateIDScanState extends State<UpdateIDScan> {
 
   Future<void> sendImagesToFirebaseStorage(String userID) async {
     final storage = FirebaseStorage.instance;
+    String idScanURL = '';
+    String faceScanURL = '';
+    String faceScanLeftURL = '';
+    String faceScanRightURL = '';
 
     // Upload capturedIDScan to user_id_scan/userID/
     if (capturedIDScan != null) {
       final Reference idScanRef = storage.ref().child('user_id_scan/$userID/capturedIDScan.jpg');
       await idScanRef.putFile(capturedIDScan!);
+
+      // Retrieve download URL
+      idScanURL = await idScanRef.getDownloadURL();
+      print('ID Scan Download URL: $idScanURL');
     }
 
     // Upload capturedFaceScan to user_face_scan/userID/
     if (capturedFaceScan != null) {
       final Reference faceScanRef = storage.ref().child('user_face_scan/$userID/capturedFaceScan.jpg');
       await faceScanRef.putFile(capturedFaceScan!);
+
+      // Retrieve download URL
+      faceScanURL = await faceScanRef.getDownloadURL();
+      print('Face Scan Download URL: $faceScanURL');
     }
+
+    // Upload capturedFaceScanLeft to user_face_scan_left/userID/
+    if (capturedFaceScanLeft != null) {
+      final Reference faceScanLeftRef = storage.ref().child('user_face_scan_left/$userID/capturedFaceScanLeft.jpg');
+      await faceScanLeftRef.putFile(capturedFaceScanLeft!);
+
+      // Retrieve download URL
+      faceScanLeftURL = await faceScanLeftRef.getDownloadURL();
+      print('Face Scan Left Download URL: $faceScanLeftURL');
+    }
+
+    // Upload capturedFaceScanRight to user_face_scan_right/userID/
+    if (capturedFaceScanRight != null) {
+      final Reference faceScanRightRef = storage.ref().child('user_face_scan_right/$userID/capturedFaceScanRight.jpg');
+      await faceScanRightRef.putFile(capturedFaceScanRight!);
+
+      // Retrieve download URL
+      faceScanRightURL = await faceScanRightRef.getDownloadURL();
+      print('Face Scan Left Download URL: $faceScanRightURL');
+    }
+
+    await saveImageLinksToServer(userID, idScanURL, faceScanURL, faceScanLeftURL, faceScanRightURL);
+  }
+
+  Future<void> saveImageLinksToServer(String userID, String idScanURL, String faceScanURL, String faceScanLeftURL, String faceScanRightURL) async {
+    const url = 'https://bmwaresd.com/spapp_conn_send_images_links.php';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userID': userID,
+          'idScanURL': idScanURL,
+          'faceScanURL': faceScanURL,
+          'faceScanLeftURL': faceScanLeftURL,
+          'faceScanRightURL': faceScanRightURL,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Data sent to server successfully');
+      } else {
+        print('Failed to send data to server. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending data to server: $e');
+    }
+
   }
 
 }

@@ -17,6 +17,8 @@ class RegisterIDScan extends StatefulWidget {
   final String selectedProvince;
   final String residentSelection;
   final File? capturedFaceScan;
+  final File? capturedFaceScanLeft;
+  final File? capturedFaceScanRight;
 
   const RegisterIDScan({
     super.key,
@@ -33,6 +35,8 @@ class RegisterIDScan extends StatefulWidget {
     required this.selectedProvince,
     required this.residentSelection,
     required this.capturedFaceScan,
+    required this.capturedFaceScanLeft,
+    required this.capturedFaceScanRight,
   });
 
   @override
@@ -58,6 +62,8 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
   late String selectedProvince;
   late String residentSelection;
   late File? capturedFaceScan;
+  late File? capturedFaceScanLeft;
+  late File? capturedFaceScanRight;
 
   @override
   void initState() {
@@ -75,6 +81,8 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
     selectedProvince = widget.selectedProvince;
     residentSelection = widget.residentSelection;
     capturedFaceScan = widget.capturedFaceScan;
+    capturedFaceScanLeft = widget.capturedFaceScanLeft;
+    capturedFaceScanRight = widget.capturedFaceScanRight;
 
     super.initState();
   }
@@ -186,6 +194,8 @@ class _RegisterIDScanState extends State<RegisterIDScan> {
                             selectedProvince: selectedProvince,
                             residentSelection: residentSelection,
                             capturedFaceScan: capturedFaceScan,
+                            capturedFaceScanLeft: capturedFaceScanLeft,
+                            capturedFaceScanRight: capturedFaceScanRight,
                             capturedIDScan: capturedIDScan,
                           ),
                         ),
