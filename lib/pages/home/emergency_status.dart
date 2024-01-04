@@ -3,6 +3,7 @@ import 'package:sp_app/pages/home/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 class EmergencyStatus extends StatefulWidget {
   final String userId;
@@ -19,13 +20,36 @@ class EmergencyStatus extends StatefulWidget {
 class _EmergencyStatusState extends State<EmergencyStatus> {
   late String userId;
   late String emergencyStatus = "";
+  late Timer timer;
+
+  // @override
+  // void initState() {
+  //   userId = widget.userId;
+  //
+  //   sendUserIDToServer(userId);
+  //   super.initState();
+  // }
 
   @override
   void initState() {
     userId = widget.userId;
 
+    // Call sendUserIDToServer once immediately
     sendUserIDToServer(userId);
+
+    // Set up a timer to call sendUserIDToServer every 5 seconds
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      sendUserIDToServer(userId);
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    timer.cancel();
+    super.dispose();
   }
 
   @override
