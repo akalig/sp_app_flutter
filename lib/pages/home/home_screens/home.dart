@@ -71,8 +71,7 @@ class _HomeState extends State<Home> {
       decoration: const BoxDecoration(),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 25.0),
+          Container(
             child: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(20),
@@ -85,7 +84,7 @@ class _HomeState extends State<Home> {
               ),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
                 child: Row(
                   children: [
                     Padding(

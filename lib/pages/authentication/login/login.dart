@@ -16,6 +16,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController mobileNumberController = TextEditingController();
   bool acceptedTerms = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -40,10 +41,10 @@ class _LoginState extends State<Login> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('Terms and Conditions'),
+              title: const Text('Terms and Conditions'),
               content: Column(
                 children: [
-                  Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+                  const Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
                   Row(
                     children: [
                       Checkbox(
@@ -54,7 +55,7 @@ class _LoginState extends State<Login> {
                           });
                         },
                       ),
-                      Text('I accept the terms and conditions'),
+                      const Text('I accept the terms and conditions'),
                     ],
                   ),
                 ],
@@ -65,7 +66,7 @@ class _LoginState extends State<Login> {
                     Navigator.of(context).pop(); // Close the dialog
                     declineTermsAndConditions();
                   },
-                  child: Text('Decline'),
+                  child: const Text('Decline'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -82,7 +83,7 @@ class _LoginState extends State<Login> {
                       );
                     }
                   },
-                  child: Text('Accept'),
+                  child: const Text('Accept'),
                 ),
               ],
             );
@@ -101,7 +102,7 @@ class _LoginState extends State<Login> {
     // Handle decline action if needed
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => Authentication()),
+      MaterialPageRoute(builder: (context) => const Authentication()),
     );
   }
 
@@ -258,19 +259,21 @@ class _LoginState extends State<Login> {
                               width: 300,
                               child: GestureDetector(
                                 onTap: () {
-                                  if (mobileNumberController.text.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Please fill in all fields'),
-                                        duration: Duration(seconds: 2),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
+                                  if (mobileNumberController.text.isEmpty || isLoading) {
                                     return;
                                   }
 
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
                                   // Call the function to check if the mobile number is registered
-                                  checkMobileNumber(context, mobileNumberController.text);
+                                  checkMobileNumber(context, mobileNumberController.text)
+                                      .then((_) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -278,8 +281,13 @@ class _LoginState extends State<Login> {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   padding: const EdgeInsets.all(18),
-                                  child: const Center(
-                                    child: Text(
+                                  child: Center(
+                                    child: isLoading
+                                        ? CircularProgressIndicator(
+                                      color: Colors.green,
+                                      backgroundColor: Colors.green[200],
+                                    )
+                                        : Text(
                                       'LOGIN',
                                       style: TextStyle(
                                         color: Colors.black,
