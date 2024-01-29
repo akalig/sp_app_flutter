@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:sp_app/pages/home/update_residency/update_face_scan_right.dart';
-import 'package:sp_app/pages/home/update_residency/update_id_scan.dart';
 
 class UpdateFaceScanLeft extends StatefulWidget {
 

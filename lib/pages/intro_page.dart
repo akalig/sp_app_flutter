@@ -5,7 +5,7 @@ import 'authentication/authentication.dart';
 import 'home/home_page.dart';
 
 class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+  const IntroPage({super.key});
 
   @override
   _IntroPageState createState() => _IntroPageState();
@@ -90,7 +90,7 @@ class _IntroPageState extends State<IntroPage> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.green[800],
+                          color: Colors.green[900],
                           borderRadius: BorderRadius.circular(5),
                         ),
                         padding: const EdgeInsets.all(18),

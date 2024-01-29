@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/authentication/register/scan/register_face_scan_right.dart';
-import 'package:sp_app/pages/authentication/register/scan/register_id_scan.dart';
 
 class RegisterFaceScanLeft extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -194,7 +193,7 @@ class _RegisterFaceScanLeftState extends State<RegisterFaceScanLeft> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.green[800],
+                          color: Colors.green[900],
                           borderRadius: BorderRadius.circular(5),
                         ),
                         padding: const EdgeInsets.all(10),

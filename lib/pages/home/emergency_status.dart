@@ -38,7 +38,7 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
     sendUserIDToServer(userId);
 
     // Set up a timer to call sendUserIDToServer every 5 seconds
-    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
       sendUserIDToServer(userId);
     });
 
@@ -99,7 +99,7 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
 
                         Text(
                           'Status: $emergencyStatus',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.w700,
                           ),
@@ -117,7 +117,7 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.green[700],
+                    color: Colors.green[900],
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
-import 'package:http/http.dart' as http;
 import 'dart:math';
 
 class RegisterNumber extends StatefulWidget {

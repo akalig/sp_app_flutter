@@ -27,7 +27,7 @@ class ConfirmMPIN extends StatefulWidget {
   final String desiredPin;
 
   const ConfirmMPIN({
-    Key? key,
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.middleNameController,
@@ -45,7 +45,7 @@ class ConfirmMPIN extends StatefulWidget {
     required this.capturedFaceScanRight,
     required this.capturedIDScan,
     required this.desiredPin,
-  }) : super(key: key);
+  });
 
   @override
   State<ConfirmMPIN> createState() => _ConfirmMPINState();

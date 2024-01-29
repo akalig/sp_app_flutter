@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/home/home_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_app/pages/home/update_residency/update_face_scan.dart';
 
 class UpdateResidency extends StatefulWidget {
@@ -121,7 +120,7 @@ class _UpdateResidencyState extends State<UpdateResidency> {
                                                 BorderRadius.circular(5.0),
                                           ),
                                           child: DropdownButton<String>(
-                                            items: [
+                                            items: const [
                                               DropdownMenuItem(
                                                 value: "0",
                                                 child: Text('Region IV - A'),
@@ -147,7 +146,7 @@ class _UpdateResidencyState extends State<UpdateResidency> {
                                                 BorderRadius.circular(5.0),
                                           ),
                                           child: DropdownButton<String>(
-                                            items: [
+                                            items: const [
                                               DropdownMenuItem(
                                                 value: "0",
                                                 child: Text('Laguna'),

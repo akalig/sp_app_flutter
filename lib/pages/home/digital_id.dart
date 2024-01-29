@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -8,9 +7,9 @@ class DigitalID extends StatefulWidget {
   final String userId;
 
   const DigitalID({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<DigitalID> createState() => _DigitalIDState();
@@ -41,8 +40,8 @@ class _DigitalIDState extends State<DigitalID> {
               child: Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Colors.green,
+                decoration: BoxDecoration(
+                  color: Colors.green[900],
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),

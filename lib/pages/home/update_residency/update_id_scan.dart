@@ -159,60 +159,55 @@ class _UpdateIDScanState extends State<UpdateIDScan> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        if (userId != null) {
-
-                          if (selectedRegion == "0") {
-                            selectedRegion = 'Region IV - A';
-                          }
-
-                          if (selectedProvince == "0") {
-                            selectedProvince = 'Laguna';
-                          }
-
-                          FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
-                          CollectionReference usersCollection = firebaseInstance.collection('users');
-
-                          try {
-                            await usersCollection.doc(userId).update({
-                              'region': selectedRegion,
-                              'province': selectedProvince,
-                              'municipality': municipalityController.text,
-                              'barangay': barangayController.text,
-                              'street': streetController.text,
-                              'status': status,
-                              'residency': residency,
-                            });
-                            print('Data updated successfully!');
-
-                            await sendDataToServer(
-                              userId,
-                              selectedRegion,
-                              selectedProvince,
-                              municipalityController.text,
-                              barangayController.text,
-                              streetController.text,
-                              status,
-                              residency
-                            );
-
-                            if (capturedIDScan != null && capturedFaceScan != null) {
-                              await sendImagesToFirebaseStorage(userId);
-                            }
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(userId: userId),
-                              ),
-                            );
-
-                          } catch (error) {
-                            print('Error updating data: $error');
-                          }
-                        } else {
-                          print('UserId is null. Make sure it is set before updating data.');
+                        if (selectedRegion == "0") {
+                          selectedRegion = 'Region IV - A';
                         }
 
+                        if (selectedProvince == "0") {
+                          selectedProvince = 'Laguna';
+                        }
+
+                        FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
+                        CollectionReference usersCollection = firebaseInstance.collection('users');
+
+                        try {
+                          await usersCollection.doc(userId).update({
+                            'region': selectedRegion,
+                            'province': selectedProvince,
+                            'municipality': municipalityController.text,
+                            'barangay': barangayController.text,
+                            'street': streetController.text,
+                            'status': status,
+                            'residency': residency,
+                          });
+                          print('Data updated successfully!');
+
+                          await sendDataToServer(
+                            userId,
+                            selectedRegion,
+                            selectedProvince,
+                            municipalityController.text,
+                            barangayController.text,
+                            streetController.text,
+                            status,
+                            residency
+                          );
+
+                          if (capturedIDScan != null && capturedFaceScan != null) {
+                            await sendImagesToFirebaseStorage(userId);
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(userId: userId),
+                            ),
+                          );
+
+                        } catch (error) {
+                          print('Error updating data: $error');
+                        }
+                      
                       },
                       child: Container(
                         decoration: BoxDecoration(

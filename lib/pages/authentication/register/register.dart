@@ -64,8 +64,8 @@ class _RegisterState extends State<Register> {
       resizeToAvoidBottomInset: false,
       body: Container(
         margin: const EdgeInsets.only(top: 25),
-        decoration: const BoxDecoration(
-          color: Colors.green,
+        decoration: BoxDecoration(
+          color: Colors.green[900],
         ),
         child: Column(
           children: [
@@ -686,7 +686,7 @@ class _RegisterState extends State<Register> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.green[800],
+                                      color: Colors.green[900],
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     padding: const EdgeInsets.all(18),

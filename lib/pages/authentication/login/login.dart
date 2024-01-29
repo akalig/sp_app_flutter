@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/login/login_otp.dart';
 import 'dart:math';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -287,7 +286,7 @@ class _LoginState extends State<Login> {
                                       color: Colors.green,
                                       backgroundColor: Colors.green[200],
                                     )
-                                        : Text(
+                                        : const Text(
                                       'LOGIN',
                                       style: TextStyle(
                                         color: Colors.black,

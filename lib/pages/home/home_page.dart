@@ -17,9 +17,9 @@ class HomePage extends StatefulWidget {
   final String userId;
 
   const HomePage({
-    Key? key, // Correct usage of Key
+    super.key, // Correct usage of Key
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userId;
 
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final FirebasePushNotificationAPI _firebasePushNotificationAPI =
   FirebasePushNotificationAPI();
@@ -137,22 +137,22 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home,
-                color: currentIndex == 0 ? Colors.green : Colors.grey),
+                color: currentIndex == 0 ? Colors.green[800] : Colors.grey),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.article_rounded,
-                color: currentIndex == 1 ? Colors.green : Colors.grey),
+                color: currentIndex == 1 ? Colors.green[800] : Colors.grey),
             label: 'News',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications,
-                color: currentIndex == 2 ? Colors.green : Colors.grey),
+                color: currentIndex == 2 ? Colors.green[800] : Colors.grey),
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard,
-                color: currentIndex == 3 ? Colors.green : Colors.grey),
+                color: currentIndex == 3 ? Colors.green[800] : Colors.grey),
             label: 'Profile',
           ),
         ],
@@ -219,14 +219,14 @@ class _HomePageState extends State<HomePage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Access Denied'),
-                content: Text('Digital ID is exclusive for Residents Only.'),
+                title: const Text('Access Denied'),
+                content: const Text('Digital ID is exclusive for Residents Only.'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Close'),
+                    child: const Text('Close'),
                   ),
 
                   TextButton(
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(builder: (context) => UpdateResidency(userId: userId)),
                       );
                     },
-                    child: Text('Update to Resident Account'),
+                    child: const Text('Update to Resident Account'),
                   ),
                 ],
               );
@@ -283,14 +283,14 @@ class _HomePageState extends State<HomePage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Access Denied'),
-                content: Text('Account must be approved first.'),
+                title: const Text('Access Denied'),
+                content: const Text('Account must be approved first.'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Close'),
+                    child: const Text('Close'),
                   ),
                 ],
               );

@@ -5,9 +5,9 @@ class Notifications extends StatefulWidget {
   final String userId;
 
   const Notifications({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -33,7 +33,7 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(),
+      decoration: const BoxDecoration(),
       child: Column(
         children: [
           Padding(
@@ -41,8 +41,8 @@ class _NotificationsState extends State<Notifications> {
             child: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              decoration: BoxDecoration(
+                color: Colors.green[900],
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -78,13 +78,13 @@ class _NotificationsState extends State<Notifications> {
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 var notifications = snapshot.data!.docs;
 
                 if (notifications.isEmpty) {
-                  return Center(child: Text('No notifications available.'));
+                  return const Center(child: Text('No notifications available.'));
                 }
 
                 return ListView.builder(
@@ -94,8 +94,8 @@ class _NotificationsState extends State<Notifications> {
                     var body = notification['body'];
 
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 2.0),
-                      padding: EdgeInsets.all(16.0),
+                      margin: const EdgeInsets.symmetric(vertical: 2.0),
+                      padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.green),
                         color: Colors.white,
@@ -105,7 +105,7 @@ class _NotificationsState extends State<Notifications> {
                         children: [
                           Text(
                             body,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),

@@ -95,7 +95,7 @@ class Authentication extends StatelessWidget {
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.green[800],
+                              color: Colors.green[900],
                               borderRadius: BorderRadius.circular(5),
                             ),
                             padding: const EdgeInsets.all(18),

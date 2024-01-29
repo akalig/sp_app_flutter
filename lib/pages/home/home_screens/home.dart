@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
           .get();
 
       if (snapshot.docs.isNotEmpty) {
-        var userData = snapshot.docs[0].data()!;
+        var userData = snapshot.docs[0].data();
 
         String firstName = userData['first_name'] ?? '';
         String middleName = userData['middle_name'] ?? '';
@@ -75,8 +75,8 @@ class _HomeState extends State<Home> {
             child: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              decoration: BoxDecoration(
+                color: Colors.green[900],
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            '$userResidency', // Use the userResidency variable
+                            userResidency, // Use the userResidency variable
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w300,
@@ -190,7 +190,6 @@ class _HomeState extends State<Home> {
                       ],
                     ),
 
-
                     const SizedBox(height: 10),
 
                     Column(
@@ -207,7 +206,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -231,7 +230,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -255,7 +254,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -279,7 +278,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -311,7 +310,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -336,7 +335,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -360,7 +359,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -384,7 +383,7 @@ class _HomeState extends State<Home> {
                                   width: 70, // Set your desired width
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[800],
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: const Center(
@@ -451,7 +450,7 @@ class _HomeState extends State<Home> {
               // Show a Snackbar with the user status
               final snackBar = SnackBar(
                 content: Text('User Status: $userStatus'),
-                duration: Duration(seconds: 3), // Adjust the duration as needed
+                duration: const Duration(seconds: 3), // Adjust the duration as needed
               );
 
               // Find the Scaffold in the widget tree and show the Snackbar
