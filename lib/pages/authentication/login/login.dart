@@ -41,23 +41,136 @@ class _LoginState extends State<Login> {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               title: const Text('Terms and Conditions'),
-              content: Column(
-                children: [
-                  const Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: acceptedTerms,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            acceptedTerms = value!;
-                          });
-                        },
-                      ),
-                      const Text('I accept the terms and conditions'),
-                    ],
-                  ),
-                ],
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Text('GENERAL', textAlign: TextAlign.start,),
+                    const Text(
+                      'The Terms and Conditions contained herein on this mobile application called San Pedro App shall govern the use of this App, including all pages to which the user may be redirected. These terms apply in full force and effect to the use of this App. The user’s personal data, whenever provided within the App shall be processed and shall be governed by the provisions of the Republic Act (RA) No 10173 or the Data Privacy Act of 2012, and all other applicable laws. Whenever used herein, “App Owner” shall mean City Government of San Pedro.',
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    const Text('BASIC TERMS', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
+                    const Text(
+                      'Only the user who is fifteen (15) years old and above may access the full features of the San Pedro App.',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'If the user is below fifteen (15) years old, parental consent or legal guardian consent will be required from them for their use of San Pedro App. It shall be the parent, legal guardian, or other person exercising parental authority over the user who is below 15 years of age who allows, authorizes, and consents to the opening of the San Pedro app who shall be principally responsible over the account and responsible for ensuring that the latter read and understand and deemed to accept these Terms and explain the use of the San Pedro app features and services. App Owner assumes no responsibility or liability for any misrepresentation of the user’s age.',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text('AUTHORITY', textAlign: TextAlign.start,),
+                    const Text(
+                      'By registering in the App, the user warrants that they are duly authorized to register, request access, and supply information on their behalf. The App Owner may, at its sole discretion, request additional or supporting documents to prove such authority.',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'By providing the requested information for verification of the user’s account, they consent that their information provided - which will serve as their digital ID, may be generated through the App. These personal data needed are specified in the Privacy Policy of San Pedro App.',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'The user also warrants that all information supplied is verified, true, and correct to the best of their knowledge.',
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    const Text('USE', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Through registration and by having access to the App, the user hereby warrants that the App shall only be used for the following purposes:',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Registration for e-government services',
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    const Text('RESTRICTIONS', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'The user is expressly and emphatically restricted from all of the following:',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Selling, sub-licensing, and/or otherwise commercializing the App;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Using the App or any of the information in illegal or unlawful activities;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Publicly performing and/or showing any App material;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Using this App in any way that is, or may be, damaging to this App;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Using this App in any way that impacts user access to this App;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Using this App contrary to applicable laws and regulations, or in a way that causes, or may cause, harm to the App, or to the App Owner or any person or organization;',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Engaging in any data mining, data harvesting, data extracting or any other similar activity in relation to this App, or while using this App; and',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Using this App to engage in any advertising or marketing.',
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    const Text('PROFILE', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'All information gathered by the App shall be treated as confidential. This App uses personal information - whether considered sensitive or not, as defined under Section 3 of the Data Privacy Act of 2012, and non-personal information to the extent necessary to comply with the requirements of the laws and legal processes, including orders of governmental agencies, courts, and tribunals; to comply with a legal obligation; or to prevent imminent harm to public security, safety, or order.',
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'When required by the App’s Data Privacy Policy and the laws, and before the App uses or processes User’s data for any other purpose, the App will secure the User’s consent. The App Owner shall use the information provided by the User in accordance with the processes in Sections 12 and 13 of the Data Privacy Act of 2012.',
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: acceptedTerms,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              acceptedTerms = value!;
+                            });
+                          },
+                        ),
+                        const Text('I accept the terms and conditions'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               actions: <Widget>[
                 TextButton(
@@ -75,7 +188,8 @@ class _LoginState extends State<Login> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('You must agree to the terms and conditions'),
+                          content: Text(
+                              'You must agree to the terms and conditions'),
                           duration: Duration(seconds: 2),
                           backgroundColor: Colors.red,
                         ),
@@ -105,13 +219,15 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> checkMobileNumber(BuildContext context, String mobileNumber) async {
+  Future<void> checkMobileNumber(
+      BuildContext context, String mobileNumber) async {
     try {
       // Make a query to Firestore to retrieve the user with the provided mobile number
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('mobile_number', isEqualTo: mobileNumber)
-          .get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .where('mobile_number', isEqualTo: mobileNumber)
+              .get();
 
       // Check if there's a user with the provided mobile number
       if (querySnapshot.docs.isEmpty) {
@@ -258,7 +374,8 @@ class _LoginState extends State<Login> {
                               width: 300,
                               child: GestureDetector(
                                 onTap: () {
-                                  if (mobileNumberController.text.isEmpty || isLoading) {
+                                  if (mobileNumberController.text.isEmpty ||
+                                      isLoading) {
                                     return;
                                   }
 
@@ -267,7 +384,8 @@ class _LoginState extends State<Login> {
                                   });
 
                                   // Call the function to check if the mobile number is registered
-                                  checkMobileNumber(context, mobileNumberController.text)
+                                  checkMobileNumber(
+                                          context, mobileNumberController.text)
                                       .then((_) {
                                     setState(() {
                                       isLoading = false;
@@ -283,18 +401,18 @@ class _LoginState extends State<Login> {
                                   child: Center(
                                     child: isLoading
                                         ? CircularProgressIndicator(
-                                      color: Colors.green,
-                                      backgroundColor: Colors.green[200],
-                                    )
+                                            color: Colors.green,
+                                            backgroundColor: Colors.green[200],
+                                          )
                                         : const Text(
-                                      'LOGIN',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
+                                            'LOGIN',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -333,8 +451,7 @@ class _LoginState extends State<Login> {
   }
 
   String generateRandomString(int length) {
-    const String characterSet =
-        '1234567890';
+    const String characterSet = '1234567890';
     Random random = Random();
 
     StringBuffer buffer = StringBuffer();
@@ -346,5 +463,4 @@ class _LoginState extends State<Login> {
 
     return buffer.toString();
   }
-
 }
