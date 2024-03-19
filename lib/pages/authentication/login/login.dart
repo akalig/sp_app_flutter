@@ -4,6 +4,7 @@ import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/login/login_otp.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -44,7 +45,7 @@ class _LoginState extends State<Login> {
               content: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Text('GENERAL', textAlign: TextAlign.start,),
+                    const Text('GENERAL', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold)),
                     const Text(
                       'The Terms and Conditions contained herein on this mobile application called San Pedro App shall govern the use of this App, including all pages to which the user may be redirected. These terms apply in full force and effect to the use of this App. The user’s personal data, whenever provided within the App shall be processed and shall be governed by the provisions of the Republic Act (RA) No 10173 or the Data Privacy Act of 2012, and all other applicable laws. Whenever used herein, “App Owner” shall mean City Government of San Pedro.',
                       textAlign: TextAlign.justify,
@@ -63,7 +64,7 @@ class _LoginState extends State<Login> {
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: 20),
-                    const Text('AUTHORITY', textAlign: TextAlign.start,),
+                    const Text('AUTHORITY', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold)),
                     const Text(
                       'By registering in the App, the user warrants that they are duly authorized to register, request access, and supply information on their behalf. The App Owner may, at its sole discretion, request additional or supporting documents to prove such authority.',
                       textAlign: TextAlign.justify,
@@ -82,7 +83,6 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 20),
 
                     const Text('USE', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 10),
                     const Text(
                       'Through registration and by having access to the App, the user hereby warrants that the App shall only be used for the following purposes:',
                       textAlign: TextAlign.justify,
@@ -96,7 +96,6 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 20),
 
                     const Text('RESTRICTIONS', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 10),
                     const Text(
                       'The user is expressly and emphatically restricted from all of the following:',
                       textAlign: TextAlign.justify,
@@ -145,7 +144,6 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 20),
 
                     const Text('PROFILE', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 10),
                     const Text(
                       'All information gathered by the App shall be treated as confidential. This App uses personal information - whether considered sensitive or not, as defined under Section 3 of the Data Privacy Act of 2012, and non-personal information to the extent necessary to comply with the requirements of the laws and legal processes, including orders of governmental agencies, courts, and tribunals; to comply with a legal obligation; or to prevent imminent harm to public security, safety, or order.',
                       textAlign: TextAlign.justify,
@@ -155,6 +153,8 @@ class _LoginState extends State<Login> {
                       'When required by the App’s Data Privacy Policy and the laws, and before the App uses or processes User’s data for any other purpose, the App will secure the User’s consent. The App Owner shall use the information provided by the User in accordance with the processes in Sections 12 and 13 of the Data Privacy Act of 2012.',
                       textAlign: TextAlign.justify,
                     ),
+
+                    const SizedBox(height: 20),
 
                     Row(
                       children: [
@@ -249,7 +249,7 @@ class _LoginState extends State<Login> {
       String retrievedUserID = querySnapshot.docs[0]['userID'];
 
       String randomDigits = generateRandomString(6);
-      // sendMessage(randomDigits);
+      sendMessage(randomDigits);
 
       // Navigate to the next screen (LoginMPIN) and pass the values
       Navigator.push(
@@ -270,36 +270,36 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // void sendMessage(String randomDigits) async {
-  //
-  //   var apiUrl = 'https://semaphore.co/api/v4/messages';
-  //   var apiKey = 'c2ccfae1d1ab68804ff30ea669c47581';
-  //   var number = mobileNumberController.text;
-  //   var senderName = 'SEMAPHORE';
-  //   var message = 'Your One-time-Password is $randomDigits';
-  //
-  //   var parameters = {
-  //     'apikey': apiKey,
-  //     'number': number,
-  //     'message': message,
-  //     'sendername': senderName,
-  //   };
-  //
-  //   // Make the POST request
-  //   var response = await http.post(
-  //     Uri.parse(apiUrl),
-  //     body: parameters,
-  //   );
-  //
-  //   // Check if the request was successful (status code 200)
-  //   if (response.statusCode == 200) {
-  //     // Print the server response
-  //     print(response.body);
-  //   } else {
-  //     // Print an error message if the request was not successful
-  //     print('Request failed with status: ${response.statusCode}');
-  //   }
-  // }
+  void sendMessage(String randomDigits) async {
+
+    var apiUrl = 'https://semaphore.co/api/v4/messages';
+    var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
+    var number = mobileNumberController.text;
+    var senderName = 'SEMAPHORE';
+    var message = 'Your One-time-Password is $randomDigits';
+
+    var parameters = {
+      'apikey': apiKey,
+      'number': number,
+      'message': message,
+      'sendername': senderName,
+    };
+
+    // Make the POST request
+    var response = await http.post(
+      Uri.parse(apiUrl),
+      body: parameters,
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Print the server response
+      print(response.body);
+    } else {
+      // Print an error message if the request was not successful
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -360,14 +360,21 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               border: OutlineInputBorder(),
-                              hintText: "🇵🇭 +63",
+                              prefixText: '+63 ', // Prefix text
+                              prefixStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.black54,
+                              ),
+                              hintText: "Mobile Number",
                               hintStyle: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 16.0,
                                 color: Colors.grey,
+                                fontWeight: FontWeight.w600
                               ),
                               hoverColor: Colors.white,
                             ),
                           ),
+
                           Padding(
                             padding: const EdgeInsets.only(bottom: 25.0),
                             child: SizedBox(

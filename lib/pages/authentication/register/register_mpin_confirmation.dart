@@ -70,6 +70,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
   late File? capturedIDScan;
   late String desiredPin;
 
+  late bool _showIndicator; // Track whether to show the indicator
+
   @override
   void initState() {
     // Initialize the instance variables in initState
@@ -90,6 +92,8 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     capturedFaceScanRight = widget.capturedFaceScanRight;
     capturedIDScan = widget.capturedIDScan;
     desiredPin = widget.desiredPin;
+
+    _showIndicator = false; // Initialize indicator to be hidden
 
     super.initState();
   }
@@ -204,6 +208,7 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                           createdAtTimestamp.toDate().toString(),
                         );
 
+
                         if (residentSelection == 'Resident' && capturedIDScan != null && capturedFaceScan != null) {
                           await sendImagesToFirebaseStorage(randomString);
                         }
@@ -230,6 +235,12 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
                 ),
               ),
             ),
+
+            Visibility(
+              visible: _showIndicator,
+              child: const CircularProgressIndicator(),
+            ),
+
           ],
         ),
       ),
@@ -297,48 +308,62 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
     String faceScanLeftURL = '';
     String faceScanRightURL = '';
 
-    // Upload capturedIDScan to user_id_scan/userID/
-    if (capturedIDScan != null) {
-      final Reference idScanRef = storage.ref().child('user_id_scan/$userID/capturedIDScan.jpg');
-      await idScanRef.putFile(capturedIDScan!);
+    try {
+      // Upload capturedIDScan to user_id_scan/userID/
+      if (capturedIDScan != null) {
+        final Reference idScanRef =
+        storage.ref().child('user_id_scan/$userID/capturedIDScan.jpg');
+        await idScanRef.putFile(capturedIDScan!);
 
-      // Retrieve download URL
-      idScanURL = await idScanRef.getDownloadURL();
-      print('ID Scan Download URL: $idScanURL');
+        // Retrieve download URL
+        idScanURL = await idScanRef.getDownloadURL();
+        print('ID Scan Download URL: $idScanURL');
+      }
+
+      // Upload capturedFaceScan to user_face_scan/userID/
+      if (capturedFaceScan != null) {
+        final Reference faceScanRef = storage
+            .ref()
+            .child('user_face_scan/$userID/capturedFaceScan.jpg');
+        await faceScanRef.putFile(capturedFaceScan!);
+
+        // Retrieve download URL
+        faceScanURL = await faceScanRef.getDownloadURL();
+        print('Face Scan Download URL: $faceScanURL');
+      }
+
+      // Upload capturedFaceScanLeft to user_face_scan_left/userID/
+      if (capturedFaceScanLeft != null) {
+        final Reference faceScanLeftRef = storage
+            .ref()
+            .child('user_face_scan_left/$userID/capturedFaceScanLeft.jpg');
+        await faceScanLeftRef.putFile(capturedFaceScanLeft!);
+
+        // Retrieve download URL
+        faceScanLeftURL = await faceScanLeftRef.getDownloadURL();
+        print('Face Scan Left Download URL: $faceScanLeftURL');
+      }
+
+      // Upload capturedFaceScanRight to user_face_scan_right/userID/
+      if (capturedFaceScanRight != null) {
+        final Reference faceScanRightRef = storage
+            .ref()
+            .child('user_face_scan_right/$userID/capturedFaceScanRight.jpg');
+        await faceScanRightRef.putFile(capturedFaceScanRight!);
+
+        // Retrieve download URL
+        faceScanRightURL = await faceScanRightRef.getDownloadURL();
+        print('Face Scan Left Download URL: $faceScanRightURL');
+      }
+
+      await saveImageLinksToServer(
+          userID, idScanURL, faceScanURL, faceScanLeftURL, faceScanRightURL);
+    } catch (e) {
+      print('Error uploading images to Firebase Storage: $e');
+      // Handle error, such as displaying a message to the user
     }
-
-    // Upload capturedFaceScan to user_face_scan/userID/
-    if (capturedFaceScan != null) {
-      final Reference faceScanRef = storage.ref().child('user_face_scan/$userID/capturedFaceScan.jpg');
-      await faceScanRef.putFile(capturedFaceScan!);
-
-      // Retrieve download URL
-      faceScanURL = await faceScanRef.getDownloadURL();
-      print('Face Scan Download URL: $faceScanURL');
-    }
-
-    // Upload capturedFaceScanLeft to user_face_scan_left/userID/
-    if (capturedFaceScanLeft != null) {
-      final Reference faceScanLeftRef = storage.ref().child('user_face_scan_left/$userID/capturedFaceScanLeft.jpg');
-      await faceScanLeftRef.putFile(capturedFaceScanLeft!);
-
-      // Retrieve download URL
-      faceScanLeftURL = await faceScanLeftRef.getDownloadURL();
-      print('Face Scan Left Download URL: $faceScanLeftURL');
-    }
-
-    // Upload capturedFaceScanRight to user_face_scan_right/userID/
-    if (capturedFaceScanRight != null) {
-      final Reference faceScanRightRef = storage.ref().child('user_face_scan_right/$userID/capturedFaceScanRight.jpg');
-      await faceScanRightRef.putFile(capturedFaceScanRight!);
-
-      // Retrieve download URL
-      faceScanRightURL = await faceScanRightRef.getDownloadURL();
-      print('Face Scan Left Download URL: $faceScanRightURL');
-    }
-
-    await saveImageLinksToServer(userID, idScanURL, faceScanURL, faceScanLeftURL, faceScanRightURL);
   }
+
 
   Future<void> saveImageLinksToServer(String userID, String idScanURL, String faceScanURL, String faceScanLeftURL, String faceScanRightURL) async {
     const url = 'https://bmwaresd.com/spapp_conn_send_images_links.php';

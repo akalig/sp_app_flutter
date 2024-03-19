@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 class RegisterNumber extends StatefulWidget {
   final String residentSelection;
@@ -42,7 +43,7 @@ class _RegisterNumberState extends State<RegisterNumber> {
 
       String randomDigits = generateRandomString(6);
 
-      // sendMessage(randomDigits);
+      sendMessage(randomDigits);
 
       Navigator.push(
         context,
@@ -60,36 +61,36 @@ class _RegisterNumberState extends State<RegisterNumber> {
     }
   }
 
-  // void sendMessage(String randomDigits) async {
-  //
-  //   var apiUrl = 'https://semaphore.co/api/v4/messages';
-  //   var apiKey = 'c2ccfae1d1ab68804ff30ea669c47581';
-  //   var number = mobileNumberController.text;
-  //   var senderName = 'SEMAPHORE';
-  //   var message = 'Your One-time-Password is $randomDigits';
-  //
-  //   var parameters = {
-  //     'apikey': apiKey,
-  //     'number': number,
-  //     'message': message,
-  //     'sendername': senderName,
-  //   };
-  //
-  //   // Make the POST request
-  //   var response = await http.post(
-  //     Uri.parse(apiUrl),
-  //     body: parameters,
-  //   );
-  //
-  //   // Check if the request was successful (status code 200)
-  //   if (response.statusCode == 200) {
-  //     // Print the server response
-  //     print(response.body);
-  //   } else {
-  //     // Print an error message if the request was not successful
-  //     print('Request failed with status: ${response.statusCode}');
-  //   }
-  // }
+  void sendMessage(String randomDigits) async {
+
+    var apiUrl = 'https://semaphore.co/api/v4/messages';
+    var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
+    var number = mobileNumberController.text;
+    var senderName = 'SEMAPHORE';
+    var message = 'Your One-time-Password is $randomDigits';
+
+    var parameters = {
+      'apikey': apiKey,
+      'number': number,
+      'message': message,
+      'sendername': senderName,
+    };
+
+    // Make the POST request
+    var response = await http.post(
+      Uri.parse(apiUrl),
+      body: parameters,
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Print the server response
+      print(response.body);
+    } else {
+      // Print an error message if the request was not successful
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
 
   @override
   void initState() {
@@ -138,7 +139,7 @@ class _RegisterNumberState extends State<RegisterNumber> {
                           maxLength: 10,
                           style: const TextStyle(color: Colors.black),
                           keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
+                          decoration:  const InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
                             enabledBorder: OutlineInputBorder(
@@ -152,8 +153,12 @@ class _RegisterNumberState extends State<RegisterNumber> {
                               fontSize: 16.0,
                               color: Colors.grey,
                             ),
+                            prefixText: "+63 ", // Fixed text with space
+                            prefixStyle: TextStyle(color: Colors.black, fontSize: 16.0), // Style for the fixed text
+                            contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0), // Adjust spacing if needed
                           ),
                         ),
+
 
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25.0),

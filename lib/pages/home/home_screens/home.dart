@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.green[900],
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
@@ -89,9 +89,12 @@ class _HomeState extends State<Home> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        'lib/images/users_icon.png',
-                        height: 70,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'lib/images/app_icon.png',
+                          height: 70,
+                          width: 70,
+                        ),
                       ),
                     ),
 
@@ -174,8 +177,12 @@ class _HomeState extends State<Home> {
                                 );
                               }
                             } else {
-                              // Handle the case when the document doesn't exist
-                              // You may want to display an error message or take appropriate action
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Emergencies(userId: userId),
+                                ),
+                              );
                             }
                           },
                           child: Image.asset(
@@ -215,8 +222,8 @@ class _HomeState extends State<Home> {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Icon(Icons.cancel_outlined, color: Colors.white,),
-                                            Text('Icon', style: TextStyle(color: Colors.white),),
+                                            Icon(Icons.waving_hand, color: Colors.white,),
+                                            Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                           ],
                                         ),
                                       ),
@@ -239,8 +246,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -263,8 +270,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -287,8 +294,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -319,8 +326,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -344,8 +351,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -368,8 +375,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),
@@ -392,8 +399,8 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: Colors.white,),
-                                          Text('Icon', style: TextStyle(color: Colors.white),),
+                                          Icon(Icons.waving_hand, color: Colors.white,),
+                                          Text('Coming Soon', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center,),
                                         ],
                                       ),
                                     ),

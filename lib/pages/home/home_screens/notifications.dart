@@ -43,7 +43,7 @@ class _NotificationsState extends State<Notifications> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.green[900],
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),

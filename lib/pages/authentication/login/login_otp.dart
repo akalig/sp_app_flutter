@@ -82,16 +82,16 @@ class _LoginOTPState extends State<LoginOTP> {
                       },
                       //runs when every textfield is filled
                       onSubmit: (String verificationCode) async {
-                        // if (otp != verificationCode) {
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(
-                        //       content: Text('OTP is not Matched'),
-                        //       duration: Duration(seconds: 2),
-                        //       backgroundColor: Colors.red,
-                        //     ),
-                        //   );
-                        //   return;
-                        // }
+                        if (otp != verificationCode) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('OTP is not Matched'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
 
                         Navigator.push(
                           context,
