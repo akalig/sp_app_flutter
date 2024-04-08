@@ -121,15 +121,26 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () async {
-          await checkResidency(userId, context);
-        },
-        shape: const CircleBorder(),
-        child: const Icon(Icons.assignment_ind_outlined,
-            color: Colors.black54, size: 30),
+      floatingActionButton: SizedBox(
+        width: 70, // Set the width of the floating action button
+        height: 70, // Set the height of the floating action button
+        child: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () async {
+            await checkResidency(userId, context);
+          },
+          shape: const CircleBorder(),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.assignment_ind_outlined,
+                  color: Colors.black54, size: 30),
+              Text('Digital ID', style: TextStyle(fontSize: 8)),
+            ],
+          ),
+        ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,

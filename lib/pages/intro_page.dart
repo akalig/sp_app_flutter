@@ -12,6 +12,27 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
+  late SharedPreferences _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstTime();
+  }
+
+  Future<void> _checkFirstTime() async {
+    _prefs = await SharedPreferences.getInstance();
+    bool isFirstTime = _prefs.getBool('isFirstTime') ?? true;
+    if (isFirstTime) {
+      // Mark that the intro has been shown
+      await _prefs.setBool('isFirstTime', false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Authentication()),
+      );
+    }
+  }
+
   void showPrivacyPolicyDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -239,7 +260,7 @@ class _IntroPageState extends State<IntroPage> {
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
-        return false; // Returning false prevents the screen from being popped automatically
+        return false;
       },
       child: Scaffold(
         body: Stack(
@@ -282,11 +303,9 @@ class _IntroPageState extends State<IntroPage> {
                     width: 300,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const Authentication(),
-                          ),
+                          MaterialPageRoute(builder: (context) => const Authentication()),
                         );
                       },
                       child: Container(

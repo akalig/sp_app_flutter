@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/resident_selection.dart';
 import 'package:sp_app/pages/intro_page.dart';
 import 'login/login.dart';
@@ -10,11 +11,8 @@ class Authentication extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const IntroPage()),
-        );
-        return false; // Returning false prevents the screen from being popped automatically
+        SystemNavigator.pop();
+        return false;
       },
       child: Scaffold(
         body: Stack(

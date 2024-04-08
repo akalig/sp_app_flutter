@@ -12,7 +12,7 @@ class _NewsState extends State<News> {
   Widget build(BuildContext context) {
     return Container(
       child: const Center(
-        child: Text('News'),
+        child: Text('Coming Soon'),
       ),
     );
   }

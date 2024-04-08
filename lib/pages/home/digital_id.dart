@@ -35,9 +35,7 @@ class _DigitalIDState extends State<DigitalID> {
         decoration: const BoxDecoration(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 25.0),
-              child: Container(
+            Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -48,19 +46,25 @@ class _DigitalIDState extends State<DigitalID> {
                   ),
                 ),
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'MY DIGITAL ID',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Text(
+                          'My Digital ID',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
