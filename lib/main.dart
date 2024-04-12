@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sp_app/pages/home/home_page.dart';
-import 'package:sp_app/pages/home/home_screens/home.dart';
 import 'package:sp_app/pages/intro_page.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +15,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

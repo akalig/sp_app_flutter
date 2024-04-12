@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/resident_selection.dart';
-import 'package:sp_app/pages/intro_page.dart';
 import 'login/login.dart';
 
 class Authentication extends StatelessWidget {

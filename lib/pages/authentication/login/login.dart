@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/login/login_mpin.dart';
-import 'package:sp_app/pages/authentication/login/login_otp.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});

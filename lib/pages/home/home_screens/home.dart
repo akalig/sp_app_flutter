@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                 child: Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(top: 8.0, right: 25.0),
+                        padding: const EdgeInsets.only(top: 20.0, right: 25.0),
                         child: FutureBuilder(
                           future: faceScanRef.getDownloadURL(),
                           builder: (context, snapshot) {
@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Text(
                             'Hello, $userName', // Use the userName variable
                             style: const TextStyle(
@@ -147,7 +147,7 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            '+63$userMobileNumber',
+                            '+63 $userMobileNumber',
                             // Use the userMobileNumber variable
                             style: const TextStyle(
                               color: Colors.white,
@@ -176,6 +176,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Column(
                       children: [
+                        const SizedBox(height: 50),
                         GestureDetector(
                           onTap: () async {
                             // Retrieve data from Firestore
@@ -229,12 +230,12 @@ class _HomeState extends State<Home> {
                               child: CircleAvatar(
                                 backgroundImage: AssetImage(
                                     'lib/images/emergency_button.png'),
-                                radius: 135.0,
+                                radius: 100.0,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         const Text(
                           'Tap in case of emergency',
                           style: TextStyle(fontWeight: FontWeight.w700),
@@ -251,275 +252,469 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/social_welfare_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Social Welfare',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/social_welfare_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Traffic Division',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/education_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Education',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/city_taxes_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'City Taxes',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+
+                              Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'lib/images/business_icon.png',
+                                            width: 20,
+                                          ),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Business',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
                             ],
                           ),
                         ),
+
+                        const SizedBox(height: 8),
+
                         Padding(
                           padding: const EdgeInsets.all(1.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/sports_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Sports',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/job_posting_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Job Posting',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/tourism_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Tourism',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 70, // Set your desired width
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[800],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.waving_hand,
-                                            color: Colors.white,
+                                          Image.asset(
+                                            'lib/images/health_care_icon.png',
+                                            width: 20,
                                           ),
-                                          Text(
-                                            'Coming Soon',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Healthcare',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 60, // Set your desired width
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[800],
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'lib/images/information_icon.png',
+                                            width: 20,
+                                          ),
+                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const Text(
+                                            'Information',
+                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 15,
+                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Coming soon',
+                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

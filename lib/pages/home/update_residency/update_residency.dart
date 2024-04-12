@@ -6,9 +6,9 @@ class UpdateResidency extends StatefulWidget {
   final String userId;
 
   const UpdateResidency({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<UpdateResidency> createState() => _UpdateResidencyState();
