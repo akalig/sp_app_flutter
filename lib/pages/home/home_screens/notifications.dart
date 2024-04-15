@@ -74,49 +74,88 @@ class _NotificationsState extends State<Notifications> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                onPressed: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: _startDate,
-                    firstDate: DateTime(2015, 8),
-                    lastDate: DateTime(2101),
-                  );
-                  if (picked != null && picked != _startDate)
-                    setState(() {
-                      _startDate = picked;
-                      _fetchNotifications();
-                    });
-                },
-                child: Text('Start Date: ${DateFormat.yMMMd().format(_startDate)}'),
+              Padding(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: _startDate,
+                      firstDate: DateTime(2015, 8),
+                      lastDate: DateTime(2101),
+                    );
+                    if (picked != null && picked != _startDate)
+                      setState(() {
+                        _startDate = picked;
+                        _fetchNotifications();
+                      });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Text('Start Date: ${DateFormat.yMMMd().format(_startDate)}'),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: _endDate,
-                    firstDate: DateTime(2015, 8),
-                    lastDate: DateTime(2101),
-                  );
-                  if (picked != null && picked != _endDate)
-                    setState(() {
-                      _endDate = picked;
-                      _fetchNotifications();
-                    });
-                },
-                child: Text('End Date: ${DateFormat.yMMMd().format(_endDate)}'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _startDate = _endDate = DateTime.now();
-                    _fetchNotifications();
-                  });
-                },
-                child: Text('See All'),
+              Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: _endDate,
+                      firstDate: DateTime(2015, 8),
+                      lastDate: DateTime(2101),
+                    );
+                    if (picked != null && picked != _endDate)
+                      setState(() {
+                        _endDate = picked;
+                        _fetchNotifications();
+                      });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Text('End Date: ${DateFormat.yMMMd().format(_endDate)}'),
+                ),
               ),
             ],
           ),
+          ElevatedButton(
+            onPressed: () async {
+              // Fetch the user's creation date from Firestore
+              DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(widget.userId)
+                  .get();
+
+              // Get the 'created_at' field from the user document
+              Timestamp userCreationTimestamp = userSnapshot['created_at'];
+              DateTime userCreationDate = userCreationTimestamp.toDate();
+
+              setState(() {
+                _startDate = userCreationDate; // Set _startDate to user's creation date
+                _endDate = DateTime.now(); // Set _endDate to current date
+                _fetchNotifications();
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              minimumSize: const Size(double.infinity, 0),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Text('See All'),
+            ),
+          ),
+
+
+
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _notificationsStream,
