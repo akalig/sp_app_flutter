@@ -71,58 +71,61 @@ class _NotificationsState extends State<Notifications> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 2.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: _startDate,
-                      firstDate: DateTime(2015, 8),
-                      lastDate: DateTime(2101),
-                    );
-                    if (picked != null && picked != _startDate)
-                      setState(() {
-                        _startDate = picked;
-                        _fetchNotifications();
-                      });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _startDate,
+                        firstDate: DateTime(2015, 8),
+                        lastDate: DateTime(2101),
+                      );
+                      if (picked != null && picked != _startDate)
+                        setState(() {
+                          _startDate = picked;
+                          _fetchNotifications();
+                        });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
+                    child: Text('Start Date: ${DateFormat.yMMMd().format(_startDate)}', style: const TextStyle(color: Colors.black),),
                   ),
-                  child: Text('Start Date: ${DateFormat.yMMMd().format(_startDate)}'),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: _endDate,
-                      firstDate: DateTime(2015, 8),
-                      lastDate: DateTime(2101),
-                    );
-                    if (picked != null && picked != _endDate)
-                      setState(() {
-                        _endDate = picked;
-                        _fetchNotifications();
-                      });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _endDate,
+                        firstDate: DateTime(2015, 8),
+                        lastDate: DateTime(2101),
+                      );
+                      if (picked != null && picked != _endDate)
+                        setState(() {
+                          _endDate = picked;
+                          _fetchNotifications();
+                        });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
+                    child: Text('End Date: ${DateFormat.yMMMd().format(_endDate)}', style: const TextStyle(color: Colors.black),),
                   ),
-                  child: Text('End Date: ${DateFormat.yMMMd().format(_endDate)}'),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -149,13 +152,11 @@ class _NotificationsState extends State<Notifications> {
               minimumSize: const Size(double.infinity, 0),
             ),
             child: const Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text('See All'),
+              padding: EdgeInsets.all(8.0),
+              child: Text('See All', style: TextStyle(color: Colors.black),),
             ),
           ),
-
-
-
+          
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _notificationsStream,
@@ -175,7 +176,7 @@ class _NotificationsState extends State<Notifications> {
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: ListView.builder(
                     itemCount: notifications.length,
                     itemBuilder: (context, index) {
@@ -187,35 +188,62 @@ class _NotificationsState extends State<Notifications> {
                       var formattedTimestamp =
                       DateFormat.yMMMd().add_jm().format(timestamp.toDate());
 
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 1.0),
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              body,
-                              style: const TextStyle(
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.normal,
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black54),
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    // Determine the title based on the body content
+                                    body.contains('Account') || body.contains('account')
+                                        ? 'Account Status Update'
+                                        : body.contains('Emergency') || body.contains('emergency')
+                                        ? 'Emergency Status Update'
+                                        : 'Notification',
+                                    style: const TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  Text(
+                                    body,
+                                    style: const TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 10),
+                                ],
                               ),
-                            ),
-                            Text(
-                              formattedTimestamp, // Display the formatted timestamp
-                              style: const TextStyle(
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.normal,
+                              Text(
+                                formattedTimestamp, // Display the formatted timestamp
+                                style: const TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
-                            ),
-                            // You can add more details or customization here
-                          ],
+                              // You can add more details or customization here
+                            ],
+                          ),
                         ),
                       );
+
                     },
                   ),
                 );

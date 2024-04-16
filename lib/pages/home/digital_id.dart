@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -7,9 +8,9 @@ class DigitalID extends StatefulWidget {
   final String userId;
 
   const DigitalID({
-    super.key,
     required this.userId,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DigitalID> createState() => _DigitalIDState();
@@ -31,111 +32,246 @@ class _DigitalIDState extends State<DigitalID> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(),
-        child: Column(
-          children: [
-            Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green[900],
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+      body: Stack(
+        children: [
+          // Background image
+          Image.asset(
+            'lib/images/san_pedro_laguna.png',
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          // Semi-transparent white layer
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.green[900]?.withOpacity(0.9) ?? Colors.green[900],
+          ),
+
+          Container(
+            decoration: const BoxDecoration(),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green[900]?.withOpacity(0.9) ?? Colors.green[900],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
                   ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 20.0),
-                        child: Text(
-                          'My Digital ID',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 30.0),
+                          child: Text(
+                            'My Digital ID',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(25),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: FutureBuilder(
-                            future: faceScanRef.getDownloadURL(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return const Text('Error loading image');
-                              } else {
-                                return ClipOval(
-                                  child: Image.network(
-                                    snapshot.data.toString(),
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.cover,
-                                  ),
-                                );
-                              }
-                            },
-                          )),
-
-                      const SizedBox(height: 20),
-
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return const Text('Error loading user data');
-                            } else {
-                              Map<String, dynamic> userData = snapshot.data?.data() as Map<String, dynamic>;
-                              String userInformation = buildUserInformation(userData);
-                              return Column(
-                                children: [
-                                  Container(
-                                    child: QrImageView(
-                                      data: userInformation,
-                                      version: QrVersions.auto,
-                                      size: 200.0,
-                                    ),
-                                  ),
-                                  // Other widgets or content as needed
-                                ],
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: FutureBuilder(
+                      future: faceScanRef.getDownloadURL(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return const Text('Error loading image');
+                        } else {
+                          return ClipOval(
+                            child: Image.network(
+                              snapshot.data.toString(),
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Accessing userData within the FutureBuilder
+                              FutureBuilder<DocumentSnapshot>(
+                                future: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userId)
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text('Error loading user data',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ));
+                                  } else {
+                                    // Extract userData from snapshot
+                                    Map<String, dynamic> userData =
+                                        snapshot.data?.data()
+                                            as Map<String, dynamic>;
+                                    // Display Name
+                                    return RichText(
+                                      text: TextSpan(
+                                        // Note: Styles for TextSpans must be explicitly defined.
+                                        // Child text spans will inherit styles from parent
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                        ),
+                                        children: <TextSpan>[
+                                          const TextSpan(
+                                              text: 'Name:\n',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
+                                          TextSpan(
+                                              text:
+                                                  '${userData['first_name']} ${userData['middle_name']} ${userData['last_name']} ${userData['suffix_name']}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              )),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              // Accessing userData within the FutureBuilder
+                              FutureBuilder<DocumentSnapshot>(
+                                future: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userId)
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text(
+                                        'Error loading user data');
+                                  } else {
+                                    // Extract userData from snapshot
+                                    Map<String, dynamic> userData =
+                                        snapshot.data?.data()
+                                            as Map<String, dynamic>;
+                                    // Display Address
+                                    return RichText(
+                                      text: TextSpan(
+                                        // Note: Styles for TextSpans must be explicitly defined.
+                                        // Child text spans will inherit styles from parent
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                        ),
+                                        children: <TextSpan>[
+                                          const TextSpan(
+                                              text: 'Address:\n',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              )),
+                                          TextSpan(
+                                              text:
+                                                  '${userData['street']}, ${userData['barangay']},\n ${userData['municipality']}, ${userData['province']},\n ${userData['region']}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              )),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .get(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return const Text('Error loading user data');
+                        } else {
+                          Map<String, dynamic> userData =
+                          snapshot.data?.data() as Map<String, dynamic>;
+                          String userInformation =
+                          buildUserInformation(userData);
+                          return Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                padding: const EdgeInsets.all(10.0),
+                                child: QrImageView(
+                                  data: userInformation,
+                                  version: QrVersions.auto,
+                                  size: 200.0,
+                                ),
+                              ),
+                              // Other widgets or content as needed
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
+
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -157,5 +293,4 @@ class _DigitalIDState extends State<DigitalID> {
       Building No./House No./Unit No./Street: ${userData['street']}
     ''';
   }
-
 }

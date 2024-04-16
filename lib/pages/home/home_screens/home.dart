@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
         String lastName = userData['last_name'] ?? '';
         String suffixName = userData['suffix_name'] ?? '';
 
-        userName = '$firstName $middleName $lastName $suffixName';
+        userName = '$firstName $lastName';
 
         userResidency = userData['residency'] ?? '';
         userMobileNumber = userData['mobile_number'] ?? '';
@@ -79,8 +79,7 @@ class _HomeState extends State<Home> {
         children: [
           Container(
             child: Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20), // Reduced bottom padding
               decoration: BoxDecoration(
                 color: Colors.green[900],
                 borderRadius: const BorderRadius.only(
@@ -89,70 +88,87 @@ class _HomeState extends State<Home> {
                 ),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Row(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Column(
                   children: [
-                    Padding(
-                        padding: const EdgeInsets.only(top: 20.0, right: 25.0),
-                        child: FutureBuilder(
-                          future: faceScanRef.getDownloadURL(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return ClipOval(
-                                child: Image.asset(
-                                  'lib/images/app_icon.png',
-                                  height: 70,
-                                  width: 70,
-                                ),
-                              );
-                            } else {
-                              return ClipOval(
-                                child: Image.network(
-                                  snapshot.data.toString(),
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
-                                ),
-                              );
-                            }
-                          },
-                        )),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Text(
-                            'Hello, $userName', // Use the userName variable
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          padding: const EdgeInsets.only(top: 20.0, right: 25.0),
+                          child: FutureBuilder(
+                            future: faceScanRef.getDownloadURL(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return ClipOval(
+                                  child: Image.asset(
+                                    'lib/images/app_icon.png',
+                                    height: 70,
+                                    width: 70,
+                                  ),
+                                );
+                              } else {
+                                return ClipOval(
+                                  child: Image.network(
+                                    snapshot.data.toString(),
+                                    width: 70,
+                                    height: 70,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              }
+                            },
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            userResidency, // Use the userResidency variable
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: Text(
+                                'Hello, $userName', // Use the userName variable
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(
+                                userResidency, // Use the userResidency variable
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(
+                                '+63 $userMobileNumber',
+                                // Use the userMobileNumber variable
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            '+63 $userMobileNumber',
-                            // Use the userMobileNumber variable
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300,
-                            ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Transform.translate(
+                          offset: const Offset(0, -20), // Adjust the value as needed
+                          child: const Image(
+                            image: AssetImage('lib/images/sp_logo_mini.png'),
+                            width: 80,
                           ),
                         ),
                       ],
@@ -162,6 +178,7 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 10.0),
@@ -260,19 +277,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/social_welfare_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Social Welfare',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -284,11 +306,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -296,7 +320,6 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
                                 child: Stack(
@@ -306,19 +329,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/social_welfare_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Traffic Division',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -330,11 +358,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -342,7 +372,6 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
                                 child: Stack(
@@ -352,19 +381,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/education_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Education',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -376,11 +410,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -388,7 +424,6 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
                                 child: Stack(
@@ -398,19 +433,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/city_taxes_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'City Taxes',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -422,11 +462,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -434,7 +476,6 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
                                 child: Stack(
@@ -444,19 +485,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/business_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Business',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -468,11 +514,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -480,13 +528,10 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 8),
-
                         Padding(
                           padding: const EdgeInsets.all(1.0),
                           child: Row(
@@ -501,19 +546,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/sports_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Sports',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -525,11 +575,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -546,19 +598,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/job_posting_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Job Posting',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -570,11 +627,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -591,19 +650,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/tourism_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Tourism',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -615,11 +679,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -636,19 +702,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/health_care_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Healthcare',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -660,11 +731,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -681,19 +754,24 @@ class _HomeState extends State<Home> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.green[800],
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             'lib/images/information_icon.png',
                                             width: 20,
                                           ),
-                                          const SizedBox(height: 3), // Adding some space between icon and text
+                                          const SizedBox(height: 3),
+                                          // Adding some space between icon and text
                                           const Text(
                                             'Information',
-                                            style: TextStyle(color: Colors.white, fontSize: 8),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -705,11 +783,13 @@ class _HomeState extends State<Home> {
                                       right: 0,
                                       child: Container(
                                         height: 15,
-                                        color: Colors.black.withOpacity(0.6), // Adjust opacity as needed
+                                        color: Colors.black.withOpacity(0.6),
+                                        // Adjust opacity as needed
                                         alignment: Alignment.center,
                                         child: const Text(
                                           'Coming soon',
-                                          style: TextStyle(color: Colors.white, fontSize: 6),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 6),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -720,7 +800,7 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ],
