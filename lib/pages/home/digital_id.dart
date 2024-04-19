@@ -32,22 +32,8 @@ class _DigitalIDState extends State<DigitalID> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          // Background image
-          Image.asset(
-            'lib/images/san_pedro_laguna.png',
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          // Semi-transparent white layer
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.green[900]?.withOpacity(0.9) ?? Colors.green[900],
-          ),
-
           Container(
             decoration: const BoxDecoration(),
             child: Column(
@@ -62,22 +48,45 @@ class _DigitalIDState extends State<DigitalID> {
                       bottomRight: Radius.circular(20),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 30.0),
-                          child: Text(
-                            'My Digital ID',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+
+                            Image.asset(
+                              'lib/images/city_of_sanpedro_logo.png',
+                              height: 70,
+                              width: 70,
                             ),
-                          ),
+
+                            const Padding(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                'Republic of the Philippine\nProvince of Laguna\nCity of San Pedro',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
+
+                        Image.asset(
+                          'lib/images/sp_logo_mini.png',
+                          height: 100,
+                          width: 100,
+                        ),
+
                       ],
                     ),
                   ),
@@ -92,140 +101,159 @@ class _DigitalIDState extends State<DigitalID> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: FutureBuilder(
-                      future: faceScanRef.getDownloadURL(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return const Text('Error loading image');
-                        } else {
-                          return ClipOval(
-                            child: Image.network(
-                              snapshot.data.toString(),
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: FutureBuilder(
+                          future: faceScanRef.getDownloadURL(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return const Text('Error loading image');
+                            } else {
+                              return Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black38, // Choose your border color here
+                                    width: 1, // Choose the border width here
+                                  ),
+                                  borderRadius: BorderRadius.circular(10), // Choose border radius
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8), // Adjust the same radius here
+                                  child: Image.network(
+                                    snapshot.data.toString(),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
                             children: [
-                              // Accessing userData within the FutureBuilder
-                              FutureBuilder<DocumentSnapshot>(
-                                future: FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(userId)
-                                    .get(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return const Text('Error loading user data',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ));
-                                  } else {
-                                    // Extract userData from snapshot
-                                    Map<String, dynamic> userData =
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Accessing userData within the FutureBuilder
+                                  FutureBuilder<DocumentSnapshot>(
+                                    future: FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(userId)
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else if (snapshot.hasError) {
+                                        return const Text('Error loading user data',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ));
+                                      } else {
+                                        // Extract userData from snapshot
+                                        Map<String, dynamic> userData =
                                         snapshot.data?.data()
-                                            as Map<String, dynamic>;
-                                    // Display Name
-                                    return RichText(
-                                      text: TextSpan(
-                                        // Note: Styles for TextSpans must be explicitly defined.
-                                        // Child text spans will inherit styles from parent
-                                        style: const TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.black,
-                                        ),
-                                        children: <TextSpan>[
-                                          const TextSpan(
-                                              text: 'Name:\n',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white)),
-                                          TextSpan(
-                                              text:
-                                                  '${userData['first_name']} ${userData['middle_name']} ${userData['last_name']} ${userData['suffix_name']}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              )),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              // Accessing userData within the FutureBuilder
-                              FutureBuilder<DocumentSnapshot>(
-                                future: FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(userId)
-                                    .get(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return const Text(
-                                        'Error loading user data');
-                                  } else {
-                                    // Extract userData from snapshot
-                                    Map<String, dynamic> userData =
+                                        as Map<String, dynamic>;
+                                        // Display Name
+                                        return RichText(
+                                          text: TextSpan(
+                                            // Note: Styles for TextSpans must be explicitly defined.
+                                            // Child text spans will inherit styles from parent
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.black,
+                                            ),
+                                            children: <TextSpan>[
+                                              const TextSpan(
+                                                  text: 'Last Name, First Name, M.I.\n',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w200,
+                                                      color: Colors.black54,
+                                                      fontSize: 10)),
+                                              TextSpan(
+                                                  text:
+                                                  '${userData['last_name']} ${userData['suffix_name']}, ${userData['first_name']} ${userData['middle_name']}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  )),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(height: 20),
+                                  // Accessing userData within the FutureBuilder
+                                  FutureBuilder<DocumentSnapshot>(
+                                    future: FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(userId)
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else if (snapshot.hasError) {
+                                        return const Text(
+                                            'Error loading user data');
+                                      } else {
+                                        // Extract userData from snapshot
+                                        Map<String, dynamic> userData =
                                         snapshot.data?.data()
-                                            as Map<String, dynamic>;
-                                    // Display Address
-                                    return RichText(
-                                      text: TextSpan(
-                                        // Note: Styles for TextSpans must be explicitly defined.
-                                        // Child text spans will inherit styles from parent
-                                        style: const TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.black,
-                                        ),
-                                        children: <TextSpan>[
-                                          const TextSpan(
-                                              text: 'Address:\n',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              )),
-                                          TextSpan(
-                                              text:
-                                                  '${userData['street']}, ${userData['barangay']},\n ${userData['municipality']}, ${userData['province']},\n ${userData['region']}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              )),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
+                                        as Map<String, dynamic>;
+                                        // Display Address
+                                        return RichText(
+                                          text: TextSpan(
+                                            // Note: Styles for TextSpans must be explicitly defined.
+                                            // Child text spans will inherit styles from parent
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.black,
+                                            ),
+                                            children: <TextSpan>[
+                                              const TextSpan(
+                                                  text: 'Address\n',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w200,
+                                                      color: Colors.black54,
+                                                      fontSize: 10)),
+                                              TextSpan(
+                                                  text:
+                                                  '${userData['street']}, ${userData['barangay']},\n${userData['municipality']}, ${userData['province']}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  )),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -248,18 +276,13 @@ class _DigitalIDState extends State<DigitalID> {
                           return Column(
                             children: [
                               Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
                                 padding: const EdgeInsets.all(10.0),
                                 child: QrImageView(
                                   data: userInformation,
                                   version: QrVersions.auto,
-                                  size: 200.0,
+                                  size: 150.0,
                                 ),
                               ),
-                              // Other widgets or content as needed
                             ],
                           );
                         }
