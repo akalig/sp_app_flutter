@@ -256,6 +256,11 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/register_number.dart';
 
 class ResidentSelection extends StatefulWidget {
@@ -15,6 +16,9 @@ class _ResidentSelectionState extends State<ResidentSelection> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       body: Stack(
         children: [

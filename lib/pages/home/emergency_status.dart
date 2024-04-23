@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -54,6 +55,9 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacement(

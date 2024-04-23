@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/scan/register_id_scan.dart';
 
 class RegisterFaceScanRight extends StatefulWidget {
@@ -85,6 +86,9 @@ class _RegisterFaceScanRightState extends State<RegisterFaceScanRight> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder(

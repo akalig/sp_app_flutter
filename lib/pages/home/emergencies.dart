@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/home/emergency_status.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 import '../location/location_service.dart';
@@ -36,6 +37,9 @@ class _EmergenciesState extends State<Emergencies> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white, // Set the background color of the scaffold to white

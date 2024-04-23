@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/register/register_mpin.dart';
 import 'scan/register_face_scan.dart';
@@ -60,6 +61,9 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(

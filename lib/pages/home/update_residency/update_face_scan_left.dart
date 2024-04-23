@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/home/update_residency/update_face_scan_right.dart';
 
 class UpdateFaceScanLeft extends StatefulWidget {
@@ -57,6 +58,9 @@ class _UpdateFaceScanLeftState extends State<UpdateFaceScanLeft> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder(

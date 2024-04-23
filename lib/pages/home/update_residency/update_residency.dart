@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/home/home_page.dart';
 import 'package:sp_app/pages/home/update_residency/update_face_scan.dart';
 
@@ -39,6 +40,9 @@ class _UpdateResidencyState extends State<UpdateResidency> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(

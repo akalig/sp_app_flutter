@@ -112,453 +112,357 @@ class _DigitalIDState extends State<DigitalID> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          height: 150,
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius:
-                                                BorderRadius.circular(3),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              FutureBuilder(
-                                                future: faceScanRef
-                                                    .getDownloadURL(),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot
-                                                          .connectionState ==
-                                                      ConnectionState.waiting) {
-                                                    return const CircularProgressIndicator();
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return const Text(
-                                                        'Error loading image');
-                                                  } else {
-                                                    return Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          color: Colors.black38,
-                                                          width: 1,
-                                                        ),
-                                                      ),
-                                                      child: ClipRRect(
-                                                        child: Image.network(
-                                                          snapshot.data
-                                                              .toString(),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(3.0),
-                                                child: Image.asset(
-                                                  'lib/images/sample_signature.png',
-                                                  width: 50,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: [
+                              FutureBuilder(
+                                future: faceScanRef.getDownloadURL(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text('Error loading image');
+                                  } else {
+                                    return Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black38,
+                                          width: 1,
                                         ),
-                                        const Text(
-                                          'Cardholder Signature',
-                                          style: TextStyle(
-                                              color: Colors.black, fontSize: 8),
+                                      ),
+                                      child: ClipRRect(
+                                        child: Image.network(
+                                          snapshot.data.toString(),
+                                          fit: BoxFit.cover,
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                FutureBuilder<DocumentSnapshot>(
-                                  future: FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(userId)
-                                      .get(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      return const Text(
-                                          'Error loading user data',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ));
-                                    } else {
-                                      Map<String, dynamic> userData =
-                                          snapshot.data?.data()
-                                              as Map<String, dynamic>;
-                                      return Text(
-                                        '${userData['residency']}',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        FutureBuilder<DocumentSnapshot>(
-                                          future: FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(userId)
-                                              .get(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return const CircularProgressIndicator();
-                                            } else if (snapshot.hasError) {
-                                              return const Text(
-                                                  'Error loading user data',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ));
-                                            } else {
-                                              Map<String, dynamic> userData =
-                                                  snapshot.data?.data()
-                                                      as Map<String, dynamic>;
-                                              return RichText(
-                                                text: TextSpan(
-                                                  style: const TextStyle(
-                                                    fontSize: 14.0,
-                                                    color: Colors.black,
-                                                  ),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text:
-                                                            'Last Name, First Name, M.I.\n',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w200,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize: 10)),
-                                                    TextSpan(
-                                                        text:
-                                                            '${userData['last_name']} ${userData['suffix_name']}, ${userData['first_name']} ${userData['middle_name']}',
-                                                        style: const TextStyle(
-                                                          color: Colors.black,
-                                                        )),
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            RichText(
-                                              text: const TextSpan(
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              FutureBuilder<DocumentSnapshot>(
+                                future: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userId)
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text('Error loading user data',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ));
+                                  } else {
+                                    Map<String, dynamic> userData =
+                                        snapshot.data?.data()
+                                            as Map<String, dynamic>;
+                                    return Text(
+                                      '${userData['residency']}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userId)
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return const Text(
+                                                'Error loading user data',
                                                 style: TextStyle(
+                                                  color: Colors.white,
+                                                ));
+                                          } else {
+                                            Map<String, dynamic> userData =
+                                                snapshot.data?.data()
+                                                    as Map<String, dynamic>;
+                                            return RichText(
+                                              text: TextSpan(
+                                                style: const TextStyle(
                                                   fontSize: 14.0,
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Gender\n',
+                                                  const TextSpan(
+                                                      text:
+                                                          'Last Name, First Name, M.I.\n',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w200,
                                                           color: Colors.black54,
                                                           fontSize: 10)),
                                                   TextSpan(
-                                                      text: 'M',
-                                                      style: TextStyle(
+                                                      text:
+                                                          '${userData['last_name']} ${userData['suffix_name']}, ${userData['first_name']} ${userData['middle_name']}',
+                                                      style: const TextStyle(
                                                         color: Colors.black,
                                                       )),
                                                 ],
                                               ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          RichText(
+                                            text: const TextSpan(
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.black,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                    text: 'Gender\n',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                        color: Colors.black54,
+                                                        fontSize: 10)),
+                                                TextSpan(
+                                                    text: 'M',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    )),
+                                              ],
                                             ),
-                                            const SizedBox(width: 20),
-                                            FutureBuilder<DocumentSnapshot>(
-                                              future: FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(userId)
-                                                  .get(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return const CircularProgressIndicator();
-                                                } else if (snapshot.hasError) {
-                                                  return const Text(
-                                                      'Error loading user data');
-                                                } else {
-                                                  Map<String, dynamic>
-                                                      userData =
-                                                      snapshot.data?.data()
-                                                          as Map<String,
-                                                              dynamic>;
-                                                  return RichText(
-                                                    text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: Colors.black,
-                                                      ),
-                                                      children: <TextSpan>[
-                                                        const TextSpan(
-                                                            text: 'Birthdate\n',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontSize: 10)),
-                                                        TextSpan(
-                                                            text:
-                                                                '${userData['birthdate']}',
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            )),
-                                                      ],
+                                          ),
+                                          const SizedBox(width: 20),
+                                          FutureBuilder<DocumentSnapshot>(
+                                            future: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(userId)
+                                                .get(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const CircularProgressIndicator();
+                                              } else if (snapshot.hasError) {
+                                                return const Text(
+                                                    'Error loading user data');
+                                              } else {
+                                                Map<String, dynamic> userData =
+                                                    snapshot.data?.data()
+                                                        as Map<String, dynamic>;
+                                                return RichText(
+                                                  text: TextSpan(
+                                                    style: const TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: Colors.black,
                                                     ),
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                            const SizedBox(width: 20),
-                                            RichText(
-                                              text: const TextSpan(
-                                                style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  color: Colors.black,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Civil Status\n',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w200,
-                                                          color: Colors.black54,
-                                                          fontSize: 10)),
-                                                  TextSpan(
-                                                      text: 'Single',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        FutureBuilder<DocumentSnapshot>(
-                                          future: FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(userId)
-                                              .get(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return const CircularProgressIndicator();
-                                            } else if (snapshot.hasError) {
-                                              return const Text(
-                                                  'Error loading user data');
-                                            } else {
-                                              Map<String, dynamic> userData =
-                                                  snapshot.data?.data()
-                                                      as Map<String, dynamic>;
-                                              return RichText(
-                                                text: TextSpan(
-                                                  style: const TextStyle(
-                                                    fontSize: 14.0,
-                                                    color: Colors.black,
-                                                  ),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'Address\n',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w200,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize: 10)),
-                                                    TextSpan(
-                                                        text:
-                                                            '${userData['street']}, ${userData['barangay']},\n${userData['municipality']}, ${userData['province']}',
-                                                        style: const TextStyle(
-                                                          color: Colors.black,
-                                                        )),
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            RichText(
-                                              text: const TextSpan(
-                                                style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  color: Colors.black,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Voter\'s ID\n',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w200,
-                                                          color: Colors.black54,
-                                                          fontSize: 10)),
-                                                  TextSpan(
-                                                      text: '1234567890',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            FutureBuilder<DocumentSnapshot>(
-                                              future: FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(userId)
-                                                  .get(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return const CircularProgressIndicator();
-                                                } else if (snapshot.hasError) {
-                                                  return const Text(
-                                                      'Error loading user data');
-                                                } else {
-                                                  Map<String, dynamic>
-                                                      userData =
-                                                      snapshot.data?.data()
-                                                          as Map<String,
-                                                              dynamic>;
-                                                  DateTime createdAt = userData[
-                                                          'created_at']
-                                                      .toDate(); // Convert Firestore timestamp to DateTime
-                                                  String formattedDate =
-                                                      DateFormat('yyyy-MM-dd')
-                                                          .format(
-                                                              createdAt); // Format the DateTime
-                                                  return RichText(
-                                                    text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: Colors.black,
-                                                      ),
-                                                      children: <TextSpan>[
-                                                        const TextSpan(
-                                                          text: 'Date Issued\n',
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                          text: 'Birthdate\n',
                                                           style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w200,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize: 10,
-                                                          ),
-                                                        ),
-                                                        TextSpan(
-                                                          text: formattedDate,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w200,
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontSize: 10)),
+                                                      TextSpan(
+                                                          text:
+                                                              '${userData['birthdate']}',
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        FutureBuilder<DocumentSnapshot>(
-                                          future: FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(userId)
-                                              .get(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return const CircularProgressIndicator();
-                                            } else if (snapshot.hasError) {
-                                              return const Text(
-                                                  'Error loading user data');
-                                            } else {
-                                              Map<String, dynamic> userData =
-                                                  snapshot.data?.data()
-                                                      as Map<String, dynamic>;
-                                              return Text(
-                                                '${userData['userID']}',
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        RichText(
-                                          text: const TextSpan(
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: Colors.black,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                  text: 'In case of Emergency, contact:',
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 8)),
-                                              TextSpan(
-                                                  text: '  09334455667, Mr. Juan Dela Cruz',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                    FontWeight.w700,
-                                                    fontSize: 12,
-                                                  )),
-                                            ],
+                                                          )),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                            },
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                          const SizedBox(width: 20),
+                                          RichText(
+                                            text: const TextSpan(
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.black,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                    text: 'Civil Status\n',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                        color: Colors.black54,
+                                                        fontSize: 10)),
+                                                TextSpan(
+                                                    text: 'Single',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userId)
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return const Text(
+                                                'Error loading user data');
+                                          } else {
+                                            Map<String, dynamic> userData =
+                                                snapshot.data?.data()
+                                                    as Map<String, dynamic>;
+                                            return RichText(
+                                              text: TextSpan(
+                                                style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  const TextSpan(
+                                                      text: 'Address\n',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w200,
+                                                          color: Colors.black54,
+                                                          fontSize: 10)),
+                                                  TextSpan(
+                                                      text:
+                                                          '${userData['street']}, ${userData['barangay']},\n${userData['municipality']}, ${userData['province']}',
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                      )),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          FutureBuilder<DocumentSnapshot>(
+                                            future: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(userId)
+                                                .get(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const CircularProgressIndicator();
+                                              } else if (snapshot.hasError) {
+                                                return const Text(
+                                                    'Error loading user data');
+                                              } else {
+                                                Map<String, dynamic> userData =
+                                                    snapshot.data?.data()
+                                                        as Map<String, dynamic>;
+                                                DateTime createdAt = userData[
+                                                        'created_at']
+                                                    .toDate(); // Convert Firestore timestamp to DateTime
+                                                String formattedDate = DateFormat(
+                                                        'yyyy-MM-dd')
+                                                    .format(
+                                                        createdAt); // Format the DateTime
+                                                return RichText(
+                                                  text: TextSpan(
+                                                    style: const TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: Colors.black,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                        text: 'Date Issued\n',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w200,
+                                                          color: Colors.black54,
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: formattedDate,
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userId)
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return const Text(
+                                                'Error loading user data');
+                                          } else {
+                                            Map<String, dynamic> userData =
+                                                snapshot.data?.data()
+                                                    as Map<String, dynamic>;
+                                            return Text(
+                                              '${userData['userID']}',
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/authentication.dart';
 import 'package:sp_app/pages/authentication/login/login_mpin.dart';
 import 'dart:math';
@@ -307,6 +308,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacement(

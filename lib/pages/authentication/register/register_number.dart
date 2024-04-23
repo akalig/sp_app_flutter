@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'dart:math';
 
@@ -101,6 +102,9 @@ class _RegisterNumberState extends State<RegisterNumber> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
