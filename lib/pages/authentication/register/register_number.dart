@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:sp_app/pages/authentication/register/register_otp.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 class RegisterNumber extends StatefulWidget {
   final String residentSelection;
@@ -43,7 +44,7 @@ class _RegisterNumberState extends State<RegisterNumber> {
 
       String randomDigits = generateRandomString(6);
 
-      // sendMessage(randomDigits);
+      sendMessage(randomDigits);
 
       Navigator.push(
         context,
@@ -61,36 +62,36 @@ class _RegisterNumberState extends State<RegisterNumber> {
     }
   }
 
-  // void sendMessage(String randomDigits) async {
-  //
-  //   var apiUrl = 'https://semaphore.co/api/v4/messages';
-  //   var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
-  //   var number = mobileNumberController.text;
-  //   var senderName = 'SEMAPHORE';
-  //   var message = 'Your One-time-Password is $randomDigits';
-  //
-  //   var parameters = {
-  //     'apikey': apiKey,
-  //     'number': number,
-  //     'message': message,
-  //     'sendername': senderName,
-  //   };
-  //
-  //   // Make the POST request
-  //   var response = await http.post(
-  //     Uri.parse(apiUrl),
-  //     body: parameters,
-  //   );
-  //
-  //   // Check if the request was successful (status code 200)
-  //   if (response.statusCode == 200) {
-  //     // Print the server response
-  //     print(response.body);
-  //   } else {
-  //     // Print an error message if the request was not successful
-  //     print('Request failed with status: ${response.statusCode}');
-  //   }
-  // }
+  void sendMessage(String randomDigits) async {
+
+    var apiUrl = 'https://semaphore.co/api/v4/messages';
+    var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
+    var number = mobileNumberController.text;
+    var senderName = 'SanPedroApp';
+    var message = 'Your One-time-Password is $randomDigits';
+
+    var parameters = {
+      'apikey': apiKey,
+      'number': number,
+      'message': message,
+      'sender_name': senderName,
+    };
+
+    // Make the POST request
+    var response = await http.post(
+      Uri.parse(apiUrl),
+      body: parameters,
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Print the server response
+      print(response.body);
+    } else {
+      // Print an error message if the request was not successful
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
 
   @override
   void initState() {
