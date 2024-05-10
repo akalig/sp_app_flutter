@@ -39,6 +39,10 @@ class _HomeState extends State<Home> {
         .ref()
         .child('user_face_scan/$userId/capturedFaceScan.jpg');
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     super.initState();
   }
 
@@ -74,9 +78,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
     return Container(
       decoration: const BoxDecoration(),
       child: Column(

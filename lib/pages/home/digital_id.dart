@@ -48,6 +48,10 @@ class _DigitalIDState extends State<DigitalID> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
     return Scaffold(
       body: Column(
         children: [

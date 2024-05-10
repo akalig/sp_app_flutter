@@ -32,6 +32,9 @@ class _EmergenciesState extends State<Emergencies> {
   void initState() {
     userId = widget.userId;
     startCountdown();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

@@ -32,6 +32,10 @@ class _RegisterOTPState extends State<RegisterOTP> {
     residentSelection = widget.residentSelection;
     otp = widget.otp;
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     super.initState();
   }
 

@@ -38,6 +38,9 @@ class _HomePageState extends State<HomePage> {
     userId = widget.userId;
     saveNotificationInfoInFirestore(userId);
     _configureFirebaseMessaging();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

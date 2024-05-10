@@ -15,6 +15,14 @@ class _ResidentSelectionState extends State<ResidentSelection> {
   String textNonResident = "Non-Resident";
 
   @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

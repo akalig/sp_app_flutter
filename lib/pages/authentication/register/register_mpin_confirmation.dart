@@ -96,6 +96,10 @@ class _ConfirmMPINState extends State<ConfirmMPIN> {
 
     _showIndicator = false; // Initialize indicator to be hidden
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     super.initState();
   }
 

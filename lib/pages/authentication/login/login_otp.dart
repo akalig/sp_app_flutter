@@ -35,6 +35,10 @@ class _LoginOTPState extends State<LoginOTP> {
     userID = widget.userID;
     otp = widget.otp;
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     super.initState();
   }
 
