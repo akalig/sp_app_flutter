@@ -86,10 +86,6 @@ class _RegisterMPINState extends State<RegisterMPIN> {
     capturedFaceScanRight = widget.capturedFaceScanRight;
     capturedIDScan = widget.capturedIDScan;
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
     super.initState();
   }
 

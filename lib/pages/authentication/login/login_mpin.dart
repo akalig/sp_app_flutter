@@ -28,10 +28,6 @@ class _LoginMPINState extends State<LoginMPIN> {
     pinPassword = widget.pinPassword;
     userID = widget.userID;
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
     super.initState();
   }
 

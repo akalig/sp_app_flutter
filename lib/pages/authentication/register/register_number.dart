@@ -98,10 +98,6 @@ class _RegisterNumberState extends State<RegisterNumber> {
     // Initialize the instance variables in initState
     residentSelection = widget.residentSelection;
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
     super.initState();
   }
 

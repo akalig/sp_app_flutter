@@ -43,10 +43,6 @@ class _EmergencyStatusState extends State<EmergencyStatus> {
       sendUserIDToServer(userId);
     });
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
     super.initState();
   }
 

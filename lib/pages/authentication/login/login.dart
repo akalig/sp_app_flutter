@@ -22,9 +22,6 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     checkTermsAndConditions();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
   }
 
   Future<void> checkTermsAndConditions() async {

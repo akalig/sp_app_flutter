@@ -24,9 +24,6 @@ class _NotificationsState extends State<Notifications> {
   void initState() {
     _startDate = _endDate = DateTime.now();
     _fetchNotifications();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
     super.initState();
   }
 

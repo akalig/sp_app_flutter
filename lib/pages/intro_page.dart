@@ -15,11 +15,8 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-    _checkFirstTime();
     super.initState();
+    _checkFirstTime();
   }
 
   Future<void> _checkFirstTime() async {

@@ -56,10 +56,6 @@ class _RegisterState extends State<Register> {
     municipalityController.text =
         (residentSelection == "Resident") ? defaultMunicipalityValue : "";
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
     super.initState();
   }
 
