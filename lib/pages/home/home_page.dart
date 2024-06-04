@@ -153,22 +153,22 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home,
-                color: currentIndex == 0 ? Colors.green[800] : Colors.grey),
+                color: currentIndex == 0 ? Colors.blue[500] : Colors.grey),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.article_rounded,
-                color: currentIndex == 1 ? Colors.green[800] : Colors.grey),
+                color: currentIndex == 1 ? Colors.blue[500] : Colors.grey),
             label: 'News',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications,
-                color: currentIndex == 2 ? Colors.green[800] : Colors.grey),
+                color: currentIndex == 2 ? Colors.blue[500] : Colors.grey),
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard,
-                color: currentIndex == 3 ? Colors.green[800] : Colors.grey),
+                color: currentIndex == 3 ? Colors.blue[500] : Colors.grey),
             label: 'Profile',
           ),
         ],

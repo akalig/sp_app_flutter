@@ -73,7 +73,7 @@ class _EmergenciesState extends State<Emergencies> {
                       width: double.infinity,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: Colors.green[800],
+                        color: Colors.blue[500],
                         borderRadius: BorderRadius.circular(10.0),
                       ),
 
@@ -111,7 +111,7 @@ class _EmergenciesState extends State<Emergencies> {
                       width: double.infinity,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: Colors.green[800],
+                        color: Colors.blue[600],
                         borderRadius: BorderRadius.circular(10.0),
                       ),
 
@@ -149,7 +149,7 @@ class _EmergenciesState extends State<Emergencies> {
                       width: double.infinity,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: Colors.green[800],
+                        color: Colors.blue[600],
                         borderRadius: BorderRadius.circular(10.0),
                       ),
 
@@ -188,7 +188,7 @@ class _EmergenciesState extends State<Emergencies> {
                 backgroundColor: Colors.white,
                 reverseSlideAnimationCurve: Curves.easeInOut,
                 reverseSlideAnimationDuration: const Duration(milliseconds: 500),
-                toggleColor: Colors.green[800],
+                toggleColor: Colors.blue[600],
                 icon: Icon(Icons.cancel_rounded, color: Colors.white,),
                 action: (controller) async {
                   stopCountdown();

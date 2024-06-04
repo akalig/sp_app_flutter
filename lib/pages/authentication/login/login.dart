@@ -327,16 +327,19 @@ class _LoginState extends State<Login> {
           ),
           child: Column(
             children: [
-              Image.asset(
-                'lib/images/sp-logo.png',
-                height: 300,
+              Padding(
+                padding: const EdgeInsets.all(55.0),
+                child: Image.asset(
+                  'lib/images/bocaue_logo.png',
+                  height: 200,
+                ),
               ),
               Expanded(
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(25),
                   decoration: BoxDecoration(
-                    color: Colors.green[900],
+                    color: Colors.blue[500],
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),

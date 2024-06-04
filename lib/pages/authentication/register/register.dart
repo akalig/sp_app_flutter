@@ -69,7 +69,7 @@ class _RegisterState extends State<Register> {
       body: Container(
         margin: const EdgeInsets.only(top: 25),
         decoration: BoxDecoration(
-          color: Colors.green[900],
+          color: Colors.blue[500],
         ),
         child: Column(
           children: [
@@ -690,7 +690,7 @@ class _RegisterState extends State<Register> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.green[900],
+                                      color: Colors.blue[500],
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     padding: const EdgeInsets.all(18),
@@ -736,7 +736,7 @@ class _RegisterState extends State<Register> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[900],
+                              backgroundColor: Colors.blue[500],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
