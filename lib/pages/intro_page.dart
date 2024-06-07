@@ -271,7 +271,7 @@ class _IntroPageState extends State<IntroPage> {
           children: [
             // Background image
             Image.asset(
-              'lib/images/phil_arena.png',
+              'lib/images/san_pedro_laguna.png',
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -314,7 +314,7 @@ class _IntroPageState extends State<IntroPage> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blue[500],
+                          color: Colors.green[900],
                           borderRadius: BorderRadius.circular(5),
                         ),
                         padding: const EdgeInsets.all(18),

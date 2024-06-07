@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
             child: Container(
               padding: const EdgeInsets.only(top: 20, left: 20, right: 20), // Reduced bottom padding
               decoration: BoxDecoration(
-                color: Colors.blue[500],
+                color: Colors.green[900],
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                               } else if (snapshot.hasError) {
                                 return ClipOval(
                                   child: Image.asset(
-                                    'lib/images/bocaue_logo.png',
+                                    'lib/images/app_icon.png',
                                     height: 70,
                                     width: 70,
                                   ),
@@ -165,24 +165,18 @@ class _HomeState extends State<Home> {
                       ],
                     ),
 
-                    const SizedBox(height: 10),
-
-                    const Divider(),
-
-                    const SizedBox(height: 10),
-
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     Transform.translate(
-                    //       offset: const Offset(0, -20), // Adjust the value as needed
-                    //       child: const Image(
-                    //         image: AssetImage('lib/images/sp_logo_mini.png'),
-                    //         width: 80,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Transform.translate(
+                          offset: const Offset(0, -20), // Adjust the value as needed
+                          child: const Image(
+                            image: AssetImage('lib/images/sp_logo_mini.png'),
+                            width: 80,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -286,7 +280,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -338,7 +332,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -390,7 +384,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -442,7 +436,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -494,7 +488,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -555,7 +549,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -607,7 +601,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -659,7 +653,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -711,7 +705,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
@@ -763,7 +757,7 @@ class _HomeState extends State<Home> {
                                       width: 60, // Set your desired width
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[600],
+                                        color: Colors.green[800],
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),

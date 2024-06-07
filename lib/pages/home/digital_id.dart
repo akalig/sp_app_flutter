@@ -59,8 +59,8 @@ class _DigitalIDState extends State<DigitalID> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.blue[500]?.withOpacity(0.9) ??
-                        Colors.blue[500],
+                    color: Colors.green[900]?.withOpacity(0.9) ??
+                        Colors.green[900],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 15.0),
@@ -73,14 +73,14 @@ class _DigitalIDState extends State<DigitalID> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset(
-                              'lib/images/bocaue_logo.png',
+                              'lib/images/city_of_sanpedro_logo.png',
                               height: 50,
                               width: 50,
                             ),
                             const Padding(
                               padding: EdgeInsets.only(left: 10.0),
                               child: Text(
-                                'Republic of the Philippine\nBocaue, Bulacan',
+                                'Republic of the Philippine\nProvince of Laguna\nCity of San Pedro',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -90,11 +90,11 @@ class _DigitalIDState extends State<DigitalID> {
                             ),
                           ],
                         ),
-                        // Image.asset(
-                        //   'lib/images/sp_logo_mini.png',
-                        //   height: 70,
-                        //   width: 70,
-                        // ),
+                        Image.asset(
+                          'lib/images/sp_logo_mini.png',
+                          height: 70,
+                          width: 70,
+                        ),
                       ],
                     ),
                   ),

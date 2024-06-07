@@ -101,19 +101,16 @@ class _RegisterMPINState extends State<RegisterMPIN> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(55.0),
-              child: Image.asset(
-                'lib/images/bocaue_logo.png',
-                height: 200,
-              ),
+            Image.asset(
+              'lib/images/sp-logo.png',
+              height: 300,
             ),
             Expanded(
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(25),
                 decoration: BoxDecoration(
-                  color: Colors.blue[500],
+                  color: Colors.green[900],
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
@@ -171,7 +168,7 @@ class _RegisterMPINState extends State<RegisterMPIN> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Bocaue App',
+                          'San Pedro App',
                           style: TextStyle(
                             color: Colors.white,
                           ),
