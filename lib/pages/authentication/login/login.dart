@@ -330,7 +330,7 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.all(55.0),
                 child: Image.asset(
-                  'lib/images/bocaue_logo.png',
+                  'lib/images/sp-logo.png',
                   height: 200,
                 ),
               ),
@@ -339,7 +339,7 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(25),
                   decoration: BoxDecoration(
-                    color: Colors.blue[500],
+                    color: Colors.green[900],
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
