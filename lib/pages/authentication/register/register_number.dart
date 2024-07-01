@@ -42,8 +42,10 @@ class _RegisterNumberState extends State<RegisterNumber> {
         return;
       }
 
+      // Generate a random string of 6 digits
       String randomDigits = generateRandomString(6);
 
+      // Send the generated OTP via SMS
       sendMessage(randomDigits);
 
       Navigator.push(
@@ -64,12 +66,22 @@ class _RegisterNumberState extends State<RegisterNumber> {
 
   void sendMessage(String randomDigits) async {
 
+    // Semaphore API URL
     var apiUrl = 'https://semaphore.co/api/v4/messages';
-    var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
-    var number = mobileNumberController.text;
-    var senderName = 'SanPedroApp';
-    var message = 'Your One-time-Password is $randomDigits';
 
+    // API key for Semaphore
+    var apiKey = '39ec15e9be8f5f92843681f3d84e4ba8';
+
+    // Mobile number to send the OTP to (retrieved from a text controller)
+    var number = mobileNumberController.text;
+
+    // Sender name for the message
+    var senderName = 'SanPedroApp';
+
+    // Message to be sent, including the OTP
+    var message = 'Your One-Time-Password is $randomDigits';
+
+    // Parameters to be sent in the POST request
     var parameters = {
       'apikey': apiKey,
       'number': number,
@@ -77,7 +89,7 @@ class _RegisterNumberState extends State<RegisterNumber> {
       'sender_name': senderName,
     };
 
-    // Make the POST request
+    // Make the POST request to the Semaphore API
     var response = await http.post(
       Uri.parse(apiUrl),
       body: parameters,

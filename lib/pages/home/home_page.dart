@@ -32,9 +32,10 @@ class _HomePageState extends State<HomePage> {
 
   final FirebasePushNotificationAPI _firebasePushNotificationAPI =
   FirebasePushNotificationAPI();
-
+  
   @override
   void initState() {
+    // Initialize Firebase Messaging configuration when the state is initialized
     userId = widget.userId;
     saveNotificationInfoInFirestore(userId);
     _configureFirebaseMessaging();
@@ -50,7 +51,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _configureFirebaseMessaging() {
+    // Set up a handler for background messages
     FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+
+    // Set up a listener for foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage: $message");
 
@@ -73,6 +77,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showNotification(Map<String, dynamic> data) {
+    // Display the notification to the user
     _firebasePushNotificationAPI;
   }
 
